@@ -17,8 +17,4 @@ namespace tables
     {
         return "{" + m_out.str() + "}";
     }
-
 }
-
-
-
