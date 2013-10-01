@@ -33,5 +33,3 @@ TEST(TestFormat, test_csv_format)
 
     EXPECT_EQ(ss.str(), "1-11-11-11-11-3.143.14testtest-1,1");
 }
-
-
