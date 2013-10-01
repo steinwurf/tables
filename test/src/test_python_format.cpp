@@ -33,5 +33,3 @@ TEST(TestPythonFormat, test_python_format)
 
     EXPECT_EQ(ss.str(), "True-11-11-11-11-3.143.14'test''test'[-1,1]");
 }
-
-

@@ -53,5 +53,3 @@ TEST(TestTable, test_table)
     EXPECT_EQ(iterations[4], 1000U);
 
 }
-
-
