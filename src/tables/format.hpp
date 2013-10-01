@@ -166,10 +166,12 @@ namespace tables
 
             if(typeid(std::string) == val.type())
                 return print(s, boost::any_cast<std::string>(val));
+            if(typeid(table) == val.type())
+                std::cout << "table" << std::endl;
+                return print(s, boost::any_cast<table>(val));
 
             // We don't know how to convert this type
             assert(0);
-
         }
 
         virtual std::string vector_begin() const
@@ -190,15 +192,11 @@ namespace tables
         void print(std::ostream &s, const std::vector<T,Alloc> &val) const
         {
             auto it = val.begin();
-
             s << vector_begin();
-
             while(val.size() > 0)
             {
                 print(s, *it);
-
                 ++it;
-
                 if(it == val.end())
                 {
                     break;
@@ -208,12 +206,18 @@ namespace tables
                     s << vector_seperator();
                 }
             }
-
             s << vector_end();
 
         }
-
-        virtual void print(std::ostream &s, const table &val) const = 0;
+        virtual void print(std::ostream &s, const table &val) const
+        {
+            // To enable use of most functions, format must not be abstract.
+            // However we still don't want to specify how tables should be
+            // generated, as this is for the subclasses to decide.
+            (void) s;
+            (void) val;
+            assert(0);
+        }
     };
 
 }

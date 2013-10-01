@@ -33,21 +33,23 @@ namespace tables
     void json_format::print(std::ostream &s, const table &val) const
     {
         s << "{";
-        for(uint32_t i = 0; i < val.rows(); ++i)
+        bool first = true;
+        for(const auto& c: val.columns())
         {
-            bool first = true;
-            for(const auto& c: val.columns())
+            if(!first)
+                s << ",";
+
+            print(s, c.first);
+            s << ":";
+            if (c.second.has_fill_value())
             {
-                if(!first)
-                    s << ",";
-
-                print(s, c.first);
-                s << ":";
-                print(s, c.second.m_values);
-
-                first = false;
+                print(s, c.second.m_values[0]);
             }
-            s << std::endl;
+            else
+            {
+                print(s, c.second.m_values);
+            }
+            first = false;
         }
         s << "}";
     }

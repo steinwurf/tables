@@ -6,6 +6,11 @@
 namespace tables
 {
 
+    bool table::column::has_fill_value() const
+    {
+        return !m_fill.empty();
+    }
+
     table::table()
         : m_rows(0)
     { }

@@ -37,6 +37,8 @@ namespace tables
         /// Represents a column in the table
         struct column
         {
+            bool has_fill_value() const;
+
             /// Stores all the values for the table rows
             std::vector<boost::any> m_values;
 
