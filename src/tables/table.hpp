@@ -10,8 +10,6 @@
 #include <boost/any.hpp>
 #include <boost/optional.hpp>
 
-#include "format.hpp"
-
 namespace tables
 {
     /// The table class represents a set of measurements on for every
@@ -122,6 +120,9 @@ namespace tables
 
         /// @return The number of rows
         uint32_t rows() const;
+
+        /// @return The columns
+        std::map<std::string, column> columns() const;
 
         /// Checks whether the column has a specific data type
         /// @param column The name of the column

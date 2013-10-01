@@ -1,7 +1,4 @@
-#include "json_format.hpp"
-
-#include "pylist.hpp"
-#include "pydict.hpp"
+#include "python_format.hpp"
 
 namespace tables
 {

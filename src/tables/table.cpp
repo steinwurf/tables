@@ -128,37 +128,9 @@ namespace tables
         return m_rows;
     }
 
-    void table::print(std::ostream& o, const format& fmt,
-                      const std::string& seperator) const
+    std::map<std::string, table::column> table::columns() const
     {
-        // Print headers
-        auto it = m_columns.begin();
-
-        while(it != m_columns.end())
-        {
-            o << it->first;
-            ++it;
-
-            if(it != m_columns.end())
-                o << seperator;
-        }
-
-        o << std::endl;
-
-        // Print columns
-        for(uint32_t i = 0; i < m_rows; ++i)
-        {
-            bool first = true;
-            for(const auto& c: m_columns)
-            {
-                if(!first)
-                    o << seperator;
-
-                fmt.print(o, c.second.m_values[i]);
-                first = false;
-            }
-            o << std::endl;
-        }
+        return m_columns;
     }
 
     void table::merge(const table& src)
@@ -175,7 +147,6 @@ namespace tables
         }
     }
 
-
     table::const_iterator table::begin() const
     {
         return m_columns.cbegin();
@@ -185,6 +156,4 @@ namespace tables
     {
         return m_columns.cend();
     }
-
-
 }

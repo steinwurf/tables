@@ -1,15 +1,13 @@
 #pragma once
 
-#include <sstream>
+#include <ostream>
+#include <string>
 
+#include "table.hpp"
 #include "format.hpp"
 
 namespace tables
 {
-
-    struct pylist;
-    struct pydict;
-
     /// Prints to the ostrea in Python format
     struct json_format : public format
     {
@@ -18,23 +16,22 @@ namespace tables
         /// Make the format::print functions available
         using format::print;
 
-    public:
-
-        void print(std::ostream &s, const pylist &val) const;
-
-        void print(std::ostream &s, const pydict &val) const;
+    public: // From format
 
         /// @copydoc format::print(std::ostream&,bool) const
-        void print(std::ostream &s, bool val) const;
+        virtual void print(std::ostream &s, bool val) const;
 
         /// @copydoc format::print(std::ostream&, const std::string&) const
-        void print(std::ostream &s, const std::string &val) const;
+        virtual void print(std::ostream &s, const std::string &val) const;
 
-        std::string vector_begin() const
-        { return "["; }
+        /// @copydoc format::vector_begin() const
+        virtual std::string vector_begin() const;
 
-        std::string vector_end() const
-        { return "]"; }
+        /// @copydoc format::vector_end() const
+        virtual std::string vector_end() const;
+
+        /// @copydoc format::void print(std::ostream&, const table&) const
+        virtual void print(std::ostream &s, const table &val) const;
 
     };
 

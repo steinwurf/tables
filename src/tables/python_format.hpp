@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sstream>
+#include <ostream>
 
 #include "format.hpp"
 #include "json_format.hpp"
@@ -16,7 +16,7 @@ namespace tables
         /// Make the format::print functions available
         using format::print;
 
-    public:
+    public: // From format
         /// @copydoc format::print(std::ostream&,bool) const
         void print(std::ostream &s, bool val) const;
 
