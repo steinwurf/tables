@@ -1,10 +1,13 @@
 #pragma once
 
+
 #include <cassert>
 #include <cstdint>
 #include <vector>
 #include <string>
 #include <boost/any.hpp>
+
+#include "table.hpp"
 
 namespace tables
 {
@@ -210,6 +213,7 @@ namespace tables
 
         }
 
+        virtual void print(std::ostream &s, const table &val) const = 0;
     };
 
 }
