@@ -4,7 +4,7 @@
 import os
 
 APPNAME = 'tables'
-VERSION = '1.1.0'
+VERSION = '2.0.0'
 
 def recurse_helper(ctx, name):
 
