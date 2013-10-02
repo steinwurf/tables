@@ -36,23 +36,24 @@ namespace tables
     public:
 
         /// Represents a column in the table
-        struct column
+        class column
         {
-            bool has_fill_value() const;
+        public:
+            column();
+            column(const boost::any const_value);
+            bool constant() const;
+            boost::any value(uint32_t index) const;
+            void set_value(uint32_t index, boost::any value);
+        private:
+            /// Checks whether the value of the colúmn is constant.
+            const bool m_constant;
 
             /// Stores all the values for the table rows
             std::vector<boost::any> m_values;
 
-            /// Keeps track of whether a row has already been
-            /// initialized
-            bool m_updated;
-
             /// Stores the data type of the row can be obtained using
             /// typeid(int).hash_code()
             boost::optional<size_t> m_type_hash;
-
-            /// The fill value for the column
-            boost::any m_fill;
         };
 
     public:
@@ -62,25 +63,15 @@ namespace tables
 
         /// Create a new column in the table
         /// @param column The name of the column
-        /// @param fill The value used to fill new rows
-        void add_column(const std::string& column,
-                        const boost::any& fill = boost::any());
+        /// @param constant A boolean determining whether the data in the column
+        /// is constant or not.
+        void add_column(const std::string& column, bool constant = false);
 
         /// Set the column data type of the column
         /// @param column The name of the column
         /// @param type_info The type info of the column data type
         void set_column_type(const std::string& column,
                              const std::type_info& type_info);
-
-        /// Set/change the fill value for a column
-        /// @param column The name of the column
-        /// @param fill The fill value
-        template<class T>
-        void set_column_fill(const std::string& column,
-                             const T& fill)
-        {
-            set_column_fill(column, boost::any(fill));
-        }
 
         /// Set/change the fill value for a column
         /// @param column The name of the column
@@ -140,7 +131,7 @@ namespace tables
         /// @param column The name of the column
         /// @param type The data type of the column
         /// @return True if the column has the type
-        bool is_column(const std::string &column,
+        bool is_column(const std::string& column,
                        const std::type_info& type) const;
 
         /// Returns true if the specific column exists
@@ -198,7 +189,5 @@ namespace tables
         /// it to prevent multiple writers overwriting each other
         /// by accident
         std::map<std::string, column> m_columns;
-
     };
-
 }
