@@ -41,13 +41,13 @@ namespace tables
 
             print(s, c.first);
             s << ":";
-            if (c.second.has_fill_value())
+            if (c.second.constant())
             {
-                print(s, c.second.m_values[0]);
+                print(s, c.second.value(0));
             }
             else
             {
-                print(s, c.second.m_values);
+                print(s, c.second.values());
             }
             first = false;
         }

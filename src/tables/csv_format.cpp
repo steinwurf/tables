@@ -24,7 +24,7 @@ namespace tables
                 else
                 {
                     // i-1 to accomedate for the header print run.
-                    print(s, c.second.m_values[i-1]);
+                    print(s, c.second.value(i-1));
                 }
 
                 first = false;

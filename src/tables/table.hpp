@@ -40,10 +40,14 @@ namespace tables
         {
         public:
             column();
-            column(const boost::any const_value);
+            column(const boost::any& const_value);
             bool constant() const;
+            boost::optional<size_t> type_hash() const;
+            void set_type_hash(size_t type_hash);
+            std::vector<boost::any> values() const;
             boost::any value(uint32_t index) const;
-            void set_value(uint32_t index, boost::any value);
+            void set_value(uint32_t index, const boost::any& value);
+            void resize(uint32_t size);
         private:
             /// Checks whether the value of the colúmn is constant.
             const bool m_constant;
@@ -52,7 +56,7 @@ namespace tables
             std::vector<boost::any> m_values;
 
             /// Stores the data type of the row can be obtained using
-            /// typeid(int).hash_code()
+            /// typeid(T).hash_code()
             boost::optional<size_t> m_type_hash;
         };
 
@@ -62,21 +66,24 @@ namespace tables
         table();
 
         /// Create a new column in the table
-        /// @param column The name of the column
-        /// @param constant A boolean determining whether the data in the column
-        /// is constant or not.
-        void add_column(const std::string& column, bool constant = false);
+        /// @param column_name The name of the column
+        void add_column(const std::string& column_name);
+
+        /// Create a new constant column in the table
+        /// @param column_name The name of the column
+        /// @param value The constant value for all rows in this column.
+        void add_const_column(const std::string& column_name, const boost::any& value);
 
         /// Set the column data type of the column
-        /// @param column The name of the column
+        /// @param column_name The name of the column
         /// @param type_info The type info of the column data type
-        void set_column_type(const std::string& column,
+        void set_column_type(const std::string& column_name,
                              const std::type_info& type_info);
 
         /// Set/change the fill value for a column
-        /// @param column The name of the column
+        /// @param column_name The name of the column
         /// @param fill The fill value
-        void set_column_fill(const std::string& column,
+        void set_column_fill(const std::string& column_name,
                              const boost::any& fill);
 
         /// Called when new results are ready to be registered. This
@@ -85,25 +92,25 @@ namespace tables
         void add_row();
 
         /// Sets the value for the current row in the specified column
-        /// @param column The name of the column
+        /// @param column_name The name of the column
         /// @param value The value to set for the current row
         template<class T>
-        void set_value(const std::string& column, const T& value)
+        void set_value(const std::string& column_name, const T& value)
         {
-            set_value(column, boost::any(value));
+            set_value(column_name, boost::any(value));
         }
 
         /// Sets the value for the current row in the specified column
-        /// @param column The name of the column
+        /// @param column_name The name of the column
         /// @param value The value to set for the current row
-        void set_value(const std::string& column, const boost::any& value);
+        void set_value(const std::string& column_name, const boost::any& value);
 
         /// Sets the value for the current row in the specified column
-        /// @param column The name of the column
+        /// @param column_name The name of the column
         /// @param value The value to set for the current row
-        void set_value(const std::string& column, const char* value)
+        void set_value(const std::string& column_name, const char* value)
         {
-            set_value(column, std::string(value));
+            set_value(column_name, std::string(value));
         }
 
         /// Merge the source table into this table. All rows in the source
@@ -119,43 +126,43 @@ namespace tables
         std::map<std::string, column> columns() const;
 
         /// Checks whether the column has a specific data type
-        /// @param column The name of the column
+        /// @param column_name The name of the column
         /// @return True if the column has the type T
         template<class T>
-        bool is_column(const std::string &column) const
+        bool is_column(const std::string &column_name) const
         {
-            return is_column(column, typeid(T));
+            return is_column(column_name, typeid(T));
         }
 
         /// Checks whether the column has a specific data type
-        /// @param column The name of the column
+        /// @param column_name The name of the column
         /// @param type The data type of the column
         /// @return True if the column has the type
-        bool is_column(const std::string& column,
+        bool is_column(const std::string& column_name,
                        const std::type_info& type) const;
 
         /// Returns true if the specific column exists
-        /// @param column The name of the column
+        /// @param column_name The name of the column
         /// @return True if the column exists
-        bool has_column(const std::string& column) const;
+        bool has_column(const std::string& column_name) const;
 
         /// Drops a specific column
-        /// @param column The name of the column
-        void drop_column(const std::string& column);
+        /// @param column_name The name of the column
+        void drop_column(const std::string& column_name);
 
         /// Returns a specific column.
-        /// @param column The name of the column
+        /// @param column_name The name of the column
         /// @return The vector containing the results for a specific column
         template<class T>
-        std::vector<T> column_as(const std::string &column) const
+        std::vector<T> column_as(const std::string &column_name) const
         {
-            assert(m_columns.find(column) != m_columns.end());
+            assert(m_columns.find(column_name) != m_columns.end());
 
-            assert(is_column<T>(column));
+            assert(is_column<T>(column_name));
 
             std::vector<T> v;
 
-            const auto& c = m_columns.at(column);
+            const auto& c = m_columns.at(column_name);
 
             for(const auto& i : c.m_values)
             {

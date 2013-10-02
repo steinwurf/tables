@@ -125,6 +125,7 @@ namespace tables
 
         virtual void print_void(std::ostream &s) const
         {
+            (void) s;
             return;
         }
 
