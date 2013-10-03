@@ -7,24 +7,19 @@ namespace tables
 {
 
     table::column::column()
-        : m_constant(false)
+        : m_constant(false), m_type_set(false)
     { }
 
     table::column::column(const boost::any& const_value)
-        : m_constant(true)
+        : m_constant(true), m_type_set(true),
+        m_type_hash(const_value.type().hash_code())
     {
-        m_type_hash = const_value.type().hash_code();
         m_values.resize(1, const_value);
     }
 
     bool table::column::constant() const
     {
         return m_constant;
-    }
-
-    void table::column::set_type_hash(size_t value)
-    {
-        m_type_hash = value;
     }
 
     boost::optional<size_t> table::column::type_hash() const
@@ -34,39 +29,51 @@ namespace tables
 
     std::vector<boost::any> table::column::values() const
     {
+        // It doesn't make sense to get a complete row of constant values.
+        // Use the value(index) method instead.
+        assert(!m_constant);
         return m_values;
     }
 
     void table::column::resize(uint32_t size)
     {
-        m_values.resize(size, boost::any());
+        if(!m_constant)
+            m_values.resize(size, boost::any());
     }
 
-    boost::any table::column::value(uint32_t index) const
+    boost::any table::column::value(uint32_t row) const
     {
         if (m_constant)
         {
             return m_values[0];
         }
-        else if (m_values.size() < index)
+        else if (m_values.size() > row)
         {
-            return m_values[index];
+            return m_values[row];
         }
         else
         {
-            return boost::any();
+            // Out of bounds
+            assert(0);
         }
     }
 
-    void table::column::set_value(uint32_t index, const boost::any& value)
+    void table::column::set_value(uint32_t row, const boost::any& value)
     {
+        // you can't override the value of a const column.
         assert(!m_constant);
-        if (m_values.size() < index)
+
+        if(!m_type_set)
         {
-            m_values.resize(index, boost::any());
+            m_type_hash = value.type().hash_code();
         }
-        auto it = m_values.end();
-        m_values.insert( it , value);
+        assert(m_type_hash == value.type().hash_code());
+
+        // did you forget to add a row?
+        assert(m_values.size() > row);
+        assert(m_values[row].empty());
+
+        m_values[row] = value;
     }
 
     table::table()
@@ -91,18 +98,6 @@ namespace tables
         auto& c = m_columns[column_name];
 
         c.resize(m_rows);
-    }
-
-    void table::set_column_type(const std::string& column_name,
-                                const std::type_info& type_info)
-    {
-        // Check that the column exists.
-        assert(m_columns.find(column_name) != m_columns.end());
-
-        auto& c = m_columns[column_name];
-
-        assert(!c.type_hash());
-        c.set_type_hash(type_info.hash_code());
     }
 
     bool table::is_column(const std::string& column_name,
@@ -140,19 +135,18 @@ namespace tables
         assert(m_columns.find(column_name) != m_columns.end());
 
         auto& c = m_columns[column_name];
-
-        if(!c.type_hash())
-        {
-            set_column_type(column_name, value.type());
-        }
-        assert(c.type_hash());
-        assert((*c.type_hash()) == value.type().hash_code());
-
         assert(m_rows > 0); // Did you forget to call add_row(..)
 
         // Access the "current" row if we are on row 1,
         // this is index 0
         c.set_value(m_rows - 1, value);
+
+        assert((*c.type_hash()) == value.type().hash_code());
+    }
+
+    void table::set_value(const std::string& column_name, const char* value)
+    {
+        set_value(column_name, std::string(value));
     }
 
     bool table::has_column(const std::string& column_name) const

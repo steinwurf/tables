@@ -43,21 +43,23 @@ namespace tables
             column(const boost::any& const_value);
             bool constant() const;
             boost::optional<size_t> type_hash() const;
-            void set_type_hash(size_t type_hash);
             std::vector<boost::any> values() const;
-            boost::any value(uint32_t index) const;
-            void set_value(uint32_t index, const boost::any& value);
+            boost::any value(uint32_t row) const;
+            void set_value(uint32_t row, const boost::any& value);
             void resize(uint32_t size);
         private:
             /// Checks whether the value of the colúmn is constant.
             const bool m_constant;
 
-            /// Stores all the values for the table rows
-            std::vector<boost::any> m_values;
+            /// Boolean value determining whether the type has been set
+            bool m_type_set;
 
             /// Stores the data type of the row can be obtained using
             /// typeid(T).hash_code()
             boost::optional<size_t> m_type_hash;
+
+            /// Stores all the values for the table rows
+            std::vector<boost::any> m_values;
         };
 
     public:
@@ -74,31 +76,10 @@ namespace tables
         /// @param value The constant value for all rows in this column.
         void add_const_column(const std::string& column_name, const boost::any& value);
 
-        /// Set the column data type of the column
-        /// @param column_name The name of the column
-        /// @param type_info The type info of the column data type
-        void set_column_type(const std::string& column_name,
-                             const std::type_info& type_info);
-
-        /// Set/change the fill value for a column
-        /// @param column_name The name of the column
-        /// @param fill The fill value
-        void set_column_fill(const std::string& column_name,
-                             const boost::any& fill);
-
         /// Called when new results are ready to be registered. This
         /// function essentially adds a new row to the table for all
         /// current columns.
         void add_row();
-
-        /// Sets the value for the current row in the specified column
-        /// @param column_name The name of the column
-        /// @param value The value to set for the current row
-        template<class T>
-        void set_value(const std::string& column_name, const T& value)
-        {
-            set_value(column_name, boost::any(value));
-        }
 
         /// Sets the value for the current row in the specified column
         /// @param column_name The name of the column
@@ -108,10 +89,7 @@ namespace tables
         /// Sets the value for the current row in the specified column
         /// @param column_name The name of the column
         /// @param value The value to set for the current row
-        void set_value(const std::string& column_name, const char* value)
-        {
-            set_value(column_name, std::string(value));
-        }
+        void set_value(const std::string& column_name, const char* value);
 
         /// Merge the source table into this table. All rows in the source
         /// table are added as new rows in the table and columns are
