@@ -90,6 +90,12 @@ namespace tables
             std::pair<std::string,column>(column_name,column(value)));
     }
 
+    void table::add_const_column(const std::string& column_name,
+        const char* value)
+    {
+        add_const_column(column_name, std::string(value));
+    }
+
     void table::add_column(const std::string& column_name)
     {
         // Check that the column doesn't already exist.

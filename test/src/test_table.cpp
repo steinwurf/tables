@@ -54,22 +54,57 @@ TEST(TestTable, test_add_row)
 {
     tables::table table;
     uint32_t rows = 10;
-    for (uint32_t i = 0; i < rows; ++i)
+    for (uint32_t i = 0; i <= rows; ++i)
     {
         EXPECT_EQ(i, table.rows());
         table.add_row();
     }
-    auto value = 42;
+    uint32_t value = 42;
     table.add_column("test");
     table.set_value("test", value);
-    auto column = table.columns().find("test")->second;
-    auto returned_value = column.value(rows);
-    EXPECT_EQ(value, returned_value);
+    auto returned_value = table.columns().find("test")->second.value(rows);
+    EXPECT_EQ(value, boost::any_cast<uint32_t>(returned_value));
+    EXPECT_TRUE(table.columns().find("test")->second.value(rows-1).empty());
 }
+
+TEST(TestTable, test_merge)
+{
+    tables::table table1;
+    tables::table table2;
+
+    table1.add_column("table1");
+    table2.add_column("table2");
+
+    table1.add_const_column("table1_const", "const");    
+    table2.add_const_column("table2_const", "const");
+    
+    table1.add_column("common");
+    table2.add_column("common");
+
+    table1.add_const_column("common_const", 4);
+    table2.add_const_column("common_const", 4);
+
+    table1.add_row();
+    table2.add_row();
+
+    table1.set_value("table1", 1);
+    table2.set_value("table2", 2);
+    
+    table1.set_value("common", 1);
+    table2.set_value("common", 2);
+    
+    EXPECT_EQ(table1.columns().size(), table2.columns().size());
+    EXPECT_EQ(table1.rows(), table2.rows());    
+
+    table1.merge(table2);
+
+    EXPECT_FALSE(table1.columns().size() == table2.columns().size());
+    EXPECT_FALSE(table1.rows() == table2.rows());    
+
+
+}
+
 /*
-void add_row();
-void set_value(const std::string& column_name, const boost::any& value);
-void set_value(const std::string& column_name, const char* value);
 void merge(const table& src);
 uint32_t rows() const;
 std::map<std::string, column> columns() const;

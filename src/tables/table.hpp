@@ -76,6 +76,8 @@ namespace tables
         /// @param value The constant value for all rows in this column.
         void add_const_column(const std::string& column_name, const boost::any& value);
 
+        void add_const_column(const std::string& column_name, const char* value);
+
         /// Called when new results are ready to be registered. This
         /// function essentially adds a new row to the table for all
         /// current columns.
