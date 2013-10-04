@@ -172,8 +172,8 @@ namespace tables
 
             if(typeid(std::string) == val.type())
                 return print(s, boost::any_cast<std::string>(val));
+
             if(typeid(table) == val.type())
-                std::cout << "table" << std::endl;
                 return print(s, boost::any_cast<table>(val));
 
             // We don't know how to convert this type

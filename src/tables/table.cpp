@@ -76,6 +76,12 @@ namespace tables
         m_values[row] = value;
     }
 
+    void table::column::make_nonconst(uint32_t size)
+    {
+        m_constant = false;
+        m_values.resize(size, m_values[0]);
+    }
+
     table::table()
         : m_rows(0)
     { }
@@ -182,11 +188,28 @@ namespace tables
         {
             add_row();
 
-            for(const auto& t : src)
+            for(const auto& kv : src)
             {
-                set_value(t.first, t.second.value(i));
-            }
+                auto name = kv.first;
+                auto column = kv.second;
+                if(column.constant())
+                {
+                    auto this_column_pair = m_columns.find(name);
+                    if(this_column_pair == m_columns.end())
+                    {
+                        add_const_column(name, column.value(0));
+                    }
+                    else if(column.value(0) != this_column_pair->second.value(0))
+                    {
 
+                    }
+                }
+                else
+                {
+
+                }
+                set_value(kv.first, kv.second.value(i));
+            }
         }
     }
 
