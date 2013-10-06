@@ -49,7 +49,7 @@ namespace tables
             void resize(uint32_t size);
             void make_nonconst(uint32_t size);
         private:
-            /// Checks whether the value of the colúmn is constant.
+            /// Checks whether the value of the column is constant.
             bool m_constant;
 
             /// Boolean value determining whether the type has been set
@@ -162,17 +162,20 @@ namespace tables
         typedef std::map<std::string, column>::const_iterator
             const_iterator;
 
-        /// @return const iterator to the first column
+        /// @return const iterator to the first row
         const_iterator begin() const;
 
-        /// @return const iterator to the last column
+        /// @return const iterator to the last row
         const_iterator end() const;
 
     private:
 
-        /// Keeps track of the number of rows
+        /// Keeps track of the number of columns
         uint32_t m_rows;
 
+        /// Keeps track of which rows have been updated, this
+        /// it to prevent multiple writers overwriting each other
+        /// by accident
         std::map<std::string, column> m_columns;
     };
 }

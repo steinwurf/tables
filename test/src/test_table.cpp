@@ -28,6 +28,23 @@ TEST(TestTable, test_add_const_column)
     EXPECT_EQ(1, table.columns().size());
 }
 
+TEST(TestTable, test_add_column_insert_zero)
+{
+    tables::table table;
+
+    table.add_column("column1");
+    table.set_value("column1", 0);
+    EXPECT_EQ(1, table.columns().size());
+}
+
+TEST(TestTable, test_add_const_column_insert_zero)
+{
+    tables::table table;
+
+    table.add_const_column("column1", 0);
+    EXPECT_EQ(1, table.columns().size());
+}
+
 TEST(TestTable, test_columns)
 {
     tables::table table;
@@ -76,6 +93,7 @@ template<class T> T to_type_from_instance(const T& value_of_type,
 
 TEST(TestTable, test_merge)
 {
+    std::cout << "START" << std::endl;
     tables::table table1;
     tables::table table2;
 
@@ -87,13 +105,19 @@ TEST(TestTable, test_merge)
 
     table1.add_column("common");
     table2.add_column("common");
-
+    std::cout << "preconst" << std::endl;
     table1.add_const_column("common_const1", 4);
+    std::cout << "preconst1" << std::endl;
     table2.add_const_column("common_const1", 4);
-
-    table1.add_const_column("common_const2", 0);
-    table2.add_const_column("common_const2", 1);
-
+    std::cout << "preconst2" << std::endl;
+    
+    table1.add_const_column("common_const2", 42);
+    std::cout << "preconst0" << std::endl;
+    
+    table2.add_const_column("common_const2", 43);
+    std::cout << "preconst4" << std::endl;
+    
+    std::cout << "columns" << std::endl;
     table1.add_row();
     table2.add_row();
 
@@ -118,7 +142,7 @@ TEST(TestTable, test_merge)
     // table1 and table 2 should have similar dimensions.
     EXPECT_EQ(table1.columns().size(), table2.columns().size());
     EXPECT_EQ(table1.rows(), table2.rows());
-
+    std::cout << "premerge" << std::endl;
     table1.merge(table2);
 
     // table1 merged with table2:

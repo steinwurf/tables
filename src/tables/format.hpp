@@ -123,7 +123,7 @@ namespace tables
             s << val;
         }
 
-        virtual void print_void(std::ostream &s) const
+        virtual void print_empty(std::ostream &s) const
         {
             (void) s;
             return;
@@ -134,8 +134,8 @@ namespace tables
         /// @param val The value to be printed
         virtual void print(std::ostream &s, const boost::any &val) const
         {
-            if(typeid(void) == val.type())
-                return print_void(s);
+            if(val.empty())
+                return print_empty(s);
 
             if(typeid(bool) == val.type())
                 return print(s, boost::any_cast<bool>(val));

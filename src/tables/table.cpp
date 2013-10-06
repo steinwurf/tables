@@ -184,31 +184,29 @@ namespace tables
 
     void table::merge(const table& src)
     {
+        //if two tables are merged, the const of a const_column no longer applies.
+        for (auto my_kv = m_columns.begin(); my_kv != m_columns.end(); ++my_kv)
+        {
+            my_kv->second.make_nonconst(m_rows);
+        }
+        std::cout << "non const" << std::endl;
+
         for(uint32_t i = 0; i < src.rows(); ++i)
         {
             add_row();
-
+            std::cout << i << std::endl;
             for(const auto& kv : src)
             {
                 auto name = kv.first;
                 auto column = kv.second;
-                if(column.constant())
+                auto this_column_pair = m_columns.find(name);
+                
+                if(this_column_pair == m_columns.end())
                 {
-                    auto this_column_pair = m_columns.find(name);
-                    if(this_column_pair == m_columns.end())
-                    {
-                        add_const_column(name, column.value(0));
-                    }
-                    else if(column.value(0) != this_column_pair->second.value(0))
-                    {
-
-                    }
+                    std::cout << "making " << name << std::endl;
+                    add_column(name);
                 }
-                else
-                {
-
-                }
-                set_value(kv.first, kv.second.value(i));
+                set_value(name, column.value(i));
             }
         }
     }
