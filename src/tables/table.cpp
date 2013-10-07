@@ -21,7 +21,7 @@ namespace tables
         assert(m_columns.find(column_name) == m_columns.end());
 
         m_columns.insert(
-            std::pair<std::string,column>(column_name,column(value)));
+            std::pair<std::string,column>(column_name,const_column(value)));
     }
 
     void table::add_const_column(const std::string& column_name,
