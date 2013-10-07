@@ -33,6 +33,7 @@ TEST(TestTable, test_add_column_insert_zero)
     tables::table table;
 
     table.add_column("column1");
+    table.add_row();
     table.set_value("column1", 0);
     EXPECT_EQ(1, table.columns().size());
 }
@@ -84,40 +85,26 @@ TEST(TestTable, test_add_row)
     EXPECT_TRUE(table.columns().find("test")->second.value(rows-1).empty());
 }
 
-template<class T> T to_type_from_instance(const T& value_of_type,
-    const boost::any& value)
-{
-    (void)value_of_type;
-    return boost::any_cast<T>(value);
-}
-
 TEST(TestTable, test_merge)
 {
-    std::cout << "START" << std::endl;
     tables::table table1;
     tables::table table2;
 
     table1.add_column("t1");
     table2.add_column("t2");
 
-    table1.add_const_column("t1_const", "const");
-    table2.add_const_column("t2_const", "const");
+    table1.add_column("t1_const");
+    table2.add_column("t2_const");
 
     table1.add_column("common");
     table2.add_column("common");
-    std::cout << "preconst" << std::endl;
-    table1.add_const_column("common_const1", 4);
-    std::cout << "preconst1" << std::endl;
-    table2.add_const_column("common_const1", 4);
-    std::cout << "preconst2" << std::endl;
-    
-    table1.add_const_column("common_const2", 42);
-    std::cout << "preconst0" << std::endl;
-    
-    table2.add_const_column("common_const2", 43);
-    std::cout << "preconst4" << std::endl;
-    
-    std::cout << "columns" << std::endl;
+    table1.add_column("common_const1");
+    table2.add_column("common_const1");
+
+    table1.add_column("common_const2");
+
+    table2.add_column("common_const2");
+
     table1.add_row();
     table2.add_row();
 
@@ -142,33 +129,55 @@ TEST(TestTable, test_merge)
     // table1 and table 2 should have similar dimensions.
     EXPECT_EQ(table1.columns().size(), table2.columns().size());
     EXPECT_EQ(table1.rows(), table2.rows());
-    std::cout << "premerge" << std::endl;
     table1.merge(table2);
-
     // table1 merged with table2:
     /**************************************************************************
      * t1 * t2 * t1_const * t2_const * common * common_const1 * common_const2 *
-     * 1  *    * const    * const    * 1      * 4             * 0             *
-     *    * 2  * const    * const    * 2      * 4             * 1             *
+     * 1  *    * const    *          * 1      * 4             * 0             *
+     *    * 2  *          * const    * 2      * 4             * 1             *
      *************************************************************************/
 
     //After merge they should not.
     EXPECT_FALSE(table1.columns().size() == table2.columns().size());
     EXPECT_FALSE(table1.rows() == table2.rows());
-
     // It should have the following dimensions:
     EXPECT_EQ(7, table1.columns().size());
     EXPECT_EQ(2, table1.rows());
 
-    auto& c1 = table1.columns().find("t1")->second;
-    auto& c2 = table1.columns().find("t2")->second;
-    auto& c3 = table1.columns().find("t1_const")->second;
-    auto& c4 = table1.columns().find("t2_const")->second;
-    auto& c5 = table1.columns().find("common")->second;
-    auto& c6 = table1.columns().find("common_const1")->second;
-    auto& c7 = table1.columns().find("common_const2")->second;
+    EXPECT_TRUE(table1.has_column("t1"));
+    auto& c1 =table1.columns().find("t1")->second;
 
-    EXPECT_EQ(1, boost::any_cast<int>(c1.value(0)));
+    auto r2 = table1.columns().find("t2");
+    EXPECT_NE(r2, table1.columns().end());
+    auto& c2 =r2->second;
+
+    auto r3 = table1.columns().find("t1_const");
+    EXPECT_NE(r3, table1.columns().end());
+    auto& c3 =r3->second;
+
+    auto r4 = table1.columns().find("t2_const");
+    EXPECT_NE(r4, table1.columns().end());
+    auto& c4 =r4->second;
+
+    auto r5 = table1.columns().find("common");
+    EXPECT_NE(r5, table1.columns().end());
+    auto& c5 =r5->second;
+
+    auto r6 = table1.columns().find("common_const1");
+    EXPECT_NE(r6, table1.columns().end());
+    auto& c6 =r6->second;
+
+    auto r7 = table1.columns().find("common_const2");
+    EXPECT_NE(r7, table1.columns().end());
+    auto& c7 =r7->second;
+
+    std::cout << "before error" << std::endl;
+    auto error_cause = c1.value(0);
+    std::cout << "after error" << std::endl;
+    auto compare_value = boost::any_cast<int32_t>(error_cause);
+
+    EXPECT_EQ(1, compare_value);
+
     EXPECT_TRUE(c1.value(1).empty());
 
     EXPECT_TRUE(c2.value(0).empty());

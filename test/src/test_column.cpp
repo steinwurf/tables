@@ -62,7 +62,7 @@ TEST(TestColumn, test_column_insert_and_retrieve)
     // Integer
     test_column_insert_and_retrieve(42);
     // String
-    test_column_insert_and_retrieve("42");
+    test_column_insert_and_retrieve(std::string("42"));
     // Custom
     test_column_insert_and_retrieve(Custom(43));
 }
@@ -80,7 +80,7 @@ TEST(TestColumn, test_hash_type_after_insert)
     // Integer
     test_hash_type_after_insert(42);
     // String
-    test_hash_type_after_insert("42");
+    test_hash_type_after_insert(std::string("42"));
     // Custom
     test_hash_type_after_insert(Custom(43));
 }
@@ -96,7 +96,7 @@ TEST(TestColumn, test_hash_type_after_const_creation)
     // Integer
     test_hash_type_after_insert(42);
     // String
-    test_hash_type_after_insert("42");
+    test_hash_type_after_insert(std::string("42"));
     // Custom
     test_hash_type_after_insert(Custom(43));
 }
@@ -125,7 +125,7 @@ TEST(TestColumn, test_values_after_insert)
     // Integer
     test_hash_type_after_insert(42);
     // String
-    test_hash_type_after_insert("42");
+    test_hash_type_after_insert(std::string("42"));
     // Custom
     test_hash_type_after_insert(Custom(43));
 }
@@ -178,7 +178,7 @@ TEST(TestColumn, test_value_method)
     {
         tables::table::column nonconst_column;
         nonconst_column.resize(1);
-        auto value = "42";
+        auto value = std::string("42");
         nonconst_column.set_value(0, value);
         // Integer
         EXPECT_TRUE(test_value_method(value, nonconst_column, 1));

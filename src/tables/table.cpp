@@ -1,87 +1,15 @@
-#include "table.hpp"
 
-#include <cassert>
 #include <iomanip>
+
+
+
+#include "const_column.hpp"
+#include "nonconst_column.hpp"
+
+#include "table.hpp"
 
 namespace tables
 {
-
-    table::column::column()
-        : m_constant(false), m_type_set(false)
-    { }
-
-    table::column::column(const boost::any& const_value)
-        : m_constant(true), m_type_set(true),
-        m_type_hash(const_value.type().hash_code())
-    {
-        m_values.resize(1, const_value);
-    }
-
-    bool table::column::constant() const
-    {
-        return m_constant;
-    }
-
-    boost::optional<size_t> table::column::type_hash() const
-    {
-        return m_type_hash;
-    }
-
-    std::vector<boost::any> table::column::values() const
-    {
-        // It doesn't make sense to get a complete row of constant values.
-        // Use the value(index) method instead.
-        assert(!m_constant);
-        return m_values;
-    }
-
-    void table::column::resize(uint32_t size)
-    {
-        if(!m_constant)
-            m_values.resize(size, boost::any());
-    }
-
-    boost::any table::column::value(uint32_t row) const
-    {
-        if (m_constant)
-        {
-            return m_values[0];
-        }
-        else if (m_values.size() > row)
-        {
-            return m_values[row];
-        }
-        else
-        {
-            // Out of bounds
-            assert(0);
-        }
-    }
-
-    void table::column::set_value(uint32_t row, const boost::any& value)
-    {
-        // you can't override the value of a const column.
-        assert(!m_constant);
-
-        if(!m_type_set)
-        {
-            m_type_hash = value.type().hash_code();
-        }
-        assert(m_type_hash == value.type().hash_code());
-
-        // did you forget to add a row?
-        assert(m_values.size() > row);
-        assert(m_values[row].empty());
-
-        m_values[row] = value;
-    }
-
-    void table::column::make_nonconst(uint32_t size)
-    {
-        m_constant = false;
-        m_values.resize(size, m_values[0]);
-    }
-
     table::table()
         : m_rows(0)
     { }
@@ -109,7 +37,8 @@ namespace tables
 
         auto& c = m_columns[column_name];
 
-        c.resize(m_rows);
+        if(m_rows > 0)
+            c.resize(m_rows);
     }
 
     bool table::is_column(const std::string& column_name,
@@ -130,7 +59,8 @@ namespace tables
 
         for(auto& kv: m_columns)
         {
-            kv.second.resize(m_rows);
+            if (!kv.second.constant())
+                kv.second.resize(m_rows);
         }
     }
 
@@ -156,11 +86,6 @@ namespace tables
         assert((*c.type_hash()) == value.type().hash_code());
     }
 
-    void table::set_value(const std::string& column_name, const char* value)
-    {
-        set_value(column_name, std::string(value));
-    }
-
     bool table::has_column(const std::string& column_name) const
     {
         return m_columns.find(column_name) != m_columns.end();
@@ -184,28 +109,21 @@ namespace tables
 
     void table::merge(const table& src)
     {
-        //if two tables are merged, the const of a const_column no longer applies.
-        for (auto my_kv = m_columns.begin(); my_kv != m_columns.end(); ++my_kv)
+        // if two tables are merged, the const of a const_column no longer applies.
+        for (auto& my_kv : m_columns)
         {
-            my_kv->second.make_nonconst(m_rows);
+            if (my_kv.second.constant())
+                my_kv.second.make_nonconst(m_rows);
         }
-        std::cout << "non const" << std::endl;
 
         for(uint32_t i = 0; i < src.rows(); ++i)
         {
             add_row();
-            std::cout << i << std::endl;
             for(const auto& kv : src)
             {
                 auto name = kv.first;
                 auto column = kv.second;
-                auto this_column_pair = m_columns.find(name);
-                
-                if(this_column_pair == m_columns.end())
-                {
-                    std::cout << "making " << name << std::endl;
-                    add_column(name);
-                }
+
                 set_value(name, column.value(i));
             }
         }
