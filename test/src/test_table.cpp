@@ -189,7 +189,7 @@ TEST(TestTable, test_is_column)
     tables::table table;
 
     table.set_const_value("const_c1", uint32_t(99));
-    table.set_const_value("const_c2", int8_t(999));
+    table.set_const_value("const_c2", int8_t(127));
     table.set_const_value("const_c3", double(9.9));
     table.set_const_value("const_c4", std::string("test_const"));
 
@@ -279,7 +279,7 @@ TEST(TestTable, test_drop_column)
     tables::table table;
 
     table.set_const_value("const_c1", uint32_t(99));
-    table.set_const_value("const_c2", int8_t(999));
+    table.set_const_value("const_c2", int8_t(127));
     table.set_const_value("const_c3", double(9.9));
     table.set_const_value("const_c4", std::string("test_const"));
 
@@ -301,7 +301,7 @@ TEST(TestTable, test_table_iterator)
     tables::table table;
 
     table.set_const_value("const_c1", uint32_t(99));
-    table.set_const_value("const_c2", int8_t(999));
+    table.set_const_value("const_c2", int8_t(127));
     table.set_const_value("const_c3", double(9.9));
     table.set_const_value("const_c4", std::string("test_const"));
 

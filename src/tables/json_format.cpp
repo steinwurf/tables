@@ -3,6 +3,11 @@
 namespace tables
 {
 
+    void json_format::print_empty(std::ostream &s) const
+    {
+        s << "null";
+    }
+
     void json_format::print(std::ostream &s, bool val) const
     {
         if(val)

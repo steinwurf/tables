@@ -2,7 +2,10 @@
 
 namespace tables
 {
-
+    void python_format::print_empty(std::ostream& s) const
+    {
+        s << "None";
+    }
     void python_format::print(std::ostream &s, bool val) const
     {
         if(val)
@@ -19,5 +22,4 @@ namespace tables
     {
         s << "'" << val << "'";
     }
-
 }

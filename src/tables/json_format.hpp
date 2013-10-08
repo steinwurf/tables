@@ -18,6 +18,9 @@ namespace tables
 
     public: // From format
 
+        /// @copydoc format::print(std::ostream&) const
+        virtual void print_empty(std::ostream &s) const;
+
         /// @copydoc format::print(std::ostream&,bool) const
         virtual void print(std::ostream &s, bool val) const;
 

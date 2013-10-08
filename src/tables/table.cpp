@@ -1,6 +1,3 @@
-
-#include <iomanip>
-
 #include "const_column.hpp"
 #include "nonconst_column.hpp"
 
@@ -84,6 +81,12 @@ namespace tables
         }
     }
 
+    void table::drop_column(const std::string& column_name)
+    {
+        assert(has_column(column_name));
+        m_columns.erase(column_name);
+    }
+
     uint32_t table::rows() const
     {
         return m_rows;
@@ -99,12 +102,6 @@ namespace tables
         return column_names;
     }
 
-    bool table::is_constant(const std::string& column_name) const
-    {
-        assert(has_column(column_name));
-        return m_columns.at(column_name)->is_constant();
-    }
-
     boost::any table::value(const std::string& column_name, uint32_t row_index) const
     {
         assert(has_column(column_name));
@@ -117,11 +114,16 @@ namespace tables
         return m_columns.at(column_name)->values();
     }
 
+    bool table::is_constant(const std::string& column_name) const
+    {
+        assert(has_column(column_name));
+        return m_columns.at(column_name)->is_constant();
+    }
+
     bool table::is_column(const std::string& column_name,
                           const std::type_info& type) const
     {
-        // Check that the column exists.
-        assert(m_columns.find(column_name) != m_columns.end());
+        assert(has_column(column_name));
 
         const auto& c = m_columns.at(column_name);
         assert(c->type_hash());
@@ -131,12 +133,6 @@ namespace tables
     bool table::has_column(const std::string& column_name) const
     {
         return m_columns.find(column_name) != m_columns.end();
-    }
-
-    void table::drop_column(const std::string& column_name)
-    {
-        assert(has_column(column_name));
-        m_columns.erase(column_name);
     }
 
     table::const_iterator table::begin() const
