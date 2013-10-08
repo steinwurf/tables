@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/shared_ptr.hpp>
 #include "column.hpp"
 
 namespace tables {
@@ -8,9 +9,11 @@ namespace tables {
     {
     public:
 
-        nonconst_column(const column& column);
+        nonconst_column(uint32_t rows = 0);
+        nonconst_column(const boost::shared_ptr<column> column);
 
     public:
+
         boost::any value(uint32_t row_index) const;
         std::vector<boost::any> values() const;
         void add_rows(uint32_t rows);

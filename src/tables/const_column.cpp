@@ -8,12 +8,17 @@ namespace tables {
 
     boost::any const_column::value(uint32_t row_index) const
     {
+        // did you forget to add rows?
+        assert(m_rows > 0);
+        // you are out of bounds here.
         assert(row_index < m_rows);
         return m_value;
     }
 
     std::vector<boost::any> const_column::values() const
     {
+        // did you forget to add rows?
+        assert(m_rows > 0);
         return std::vector<boost::any>(m_rows, m_value);
     }
 
@@ -34,13 +39,14 @@ namespace tables {
 
     void const_column::set_value(boost::any value)
     {
+        (void)value;
         // the value of a const_column cannot be set.
         assert(0);
     }
 
     boost::optional<size_t> const_column::type_hash() const
     {
-        return m_value.type().hash_code()
+        return m_value.type().hash_code();
     }
 
     bool const_column::is_constant() const

@@ -19,12 +19,12 @@ namespace tables
 
                 if (print_headers)
                 {
-                    s << c.first;
+                    s << c;
                 }
                 else
                 {
                     // i-1 to accomedate for the header print run.
-                    print(s, c.second.value(i-1));
+                    print(s, val.value(c, i-1));
                 }
 
                 first = false;

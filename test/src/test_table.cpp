@@ -12,59 +12,62 @@ TEST(TestTable, test_constructor)
     EXPECT_EQ(0, table.rows());
 }
 
-TEST(TestTable, test_add_column)
+TEST(TestTable, test_set_value)
 {
     tables::table table;
-
-    table.add_column("column1");
+    table.add_row();
+    table.set_value("column1", 42);
     EXPECT_EQ(1, table.columns().size());
+    EXPECT_EQ(std::string("column1"), table.columns()[0]);
 }
 
-TEST(TestTable, test_add_const_column)
+TEST(TestTable, test_set_const_value)
 {
     tables::table table;
 
-    table.add_const_column("column1", 42);
+    table.set_const_value("column1", 42);
     EXPECT_EQ(1, table.columns().size());
 }
 
 TEST(TestTable, test_add_column_insert_zero)
 {
     tables::table table;
-
-    table.add_column("column1");
     table.add_row();
     table.set_value("column1", 0);
     EXPECT_EQ(1, table.columns().size());
+    EXPECT_EQ(0, boost::any_cast<int>(table.value("column1", 0)));
+    EXPECT_EQ(std::string("column1"), table.columns()[0]);
 }
 
 TEST(TestTable, test_add_const_column_insert_zero)
 {
     tables::table table;
-
-    table.add_const_column("column1", 0);
+    table.add_row();
+    table.set_const_value("column1", 0);
     EXPECT_EQ(1, table.columns().size());
+    EXPECT_EQ(0, boost::any_cast<int>(table.value("column1", 0)));
+    EXPECT_EQ(std::string("column1"), table.columns()[0]);
 }
 
 TEST(TestTable, test_columns)
 {
     tables::table table;
-
-    table.add_const_column("column1", 42);
+    table.add_row();
+    table.set_const_value("column1", 42);
     EXPECT_EQ(1, table.columns().size());
-    table.add_column("column2");
+    table.set_value("column2", 1337);
     EXPECT_EQ(2, table.columns().size());
-    table.add_const_column("column3", 42);
+    table.set_const_value("column3", 42);
     EXPECT_EQ(3, table.columns().size());
-    table.add_column("column4");
+    table.set_value("column4", 1337);
     EXPECT_EQ(4, table.columns().size());
-    table.add_column("column5");
+    table.set_value("column5", 1337);
     EXPECT_EQ(5, table.columns().size());
-    table.add_column("column6");
+    table.set_value("column6", 1337);
     EXPECT_EQ(6, table.columns().size());
-    table.add_const_column("column7", std::string("42"));
+    table.set_const_value("column7", std::string("42"));
     EXPECT_EQ(7, table.columns().size());
-    table.add_const_column("column8", 88);
+    table.set_const_value("column8", 88);
     EXPECT_EQ(8, table.columns().size());
 }
 
@@ -72,17 +75,24 @@ TEST(TestTable, test_add_row)
 {
     tables::table table;
     uint32_t rows = 10;
-    for (uint32_t i = 0; i <= rows; ++i)
+    for (uint32_t i = 0; i < rows; ++i)
     {
         EXPECT_EQ(i, table.rows());
         table.add_row();
     }
     uint32_t value = 42;
-    table.add_column("test");
     table.set_value("test", value);
-    auto returned_value = table.columns().find("test")->second.value(rows);
+    auto returned_value = table.value("test", rows-1);
     EXPECT_EQ(value, boost::any_cast<uint32_t>(returned_value));
-    EXPECT_TRUE(table.columns().find("test")->second.value(rows-1).empty());
+    EXPECT_TRUE(table.value("test", rows-2).empty());
+
+    // test values()
+    EXPECT_EQ(rows, table.values("test").size());
+    for (int i = 0; i < rows-1; ++i)
+    {
+        EXPECT_TRUE(table.values("test")[i].empty());
+    }
+    EXPECT_EQ(value, boost::any_cast<uint32_t>(table.values("test")[rows-1]));
 }
 
 TEST(TestTable, test_merge)
@@ -90,29 +100,23 @@ TEST(TestTable, test_merge)
     tables::table table1;
     tables::table table2;
 
-    table1.add_column("t1");
-    table2.add_column("t2");
-
-    table1.add_column("t1_const");
-    table2.add_column("t2_const");
-
-    table1.add_column("common");
-    table2.add_column("common");
-    table1.add_column("common_const1");
-    table2.add_column("common_const1");
-
-    table1.add_column("common_const2");
-
-    table2.add_column("common_const2");
-
     table1.add_row();
     table2.add_row();
 
-    table1.set_value("t1", 1);
-    table2.set_value("t2", 2);
+    table1.set_value("t1", uint32_t(1));
+    table2.set_value("t2", uint32_t(2));
 
-    table1.set_value("common", 1);
-    table2.set_value("common", 2);
+    table1.set_value("t1_const", std::string("const"));
+    table2.set_value("t2_const", std::string("const"));
+
+    table1.set_value("common", uint32_t(1));
+    table2.set_value("common", uint32_t(2));
+    table1.set_value("common_const1", uint32_t(4));
+    table2.set_value("common_const1", uint32_t(4));
+
+    table1.set_value("common_const2", uint32_t(0));
+
+    table2.set_value("common_const2", uint32_t(1));
 
     // table1:
     /**********************************************************
@@ -145,70 +149,171 @@ TEST(TestTable, test_merge)
     EXPECT_EQ(2, table1.rows());
 
     EXPECT_TRUE(table1.has_column("t1"));
-    auto& c1 =table1.columns().find("t1")->second;
+    EXPECT_TRUE(table1.has_column("t2"));
+    EXPECT_TRUE(table1.has_column("t1_const"));
+    EXPECT_TRUE(table1.has_column("t2_const"));
+    EXPECT_TRUE(table1.has_column("common"));
+    EXPECT_TRUE(table1.has_column("common_const1"));
+    EXPECT_TRUE(table1.has_column("common_const2"));
 
-    auto r2 = table1.columns().find("t2");
-    EXPECT_NE(r2, table1.columns().end());
-    auto& c2 =r2->second;
+    // t1
+    EXPECT_EQ(1, boost::any_cast<uint32_t>(table1.value("t1", 0)));
+    EXPECT_TRUE(table1.value("t1", 1).empty());
+    // t2
+    EXPECT_TRUE(table1.value("t2", 0).empty());
+    EXPECT_EQ(2, boost::any_cast<uint32_t>(table1.value("t2", 1)));
+    // t1_const
+    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(
+        table1.value("t1_const", 0)));
+    EXPECT_TRUE(table1.value("t1_const", 1).empty());
+    // t2_const
+    EXPECT_TRUE(table1.value("t2_const", 0).empty());
+    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(
+        table1.value("t2_const", 1)));
+    // common
+    EXPECT_EQ(1, boost::any_cast<uint32_t>(table1.value("common", 0)));
+    EXPECT_EQ(2, boost::any_cast<uint32_t>(table1.value("common", 1)));
 
-    auto r3 = table1.columns().find("t1_const");
-    EXPECT_NE(r3, table1.columns().end());
-    auto& c3 =r3->second;
+    // common_const1
+    EXPECT_EQ(4, boost::any_cast<uint32_t>(table1.value("common_const1", 0)));
+    EXPECT_EQ(4, boost::any_cast<uint32_t>(table1.value("common_const1", 1)));
 
-    auto r4 = table1.columns().find("t2_const");
-    EXPECT_NE(r4, table1.columns().end());
-    auto& c4 =r4->second;
-
-    auto r5 = table1.columns().find("common");
-    EXPECT_NE(r5, table1.columns().end());
-    auto& c5 =r5->second;
-
-    auto r6 = table1.columns().find("common_const1");
-    EXPECT_NE(r6, table1.columns().end());
-    auto& c6 =r6->second;
-
-    auto r7 = table1.columns().find("common_const2");
-    EXPECT_NE(r7, table1.columns().end());
-    auto& c7 =r7->second;
-
-    std::cout << "before error" << std::endl;
-    auto error_cause = c1.value(0);
-    std::cout << "after error" << std::endl;
-    auto compare_value = boost::any_cast<int32_t>(error_cause);
-
-    EXPECT_EQ(1, compare_value);
-
-    EXPECT_TRUE(c1.value(1).empty());
-
-    EXPECT_TRUE(c2.value(0).empty());
-    EXPECT_EQ(2, boost::any_cast<int>(c2.value(1)));
-
-    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(c3.value(0)));
-    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(c3.value(1)));
-
-    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(c4.value(0)));
-    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(c4.value(1)));
-
-    EXPECT_EQ(1, boost::any_cast<int>(c5.value(0)));
-    EXPECT_EQ(2, boost::any_cast<int>(c5.value(1)));
-
-    EXPECT_EQ(4, boost::any_cast<int>(c6.value(0)));
-    EXPECT_EQ(4, boost::any_cast<int>(c6.value(1)));
-
-    EXPECT_EQ(0, boost::any_cast<int>(c7.value(0)));
-    EXPECT_EQ(1, boost::any_cast<int>(c7.value(1)));
+    // common_const2
+    EXPECT_EQ(0, boost::any_cast<uint32_t>(table1.value("common_const2", 0)));
+    EXPECT_EQ(1, boost::any_cast<uint32_t>(table1.value("common_const2", 1)));
 }
 
-/*
-void merge(const table& src);
-uint32_t rows() const;
-std::map<std::string, column> columns() const;
-template<class T> bool is_column(const std::string &column_name) const;
-bool is_column(const std::string& column_name, const std::type_info& type) const;
-bool has_column(const std::string& column_name) const;
-void drop_column(const std::string& column_name);
-template<class T> std::vector<T> column_as(const std::string &column_name) const;
-typedef std::map<std::string, column>::const_iterator const_iterator;
-const_iterator begin() const;
-const_iterator end() const;
-*/
+
+TEST(TestTable, test_is_column)
+{
+    tables::table table;
+
+    table.set_const_value("const_c1", uint32_t(99));
+    table.set_const_value("const_c2", int8_t(999));
+    table.set_const_value("const_c3", double(9.9));
+    table.set_const_value("const_c4", std::string("test_const"));
+
+    table.add_row();
+    table.set_value("c1", uint32_t(1));
+    table.set_value("c2", int8_t(23));
+    table.set_value("c3", double(2.3));
+    table.set_value("c4", std::string("test1"));
+
+    table.add_row();
+    table.set_value("c1", uint32_t(2));
+    table.set_value("c2", int8_t(33));
+    table.set_value("c3", double(3.3));
+    table.set_value("c4", std::string("test2"));
+
+    table.add_row();
+    table.set_value("c1", uint32_t(3));
+    table.set_value("c2", int8_t(43));
+    table.set_value("c3", double(4.3));
+    table.set_value("c4", std::string("test3"));
+
+    EXPECT_TRUE(table.is_column<uint32_t>("c1"));
+    EXPECT_FALSE(table.is_column<int8_t>("c1"));
+    EXPECT_FALSE(table.is_column<double>("c1"));
+    EXPECT_FALSE(table.is_column<std::string>("c1"));
+
+    EXPECT_FALSE(table.is_column<uint32_t>("c2"));
+    EXPECT_TRUE(table.is_column<int8_t>("c2"));
+    EXPECT_FALSE(table.is_column<double>("c2"));
+    EXPECT_FALSE(table.is_column<std::string>("c2"));
+
+    EXPECT_FALSE(table.is_column<uint32_t>("c3"));
+    EXPECT_FALSE(table.is_column<int8_t>("c3"));
+    EXPECT_TRUE(table.is_column<double>("c3"));
+    EXPECT_FALSE(table.is_column<std::string>("c3"));
+
+    EXPECT_FALSE(table.is_column<uint32_t>("c4"));
+    EXPECT_FALSE(table.is_column<int8_t>("c4"));
+    EXPECT_FALSE(table.is_column<double>("c4"));
+    EXPECT_TRUE(table.is_column<std::string>("c4"));
+
+    EXPECT_TRUE(table.is_column<uint32_t>("const_c1"));
+    EXPECT_FALSE(table.is_column<int8_t>("const_c1"));
+    EXPECT_FALSE(table.is_column<double>("const_c1"));
+    EXPECT_FALSE(table.is_column<std::string>("const_c1"));
+
+    EXPECT_FALSE(table.is_column<uint32_t>("const_c2"));
+    EXPECT_TRUE(table.is_column<int8_t>("const_c2"));
+    EXPECT_FALSE(table.is_column<double>("const_c2"));
+    EXPECT_FALSE(table.is_column<std::string>("const_c2"));
+
+    EXPECT_FALSE(table.is_column<uint32_t>("const_c3"));
+    EXPECT_FALSE(table.is_column<int8_t>("const_c3"));
+    EXPECT_TRUE(table.is_column<double>("const_c3"));
+    EXPECT_FALSE(table.is_column<std::string>("const_c3"));
+
+    EXPECT_FALSE(table.is_column<uint32_t>("const_c4"));
+    EXPECT_FALSE(table.is_column<int8_t>("const_c4"));
+    EXPECT_FALSE(table.is_column<double>("const_c4"));
+    EXPECT_TRUE(table.is_column<std::string>("const_c4"));
+
+    std::vector<uint32_t> vuint32_t = table.values_as<uint32_t>("c1");
+    std::vector<int8_t> vint8_t = table.values_as<int8_t>("c2");
+    std::vector<double> vdouble = table.values_as<double>("c3");
+    std::vector<std::string> vstring = table.values_as<std::string>("c4");
+
+    std::vector<uint32_t> vconstuint32_t = table.values_as<uint32_t>("const_c1");
+    std::vector<int8_t> vconstint8_t = table.values_as<int8_t>("const_c2");
+    std::vector<double> vconstdouble = table.values_as<double>("const_c3");
+    std::vector<std::string> vconststring = table.values_as<std::string>(
+        "const_c4");
+
+    EXPECT_EQ(3, vuint32_t.size());
+    EXPECT_EQ(3, vint8_t.size());
+    EXPECT_EQ(3, vdouble.size());
+    EXPECT_EQ(3, vstring.size());
+
+    EXPECT_EQ(3, vconstuint32_t.size());
+    EXPECT_EQ(3, vconstint8_t.size());
+    EXPECT_EQ(3, vconstdouble.size());
+    EXPECT_EQ(3, vconststring.size());
+}
+
+
+TEST(TestTable, test_drop_column)
+{
+    tables::table table;
+
+    table.set_const_value("const_c1", uint32_t(99));
+    table.set_const_value("const_c2", int8_t(999));
+    table.set_const_value("const_c3", double(9.9));
+    table.set_const_value("const_c4", std::string("test_const"));
+
+    table.add_row();
+    table.set_value("c1", uint32_t(1));
+    table.set_value("c2", int8_t(23));
+    table.set_value("c3", double(2.3));
+    table.set_value("c4", std::string("test1"));
+
+    EXPECT_EQ(8, table.columns().size());
+    table.drop_column("const_c1");
+    EXPECT_EQ(7, table.columns().size());
+    table.drop_column("c1");
+    EXPECT_EQ(6, table.columns().size());
+}
+
+TEST(TestTable, test_table_iterator)
+{
+    tables::table table;
+
+    table.set_const_value("const_c1", uint32_t(99));
+    table.set_const_value("const_c2", int8_t(999));
+    table.set_const_value("const_c3", double(9.9));
+    table.set_const_value("const_c4", std::string("test_const"));
+
+    table.add_row();
+    table.set_value("c1", uint32_t(1));
+    table.set_value("c2", int8_t(23));
+    table.set_value("c3", double(2.3));
+    table.set_value("c4", std::string("test1"));
+    uint32_t counter = 0;
+    for(auto& c_name : table)
+    {
+        EXPECT_EQ(table.columns()[counter], c_name);
+        counter++;
+    }
+}

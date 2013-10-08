@@ -39,15 +39,15 @@ namespace tables
             if(!first)
                 s << ",";
 
-            print(s, c.first);
+            print(s, c);
             s << ":";
-            if (c.second.constant())
+            if (val.is_constant(c))
             {
-                print(s, c.second.value(0));
+                print(s, val.value(c, 0));
             }
             else
             {
-                print(s, c.second.values());
+                print(s, val.values(c));
             }
             first = false;
         }

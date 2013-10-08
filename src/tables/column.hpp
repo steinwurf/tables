@@ -19,5 +19,7 @@ namespace tables {
         virtual void set_value(boost::any value) = 0;
         virtual bool is_constant() const = 0;
         virtual boost::optional<size_t> type_hash() const = 0;
+
+        virtual ~column() {}
     };
 }

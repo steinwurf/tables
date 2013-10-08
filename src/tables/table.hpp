@@ -7,6 +7,7 @@
 #include <vector>
 
 #include <boost/any.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "column.hpp"
 
@@ -28,8 +29,8 @@ namespace tables
         /// Sets a constant value for a new column
         /// @param column_name The name of the new column
         /// @param value The value to set for the current row
-        void set_const_value(const std::string& column_name, const boost::any& value);
-
+        void set_const_value(const std::string& column_name,
+            const boost::any& value);
 
         /// Called when new results are ready to be registered. This
         /// function essentially adds a new row to the table for all
@@ -47,6 +48,13 @@ namespace tables
 
         /// @return The column names
         std::vector<std::string> columns() const;
+
+        bool is_constant(const std::string& column_name) const;
+
+        boost::any value(const std::string& column_name,
+            uint32_t row_index) const;
+
+        std::vector<boost::any> values(const std::string& column_name) const;
 
         /// Checks whether the column has a specific data type
         /// @param column_name The name of the column
@@ -77,33 +85,34 @@ namespace tables
         /// @param column_name The name of the column
         /// @return The vector containing the results for a specific column
         template<class T>
-        std::vector<T> column_as(const std::string &column_name) const
+        std::vector<T> values_as(const std::string &column_name) const
         {
             assert(m_columns.find(column_name) != m_columns.end());
 
             assert(is_column<T>(column_name));
 
-            std::vector<T> v;
+            std::vector<T> values;
 
             const auto& c = m_columns.at(column_name);
 
-            for(const auto& i : c.m_values)
+            for(const auto& v : c->values())
             {
-                assert(!i.empty());
-                T t = boost::any_cast<T>(i);
-                v.push_back(t);
+                assert(!v.empty());
+                T t = boost::any_cast<T>(v);
+                values.push_back(t);
             }
 
-            return v;
+            return values;
 
         }
 
     public: // Iterator access to the results
 
         /// The iterator type
-        typedef std::map<std::string>::const_iterator
+        typedef std::vector<std::string>::const_iterator
             const_iterator;
 
+        typedef boost::shared_ptr<column> column_ptr;
         /// @return const iterator to the first column name
         const_iterator begin() const;
 
@@ -116,6 +125,6 @@ namespace tables
         uint32_t m_rows;
 
         /// Stores the columns and their names
-        std::map<std::string, column> m_columns;
+        std::map<std::string, column_ptr> m_columns;
     };
 }
