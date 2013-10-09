@@ -184,7 +184,6 @@ TEST(TestTable, test_merge)
     EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(table1.value("common_const2", 1)));
 }
 
-
 TEST(TestTable, test_is_column)
 {
     tables::table table;
@@ -273,7 +272,6 @@ TEST(TestTable, test_is_column)
     EXPECT_EQ(uint64_t(3), vconstdouble.size());
     EXPECT_EQ(uint64_t(3), vconststring.size());
 }
-
 
 TEST(TestTable, test_drop_column)
 {

@@ -2,7 +2,8 @@
 
 #include "column.hpp"
 
-namespace tables {
+namespace tables
+{
 
     /// Class for columns containing the same data for every row.
     class const_column : public column
@@ -18,18 +19,25 @@ namespace tables {
 
         /// @copydoc column::value(uint32_t) const
         boost::any value(uint32_t row_index) const;
+
         /// @copydoc column::values() const
         std::vector<boost::any> values() const;
+
         /// @copydoc column::add_rows(uint32_t)
         void add_rows(uint32_t rows);
+
         /// @copydoc column::add_row()
         void add_row();
+
         /// @copydoc column::rows() const
         uint32_t rows() const;
-        /// @copydoc column::set_value(boost::any)
-        void set_value(boost::any value);
+
+        /// @copydoc column::set_value(const boost::any&)
+        void set_value(const boost::any& value);
+
         /// @copydoc column::is_constant() const
         bool is_constant() const;
+
         /// @copydoc column::type_hash() const
         boost::optional<size_t> type_hash() const;
 

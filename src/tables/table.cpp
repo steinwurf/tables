@@ -3,10 +3,6 @@
 
 #include "table.hpp"
 
-#include <functional>
-
-
-
 namespace tables
 {
     table::table()

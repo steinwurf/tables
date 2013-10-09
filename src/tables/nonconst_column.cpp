@@ -1,6 +1,7 @@
 #include "nonconst_column.hpp"
 
-namespace tables {
+namespace tables
+{
 
     nonconst_column::nonconst_column(uint32_t rows)
     {
@@ -42,7 +43,7 @@ namespace tables {
         return m_values.size();
     }
 
-    void nonconst_column::set_value(boost::any value)
+    void nonconst_column::set_value(const boost::any& value)
     {
         // You forgot to call add_row(s), didn't you?
         assert(m_values[m_values.size()-1].empty());

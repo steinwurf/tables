@@ -6,7 +6,8 @@
 #include <boost/any.hpp>
 #include <boost/optional.hpp>
 
-namespace tables {
+namespace tables
+{
 
     /// An abstract class containing only purely virtual methods. This is used
     /// as a base class for the different columns.
@@ -37,7 +38,7 @@ namespace tables {
 
         /// Sets a value in the column, at the current row
         /// @param value The value to set
-        virtual void set_value(boost::any value) = 0;
+        virtual void set_value(const boost::any& value) = 0;
 
         /// Returns true if the column is constant
         /// @return True if the column is constant

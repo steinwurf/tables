@@ -91,7 +91,6 @@ namespace tables
         /// @return True of the specified column is constant
         bool is_constant(const std::string& column_name) const;
 
-
         /// Checks whether the column contains a specific data type
         /// @param column_name The name of the column
         /// @return True if the column has the type T

@@ -4,7 +4,9 @@ namespace tables {
 
     const_column::const_column(const boost::any& value, uint32_t rows)
         : m_value(value), m_rows(rows)
-    { }
+    {
+        assert(!value.empty());
+    }
 
     boost::any const_column::value(uint32_t row_index) const
     {
@@ -24,12 +26,13 @@ namespace tables {
 
     void const_column::add_rows(uint32_t rows)
     {
+        assert(rows > 0);
         m_rows += rows;
     }
 
     void const_column::add_row()
     {
-        add_rows(1);
+        m_rows += 1;
     }
 
     uint32_t const_column::rows() const
@@ -37,7 +40,7 @@ namespace tables {
         return m_rows;
     }
 
-    void const_column::set_value(boost::any value)
+    void const_column::set_value(const boost::any& value)
     {
         (void)value;
         // the value of a const_column cannot be set.

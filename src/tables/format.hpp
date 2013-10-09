@@ -240,5 +240,4 @@ namespace tables
             assert(0);
         }
     };
-
 }
