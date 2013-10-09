@@ -8,7 +8,8 @@
 
 namespace tables
 {
-    /// Prints to the ostrea in Python format
+    /// Prints to the ostream in the JSON format, as specified here:
+    /// http://tools.ietf.org/html/rfc4627
     struct json_format : public format
     {
     public:
@@ -37,5 +38,4 @@ namespace tables
         virtual void print(std::ostream &s, const table &val) const;
 
     };
-
 }
