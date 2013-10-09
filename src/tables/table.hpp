@@ -114,18 +114,39 @@ namespace tables
 
     public: // Iterator access to the results
 
-        /// The iterator type
-        typedef std::vector<std::string>::const_iterator
-            const_iterator;
-
         /// The pointer to a column type
         typedef boost::shared_ptr<column> column_ptr;
 
+        /// The column map type
+        typedef std::map<std::string, column_ptr> column_map;
+
+        /// The column iterator type
+        typedef column_map::const_iterator column_iterator;
+
+        /// The column name iterator type
+        class column_name_iterator : public column_iterator
+        {
+        public:
+            column_name_iterator() : column_iterator()
+            { };
+            column_name_iterator(const column_iterator s) : column_iterator(s)
+            { };
+            std::string* operator->()
+            {
+                return (std::string* const)&(column_iterator::operator->()->first);
+            }
+            std::string operator*()
+            {
+                return column_iterator::operator*().first;
+            }
+        };
+
+
         /// @return const iterator to the first column name
-        const_iterator begin() const;
+        column_name_iterator begin() const;
 
         /// @return const iterator to the last column name
-        const_iterator end() const;
+        column_name_iterator end() const;
 
     private:
 
@@ -133,6 +154,6 @@ namespace tables
         uint32_t m_rows;
 
         /// Stores the columns and their names
-        std::map<std::string, column_ptr> m_columns;
+        column_map m_columns;
     };
 }

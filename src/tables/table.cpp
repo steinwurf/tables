@@ -3,6 +3,10 @@
 
 #include "table.hpp"
 
+#include <functional>
+
+
+
 namespace tables
 {
     table::table()
@@ -135,13 +139,14 @@ namespace tables
         return m_columns.find(column_name) != m_columns.end();
     }
 
-    table::const_iterator table::begin() const
+    table::column_name_iterator table::begin() const
     {
-        return columns().cbegin();
+
+        return m_columns.cbegin();
     }
 
-    table::const_iterator table::end() const
+    table::column_name_iterator table::end() const
     {
-        return columns().cend();
+        return m_columns.cend();
     }
 }
