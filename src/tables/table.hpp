@@ -141,7 +141,6 @@ namespace tables
             }
         };
 
-
         /// @return const iterator to the first column name
         column_name_iterator begin() const;
 
