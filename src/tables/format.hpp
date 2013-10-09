@@ -199,15 +199,20 @@ namespace tables
         }
 
         virtual std::string vector_begin() const
-        { return ""; }
+        {
+            return "";
+        }
 
         virtual std::string vector_seperator() const
-        { return ","; }
+        {
+            return ",";
+        }
 
 
         virtual std::string vector_end() const
-        { return ""; }
-
+        {
+            return "";
+        }
 
         /// Prints the value to the ostream
         /// @param s The output stream
@@ -233,6 +238,7 @@ namespace tables
             s << vector_end();
 
         }
+
         virtual void print(std::ostream& s, const table& val) const
         {
             // Because we want to be able to instantiate this format class,
