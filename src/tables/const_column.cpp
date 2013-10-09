@@ -1,6 +1,7 @@
 #include "const_column.hpp"
 
-namespace tables {
+namespace tables
+{
 
     const_column::const_column(const boost::any& value, uint32_t rows)
         : m_value(value), m_rows(rows)
@@ -26,7 +27,6 @@ namespace tables {
 
     void const_column::add_rows(uint32_t rows)
     {
-        assert(rows > 0);
         m_rows += rows;
     }
 
@@ -38,6 +38,11 @@ namespace tables {
     uint32_t const_column::rows() const
     {
         return m_rows;
+    }
+
+    uint32_t const_column::empty_rows() const
+    {
+        return 0;
     }
 
     void const_column::set_value(const boost::any& value)

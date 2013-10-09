@@ -37,6 +37,9 @@ namespace tables
         /// @copydoc column::rows() const
         uint32_t rows() const;
 
+        /// @copydoc column::empty_rows() const
+        uint32_t empty_rows() const;
+
         /// @copydoc column::set_value(const boost::any&)
         void set_value(const boost::any& value);
 

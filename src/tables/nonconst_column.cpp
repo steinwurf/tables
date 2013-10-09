@@ -1,5 +1,7 @@
 #include "nonconst_column.hpp"
 
+#include <algorithm>
+
 namespace tables
 {
 
@@ -30,6 +32,12 @@ namespace tables
 
     void nonconst_column::add_rows(uint32_t rows)
     {
+        // Check for overflow
+        assert(m_values.size() + rows >= rows);
+
+        // Check we can increase the size of the vector
+        assert(m_values.size() + rows < m_values.max_size());
+
         m_values.resize(m_values.size() + rows, boost::any());
     }
 
@@ -43,9 +51,19 @@ namespace tables
         return m_values.size();
     }
 
+    uint32_t nonconst_column::empty_rows() const
+    {
+        return std::count_if(m_values.begin(), m_values.end(),
+            [](const boost::any& value)
+            {
+                return value.empty();
+            });
+    }
+
     void nonconst_column::set_value(const boost::any& value)
     {
         // You forgot to call add_row(s), didn't you?
+        assert(m_values.size() > 0);
         assert(m_values[m_values.size()-1].empty());
 
         if(!value.empty())

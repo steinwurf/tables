@@ -1,5 +1,8 @@
 #include <cstdint>
 #include <string>
+#include <iterator>
+
+#include "infix_ostream_iterator.hpp"
 
 #include "csv_format.hpp"
 
@@ -7,29 +10,23 @@ namespace tables
 {
     void csv_format::print(std::ostream &s, const table &val) const
     {
-        // Print headers first, then rows.
-        bool print_headers = true;
-        for(uint32_t i = 0; i < val.rows()+1; ++i)
+        // Print headers
+        infix_ostream_iterator<std::string> print_headers (s, ",");
+        std::copy (val.begin(), val.end(), print_headers );
+        s << std::endl;
+
+        // Print rows
+        for(uint32_t i = 0; i < val.rows(); ++i)
         {
             bool first = true;
-            for(const auto& c: val.columns())
+            for(const auto& c_name: val)
             {
                 if(!first)
                     s << ",";
-
-                if (print_headers)
-                {
-                    s << c;
-                }
-                else
-                {
-                    // i-1 to accomedate for the header print run.
-                    print(s, val.value(c, i-1));
-                }
-
                 first = false;
+
+                print(s, val.value(c_name, i));
             }
-            print_headers = false;
             s << std::endl;
         }
     }

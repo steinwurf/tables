@@ -67,35 +67,47 @@ namespace tables
         /// @return A vector containing the results for a specific column as the
         /// provided data type T
         template<class T>
-        std::vector<T> values_as(const std::string &column_name) const
+        std::vector<T> values_as(const std::string& column_name,
+            const T& default_value) const
         {
             assert(has_column(column_name));
             assert(is_column<T>(column_name));
 
             std::vector<T> values;
 
-            const auto& c = m_columns.at(column_name);
+            const auto& column = m_columns.at(column_name);
 
-            for(const auto& v : c->values())
+            for(const auto& value : column->values())
             {
-                assert(!v.empty());
-                T t = boost::any_cast<T>(v);
-                values.push_back(t);
+                if(value.empty())
+                {
+                    values.push_back(default_value);
+                }
+                else
+                {
+                    T casted_value = boost::any_cast<T>(value);
+                    values.push_back(casted_value);
+                }
             }
 
             return values;
-
         }
 
+        /// Returns true if the specified column is constant
         /// @param column_name The name of the column
-        /// @return True of the specified column is constant
+        /// @return True if the specified column is constant
         bool is_constant(const std::string& column_name) const;
+
+        /// Returns the number of empty values in a specified column
+        /// @param column_name The name of the column
+        /// @return Number of empty values in the specified column
+        uint32_t empty_rows(const std::string& column_name) const;
 
         /// Checks whether the column contains a specific data type
         /// @param column_name The name of the column
         /// @return True if the column has the type T
         template<class T>
-        bool is_column(const std::string &column_name) const
+        bool is_column(const std::string& column_name) const
         {
             return is_column(column_name, typeid(T));
         }
@@ -126,14 +138,19 @@ namespace tables
         class column_name_iterator : public column_iterator
         {
         public:
+
             column_name_iterator() : column_iterator()
             { };
+
             column_name_iterator(const column_iterator s) : column_iterator(s)
             { };
+
             std::string* operator->()
             {
-                return (std::string* const)&(column_iterator::operator->()->first);
+                return (std::string* const)&(
+                    column_iterator::operator->()->first);
             }
+
             std::string operator*()
             {
                 return column_iterator::operator*().first;

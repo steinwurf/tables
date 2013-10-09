@@ -9,7 +9,8 @@ namespace tables
         : m_rows(0)
     { }
 
-    void table::set_value(const std::string& column_name, const boost::any& value)
+    void table::set_value(const std::string& column_name,
+        const boost::any& value)
     {
         // You can not insert a nonconst value without a row to put it in.
         assert(m_rows > 0);
@@ -102,7 +103,8 @@ namespace tables
         return column_names;
     }
 
-    boost::any table::value(const std::string& column_name, uint32_t row_index) const
+    boost::any table::value(const std::string& column_name,
+        uint32_t row_index) const
     {
         assert(has_column(column_name));
         return m_columns.at(column_name)->value(row_index);
@@ -118,6 +120,12 @@ namespace tables
     {
         assert(has_column(column_name));
         return m_columns.at(column_name)->is_constant();
+    }
+
+    uint32_t table::empty_rows(const std::string& column_name) const
+    {
+        assert(has_column(column_name));
+        return m_columns.at(column_name)->empty_rows();
     }
 
     bool table::is_column(const std::string& column_name,

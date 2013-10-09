@@ -93,6 +93,7 @@ TEST(TestTable, test_add_row)
     {
         EXPECT_TRUE(table.values("test")[i].empty());
     }
+    EXPECT_EQ(rows-1, table.empty_rows("test"));
     EXPECT_EQ(value, boost::any_cast<uint32_t>(table.values("test")[rows-1]));
 }
 
@@ -251,16 +252,21 @@ TEST(TestTable, test_is_column)
     EXPECT_FALSE(table.is_column<double>("const_c4"));
     EXPECT_TRUE(table.is_column<std::string>("const_c4"));
 
-    std::vector<uint32_t> vuint32_t = table.values_as<uint32_t>("c1");
-    std::vector<int8_t> vint8_t = table.values_as<int8_t>("c2");
-    std::vector<double> vdouble = table.values_as<double>("c3");
-    std::vector<std::string> vstring = table.values_as<std::string>("c4");
+    std::vector<uint32_t> vuint32_t = table.values_as<uint32_t>("c1",
+        uint32_t());
+    std::vector<int8_t> vint8_t = table.values_as<int8_t>("c2", int8_t());
+    std::vector<double> vdouble = table.values_as<double>("c3", double());
+    std::vector<std::string> vstring = table.values_as<std::string>("c4",
+        std::string());
 
-    std::vector<uint32_t> vconstuint32_t = table.values_as<uint32_t>("const_c1");
-    std::vector<int8_t> vconstint8_t = table.values_as<int8_t>("const_c2");
-    std::vector<double> vconstdouble = table.values_as<double>("const_c3");
+    std::vector<uint32_t> vconstuint32_t = table.values_as<uint32_t>("const_c1",
+        uint32_t());
+    std::vector<int8_t> vconstint8_t = table.values_as<int8_t>("const_c2",
+        int8_t());
+    std::vector<double> vconstdouble = table.values_as<double>("const_c3",
+        double());
     std::vector<std::string> vconststring = table.values_as<std::string>(
-        "const_c4");
+        "const_c4", std::string());
 
     EXPECT_EQ(uint64_t(3), vuint32_t.size());
     EXPECT_EQ(uint64_t(3), vint8_t.size());

@@ -22,7 +22,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, bool val) const
+        virtual void print(std::ostream& s, bool val) const
         {
             s << val;
         }
@@ -30,7 +30,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, int8_t val) const
+        virtual void print(std::ostream& s, int8_t val) const
         {
             s << (int32_t) val;
         }
@@ -38,7 +38,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, uint8_t val) const
+        virtual void print(std::ostream& s, uint8_t val) const
         {
             s << (uint32_t) val;
         }
@@ -46,7 +46,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, int16_t val) const
+        virtual void print(std::ostream& s, int16_t val) const
         {
             s << val;
         }
@@ -54,7 +54,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, uint16_t val) const
+        virtual void print(std::ostream& s, uint16_t val) const
         {
             s << val;
         }
@@ -62,7 +62,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, int32_t val) const
+        virtual void print(std::ostream& s, int32_t val) const
         {
             s << val;
         }
@@ -70,7 +70,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, uint32_t val) const
+        virtual void print(std::ostream& s, uint32_t val) const
         {
             s << val;
         }
@@ -78,7 +78,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, int64_t val) const
+        virtual void print(std::ostream& s, int64_t val) const
         {
             s << val;
         }
@@ -86,7 +86,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, uint64_t val) const
+        virtual void print(std::ostream& s, uint64_t val) const
         {
             s << val;
         }
@@ -94,7 +94,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, float val) const
+        virtual void print(std::ostream& s, float val) const
         {
             s << val;
         }
@@ -102,7 +102,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, double val) const
+        virtual void print(std::ostream& s, double val) const
         {
             s << val;
         }
@@ -110,7 +110,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, const char *val) const
+        virtual void print(std::ostream& s, const char *val) const
         {
             print(s, std::string(val));
         }
@@ -118,12 +118,15 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, const std::string &val) const
+        virtual void print(std::ostream& s, const std::string& val) const
         {
             s << val;
         }
 
-        virtual void print_empty(std::ostream &s) const
+        /// By default, printing an empty value does nothing. This can however
+        /// be changed in super classes
+        /// @param s The output stream
+        virtual void print_empty(std::ostream& s) const
         {
             (void) s;
             return;
@@ -132,7 +135,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream &s, const boost::any &val) const
+        virtual void print(std::ostream& s, const boost::any& val) const
         {
             if(val.empty())
             {
@@ -210,7 +213,7 @@ namespace tables
         /// @param s The output stream
         /// @param val The value to be printed
         template<class T, class Alloc>
-        void print(std::ostream &s, const std::vector<T,Alloc> &val) const
+        void print(std::ostream& s, const std::vector<T,Alloc>& val) const
         {
             auto it = val.begin();
             s << vector_begin();
@@ -230,11 +233,10 @@ namespace tables
             s << vector_end();
 
         }
-        virtual void print(std::ostream &s, const table &val) const
+        virtual void print(std::ostream& s, const table& val) const
         {
-            // To enable use of most functions, format must not be abstract.
-            // However we still don't want to specify how tables should be
-            // generated, as this is for the subclasses to decide.
+            // Because we want to be able to instantiate this format class,
+            // this method cannot be made purely virtual.
             (void) s;
             (void) val;
             assert(0);

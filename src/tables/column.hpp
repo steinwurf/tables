@@ -36,6 +36,10 @@ namespace tables
         /// @return The number of rows
         virtual uint32_t rows() const = 0;
 
+        /// Returns the number of empty rows
+        /// @return The number of empty rows
+        virtual uint32_t empty_rows() const = 0;
+
         /// Sets a value in the column, at the current row
         /// @param value The value to set
         virtual void set_value(const boost::any& value) = 0;
