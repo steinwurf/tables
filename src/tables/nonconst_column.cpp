@@ -51,13 +51,11 @@ namespace tables
         return m_values.size();
     }
 
+    bool value_is_empty(const boost::any& value) { return value.empty(); }
+
     uint32_t nonconst_column::empty_rows() const
     {
-        return std::count_if(m_values.begin(), m_values.end(),
-            [](const boost::any& value)
-            {
-                return value.empty();
-            });
+        return std::count_if(m_values.begin(), m_values.end(), value_is_empty);
     }
 
     void nonconst_column::set_value(const boost::any& value)
