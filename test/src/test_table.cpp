@@ -17,16 +17,16 @@ TEST(TestTable, test_set_value)
 {
     tables::table table;
     table.add_row();
+    table.add_column("column1");
     table.set_value("column1", 42);
     EXPECT_EQ(uint64_t(1), table.columns().size());
     EXPECT_EQ(std::string("column1"), table.columns()[0]);
 }
 
-TEST(TestTable, test_set_const_value)
+TEST(TestTable, test_add_const_column)
 {
     tables::table table;
-
-    table.set_const_value("column1", 42);
+    table.add_const_column("column1", 42);
     EXPECT_EQ(uint64_t(1), table.columns().size());
 }
 
@@ -34,6 +34,7 @@ TEST(TestTable, test_add_column_insert_zero)
 {
     tables::table table;
     table.add_row();
+    table.add_column("column1");
     table.set_value("column1", 0);
     EXPECT_EQ(uint64_t(1), table.columns().size());
     EXPECT_EQ(0, boost::any_cast<int>(table.value("column1", 0)));
@@ -44,7 +45,7 @@ TEST(TestTable, test_add_const_column_insert_zero)
 {
     tables::table table;
     table.add_row();
-    table.set_const_value("column1", 0);
+    table.add_const_column("column1", 0);
     EXPECT_EQ(uint64_t(1), table.columns().size());
     EXPECT_EQ(0, boost::any_cast<int>(table.value("column1", 0)));
     EXPECT_EQ(std::string("column1"), table.columns()[0]);
@@ -54,21 +55,25 @@ TEST(TestTable, test_columns)
 {
     tables::table table;
     table.add_row();
-    table.set_const_value("column1", 42);
+    table.add_const_column("column1", 42);
     EXPECT_EQ(uint64_t(1), table.columns().size());
+    table.add_column("column2");
     table.set_value("column2", 1337);
     EXPECT_EQ(uint64_t(2), table.columns().size());
-    table.set_const_value("column3", 42);
+    table.add_const_column("column3", 42);
     EXPECT_EQ(uint64_t(3), table.columns().size());
+    table.add_column("column4");
     table.set_value("column4", 1337);
     EXPECT_EQ(uint64_t(4), table.columns().size());
+    table.add_column("column5");
     table.set_value("column5", 1337);
     EXPECT_EQ(uint64_t(5), table.columns().size());
+    table.add_column("column6");
     table.set_value("column6", 1337);
     EXPECT_EQ(uint64_t(6), table.columns().size());
-    table.set_const_value("column7", std::string("42"));
+    table.add_const_column("column7", std::string("42"));
     EXPECT_EQ(uint64_t(7), table.columns().size());
-    table.set_const_value("column8", 88);
+    table.add_const_column("column8", 88);
     EXPECT_EQ(uint64_t(8), table.columns().size());
 }
 
@@ -82,6 +87,7 @@ TEST(TestTable, test_add_row)
         table.add_row();
     }
     uint32_t value = 42;
+    table.add_column("test");
     table.set_value("test", value);
     auto returned_value = table.value("test", rows-1);
     EXPECT_EQ(value, boost::any_cast<uint32_t>(returned_value));
@@ -104,6 +110,18 @@ TEST(TestTable, test_merge)
 
     table1.add_row();
     table2.add_row();
+
+    table1.add_column("t1");
+    table1.add_column("t1_const");
+    table1.add_column("common");
+    table1.add_column("common_const1");
+    table1.add_column("common_const2");
+
+    table2.add_column("t2");
+    table2.add_column("t2_const");
+    table2.add_column("common");
+    table2.add_column("common_const1");
+    table2.add_column("common_const2");
 
     table1.set_value("t1", uint32_t(1));
     table2.set_value("t2", uint32_t(2));
@@ -189,12 +207,18 @@ TEST(TestTable, test_is_column)
 {
     tables::table table;
 
-    table.set_const_value("const_c1", uint32_t(99));
-    table.set_const_value("const_c2", int8_t(127));
-    table.set_const_value("const_c3", double(9.9));
-    table.set_const_value("const_c4", std::string("test_const"));
+    table.add_const_column("const_c1", uint32_t(99));
+    table.add_const_column("const_c2", int8_t(127));
+    table.add_const_column("const_c3", double(9.9));
+    table.add_const_column("const_c4", std::string("test_const"));
 
     table.add_row();
+
+    table.add_column("c1");
+    table.add_column("c2");
+    table.add_column("c3");
+    table.add_column("c4");
+
     table.set_value("c1", uint32_t(1));
     table.set_value("c2", int8_t(23));
     table.set_value("c3", double(2.3));
@@ -283,10 +307,15 @@ TEST(TestTable, test_drop_column)
 {
     tables::table table;
 
-    table.set_const_value("const_c1", uint32_t(99));
-    table.set_const_value("const_c2", int8_t(127));
-    table.set_const_value("const_c3", double(9.9));
-    table.set_const_value("const_c4", std::string("test_const"));
+    table.add_const_column("const_c1", uint32_t(99));
+    table.add_const_column("const_c2", int8_t(127));
+    table.add_const_column("const_c3", double(9.9));
+    table.add_const_column("const_c4", std::string("test_const"));
+
+    table.add_column("c1");
+    table.add_column("c2");
+    table.add_column("c3");
+    table.add_column("c4");
 
     table.add_row();
     table.set_value("c1", uint32_t(1));
@@ -305,10 +334,15 @@ TEST(TestTable, test_table_iterator)
 {
     tables::table table;
 
-    table.set_const_value("const_c1", uint32_t(99));
-    table.set_const_value("const_c2", int8_t(127));
-    table.set_const_value("const_c3", double(9.9));
-    table.set_const_value("const_c4", std::string("test_const"));
+    table.add_const_column("const_c1", uint32_t(99));
+    table.add_const_column("const_c2", int8_t(127));
+    table.add_const_column("const_c3", double(9.9));
+    table.add_const_column("const_c4", std::string("test_const"));
+
+    table.add_column("c1");
+    table.add_column("c2");
+    table.add_column("c3");
+    table.add_column("c4");
 
     table.add_row();
     table.set_value("c1", uint32_t(1));

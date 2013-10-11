@@ -28,6 +28,9 @@ namespace tables
         /// @copydoc column::values() const
         std::vector<boost::any> values() const;
 
+        /// @copydoc column::default_value() const
+        boost::any default_value() const;
+
         /// @copydoc column::add_rows(uint32_t)
         void add_rows(uint32_t rows);
 
@@ -43,6 +46,9 @@ namespace tables
         /// @copydoc column::set_value(const boost::any&)
         void set_value(const boost::any& value);
 
+        /// @copydoc column::set_default_value(const boost::any&)
+        void set_default_value(const boost::any& value);
+
         /// @copydoc column::is_constant() const
         boost::optional<size_t> type_hash() const;
 
@@ -53,6 +59,9 @@ namespace tables
 
         /// Stores the columns data for every row.
         std::vector<boost::any> m_values;
+
+        /// Stores the default value of the column
+        boost::any m_default_value;
 
         /// Stores a hash of the columns data type
         boost::optional<size_t> m_type_hash;

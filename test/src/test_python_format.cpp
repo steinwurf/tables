@@ -41,10 +41,16 @@ TEST(TestFormat, test_python_table_format)
 {
     tables::table table;
 
-    table.set_const_value("const_c1", uint32_t(99));
-    table.set_const_value("const_c2", int8_t(127));
-    table.set_const_value("const_c3", double(9.9));
-    table.set_const_value("const_c4", std::string("test_const"));
+    table.add_const_column("const_c1", uint32_t(99));
+    table.add_const_column("const_c2", int8_t(127));
+    table.add_const_column("const_c3", double(9.9));
+    table.add_const_column("const_c4", std::string("test_const"));
+
+    table.add_column("c1");
+    table.add_column("c2");
+    table.add_column("c3");
+    table.add_column("c4");
+    table.add_column("c5");
 
     table.add_row();
     table.set_value("c1", uint32_t(1));

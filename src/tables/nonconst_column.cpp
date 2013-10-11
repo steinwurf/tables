@@ -6,6 +6,7 @@ namespace tables
 {
 
     nonconst_column::nonconst_column(uint32_t rows)
+        : m_default_value(boost::any())
     {
         add_rows(rows);
     }
@@ -17,6 +18,7 @@ namespace tables
             add_row();
             set_value(v);
         }
+        m_default_value = column->default_value();
     }
 
     boost::any nonconst_column::value(uint32_t row_index) const
@@ -30,6 +32,11 @@ namespace tables
         return m_values;
     }
 
+    boost::any nonconst_column::default_value() const
+    {
+        return m_default_value;
+    }
+
     void nonconst_column::add_rows(uint32_t rows)
     {
         // Check for overflow
@@ -38,7 +45,7 @@ namespace tables
         // Check we can increase the size of the vector
         assert(m_values.size() + rows < m_values.max_size());
 
-        m_values.resize(m_values.size() + rows, boost::any());
+        m_values.resize(m_values.size() + rows, m_default_value);
     }
 
     void nonconst_column::add_row()
@@ -51,6 +58,7 @@ namespace tables
         return m_values.size();
     }
 
+    // Helper functoin for the empty_rows;
     bool value_is_empty(const boost::any& value) { return value.empty(); }
 
     uint32_t nonconst_column::empty_rows() const
@@ -74,6 +82,16 @@ namespace tables
         }
 
         m_values[m_values.size()-1] = value;
+    }
+
+    void nonconst_column::set_default_value(const boost::any& value)
+    {
+        // The default default value is an empty boost::any anyway.
+        assert(!value.empty());
+        // You can't set the default value twice.
+        assert(m_default_value.empty());
+
+        m_default_value = value;
     }
 
     boost::optional<size_t> nonconst_column::type_hash() const

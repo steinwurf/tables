@@ -20,18 +20,22 @@ namespace tables
         /// Construct a new table
         table();
 
+        /// Adds a column to the table.
+        /// @param column_name The name of the new column
+        void add_column(const std::string& column_name);
+
+        /// Adds a column with a single constant value for each
+        /// row to the table.
+        /// @param column_name The name of the new column
+        /// @param value The value to set for all rows
+        void add_const_column(const std::string& column_name,
+            const boost::any& value);
+
         /// Sets the value for the current row in the specified column, if the
         /// doesn't exist, it will be created.
         /// @param column_name The name of the column
         /// @param value The value to set for the current row
         void set_value(const std::string& column_name, const boost::any& value);
-
-        /// Sets a constant value for a new column, must only be called once per
-        /// table, per column name.
-        /// @param column_name The name of the new column
-        /// @param value The value to set for all rows
-        void set_const_value(const std::string& column_name,
-            const boost::any& value);
 
         /// Adds a new row to the table for all columns.
         void add_row();
@@ -42,27 +46,36 @@ namespace tables
         /// @param src The source table to merge into this table
         void merge(const table& src);
 
-        /// Drops a specific column
+        /// Drops a specific column.
         /// @param column_name The name of the column
         void drop_column(const std::string& column_name);
 
+        /// Returns the number of rows.
         /// @return The number of rows
         uint32_t rows() const;
 
+        /// Returns the names of the columns.
         /// @return The names of the columns
         std::vector<std::string> columns() const;
 
+        /// Returns the value stored on the specified position.
         /// @param column_name The name of the column
         /// @param row_index The index of the row to access
         /// @return The value stored on the specified position
         boost::any value(const std::string& column_name,
             uint32_t row_index) const;
 
+        /// Returns the default value of the column.
+        /// @param column_name The name of the column
+        /// @return The default value of the column
+        boost::any default_value(const std::string& column_name) const;
+
+        /// Returns the values stored in the specified column.
         /// @param column_name The name of the column
         /// @return The values stored in the specified column
         std::vector<boost::any> values(const std::string& column_name) const;
 
-        /// Returns the data of specific column
+        /// Returns the data of specific column.
         /// @param column_name The name of the column
         /// @return A vector containing the results for a specific column as the
         /// provided data type T
@@ -93,17 +106,17 @@ namespace tables
             return values;
         }
 
-        /// Returns true if the specified column is constant
+        /// Returns true if the specified column is constant.
         /// @param column_name The name of the column
         /// @return True if the specified column is constant
         bool is_constant(const std::string& column_name) const;
 
-        /// Returns the number of empty values in a specified column
+        /// Returns the number of empty values in a specified column.
         /// @param column_name The name of the column
         /// @return Number of empty values in the specified column
         uint32_t empty_rows(const std::string& column_name) const;
 
-        /// Checks whether the column contains a specific data type
+        /// Checks whether the column contains a specific data type.
         /// @param column_name The name of the column
         /// @return True if the column has the type T
         template<class T>
@@ -112,13 +125,14 @@ namespace tables
             return is_column(column_name, typeid(T));
         }
 
-        /// Checks whether the column contains a specific data type
+        /// Checks whether the column contains a specific data type.
         /// @param column_name The name of the column
         /// @param type The data type of the column
         /// @return True if the column has the type
         bool is_column(const std::string& column_name,
                        const std::type_info& type) const;
 
+        /// Returns true if the column exists.
         /// @param column_name The name of the column
         /// @return True if the column exists
         bool has_column(const std::string& column_name) const;

@@ -25,6 +25,11 @@ namespace tables
         return std::vector<boost::any>(m_rows, m_value);
     }
 
+    boost::any const_column::default_value() const
+    {
+        return boost::any();
+    }
+
     void const_column::add_rows(uint32_t rows)
     {
         m_rows += rows;
@@ -51,6 +56,14 @@ namespace tables
         // the value of a const_column cannot be set.
         assert(0);
     }
+
+    void const_column::set_default_value(const boost::any& value)
+    {
+        (void)value;
+        // the default value of a const_column is set on construction.
+        assert(0);
+    }
+
 
     boost::optional<size_t> const_column::type_hash() const
     {

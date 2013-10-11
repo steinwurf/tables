@@ -25,6 +25,10 @@ namespace tables
         /// @return A vector containing all the values
         virtual std::vector<boost::any> values() const = 0;
 
+        /// Returns the column's default value
+        /// @return The column's default value
+        virtual boost::any default_value() const = 0;
+
         /// Adds the specfied number of rows
         /// @param rows The number of rows to add
         virtual void add_rows(uint32_t rows) = 0;
@@ -43,6 +47,11 @@ namespace tables
         /// Sets a value in the column, at the current row
         /// @param value The value to set
         virtual void set_value(const boost::any& value) = 0;
+
+        /// Sets the default value for the column. This is used instead
+        /// when values in the column is empty.
+        /// @param value The value to set
+        virtual void set_default_value(const boost::any& value) = 0;
 
         /// Returns true if the column is constant
         /// @return True if the column is constant

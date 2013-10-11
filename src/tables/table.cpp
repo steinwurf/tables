@@ -9,24 +9,14 @@ namespace tables
         : m_rows(0)
     { }
 
-    void table::set_value(const std::string& column_name,
-        const boost::any& value)
+    void table::add_column(const std::string& column_name)
     {
-        // You can not insert a nonconst value without a row to put it in.
-        assert(m_rows > 0);
-        if(!has_column(column_name))
-        {
-            m_columns.insert(
-                std::pair<std::string, column_ptr>(
+        assert(!has_column(column_name));
+        m_columns.insert(std::pair<std::string, column_ptr>(
                     column_name, column_ptr(new nonconst_column(m_rows))));
-        }
-        auto& c = m_columns.at(column_name);
-        c->set_value(value);
-        assert(value.empty() ||
-               c->type_hash() == value.type().hash_code());
     }
 
-    void table::set_const_value(const std::string& column_name,
+    void table::add_const_column(const std::string& column_name,
         const boost::any& value)
     {
         // You can't add a const column which already exists.
@@ -35,6 +25,19 @@ namespace tables
         m_columns.insert(
             std::pair<std::string, column_ptr>(column_name,
                 column_ptr(new const_column(value, m_rows))));
+    }
+
+    void table::set_value(const std::string& column_name,
+        const boost::any& value)
+    {
+        // You can not insert a nonconst value without a row to put it in.
+        assert(m_rows > 0);
+        assert(has_column(column_name));
+
+        auto& c = m_columns.at(column_name);
+        c->set_value(value);
+        assert(value.empty() ||
+               c->type_hash() == value.type().hash_code());
     }
 
     void table::add_row()
@@ -75,6 +78,10 @@ namespace tables
             for(const auto& kv : src.m_columns)
             {
                 auto name = kv.first;
+
+                if (!has_column(name))
+                    add_column(name);
+
                 auto column = kv.second;
 
                 set_value(name, column->value(i));
@@ -114,6 +121,12 @@ namespace tables
     {
         assert(has_column(column_name));
         return m_columns.at(column_name)->values();
+    }
+
+    boost::any table::default_value(const std::string& column_name) const
+    {
+        assert(has_column(column_name));
+        return m_columns.at(column_name)->default_value();
     }
 
     bool table::is_constant(const std::string& column_name) const

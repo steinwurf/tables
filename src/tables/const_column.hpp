@@ -20,6 +20,9 @@ namespace tables
         /// @copydoc column::value(uint32_t) const
         boost::any value(uint32_t row_index) const;
 
+        /// @copydoc column::default_value() const
+        boost::any default_value() const;
+
         /// @copydoc column::values() const
         std::vector<boost::any> values() const;
 
@@ -37,6 +40,9 @@ namespace tables
 
         /// @copydoc column::set_value(const boost::any&)
         void set_value(const boost::any& value);
+
+        /// @copydoc column::set_default_value(const boost::any&)
+        void set_default_value(const boost::any& value);
 
         /// @copydoc column::is_constant() const
         bool is_constant() const;
