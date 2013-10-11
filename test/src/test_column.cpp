@@ -74,6 +74,61 @@ template<class T> void test_nonconst_column_insert_and_retrieve(T value)
     }
 }
 
+TEST(TestColumn, test_nonconst_column_insert_and_retrieve)
+{
+    // Integer
+    test_nonconst_column_insert_and_retrieve(42);
+    // String
+    test_nonconst_column_insert_and_retrieve(std::string("42"));
+    // Custom
+    test_nonconst_column_insert_and_retrieve(Custom(43));
+}
+
+template<class T> void test_nonconst_column_default_insert_and_retrieve(T value,
+    T default_value)
+{
+    uint32_t length = 10;
+    for (uint32_t i = 0; i < length; ++i)
+    {
+        tables::nonconst_column column;
+        column.set_default_value(default_value);
+        // insert
+        for (uint32_t j = 0; j < length; ++j)
+        {
+            column.add_row();
+            if(j == i)
+            {
+                column.set_value(value);
+            }
+        }
+
+        // retrieve
+        for (uint32_t j = 0; j < length; ++j)
+        {
+            if(j == i)
+            {
+                EXPECT_EQ(value, boost::any_cast<T>(column.value(i)));
+            }
+            else
+            {
+                EXPECT_EQ(boost::any_cast<T>(column.value(j)), default_value);
+            }
+        }
+    }
+}
+
+TEST(TestColumn, test_nonconst_column_default_insert_and_retrieve)
+{
+    // Integer
+    test_nonconst_column_default_insert_and_retrieve(42, 43);
+    // String
+    test_nonconst_column_default_insert_and_retrieve(std::string("42"),
+        std::string("43"));
+    // Custom
+    test_nonconst_column_default_insert_and_retrieve(Custom(43),
+        Custom(44));
+}
+
 template<class T> void test_const_column_insert_and_retrieve(T value)
 {
     uint32_t length = 10;
@@ -109,16 +164,6 @@ TEST(TestColumn, test_const_column_insert_and_retrieve)
     test_const_column_insert_and_retrieve(std::string("42"));
     // Custom
     test_const_column_insert_and_retrieve(Custom(43));
-}
-
-TEST(TestColumn, test_nonconst_column_insert_and_retrieve)
-{
-    // Integer
-    test_nonconst_column_insert_and_retrieve(42);
-    // String
-    test_nonconst_column_insert_and_retrieve(std::string("42"));
-    // Custom
-    test_nonconst_column_insert_and_retrieve(Custom(43));
 }
 
 template<class T> void test_const_hash_type_after_insert(T value)

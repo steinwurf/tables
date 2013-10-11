@@ -70,7 +70,9 @@ namespace tables
     {
         // You forgot to call add_row(s), didn't you?
         assert(m_values.size() > 0);
-        assert(m_values[m_values.size()-1].empty());
+        // If the default is not set we can check if the value was previously
+        // set, otherwise we cannot.
+        assert(!m_default_value.empty() || m_values[m_values.size()-1].empty());
 
         if(!value.empty())
         {
