@@ -60,7 +60,7 @@ namespace tables
     void const_column::set_default_value(const boost::any& value)
     {
         (void)value;
-        // the default value of a const_column is set on construction.
+        // a const_column cannot have a default value.
         assert(0);
     }
 
