@@ -6,6 +6,10 @@ of every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+4.0.0
+-----
 * Major: Modified the API for specifying default values.
 * Minor: Improved unit test for table merging.
 
