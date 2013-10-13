@@ -6,7 +6,7 @@ of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Major: Modified the API used for tables.
 
 2.0.0
 -----

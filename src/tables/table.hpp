@@ -2,203 +2,187 @@
 
 #include <cassert>
 #include <cstdint>
-#include <iostream>
 #include <map>
-#include <memory>
 #include <string>
 #include <vector>
 
 #include <boost/any.hpp>
-#include <boost/optional.hpp>
+#include <boost/shared_ptr.hpp>
+
+#include "column.hpp"
 
 namespace tables
 {
-    /// The table class represents a set of measurements on for every
-    /// run. The table consists of columns and rows, the columns represent
-    /// an event we have measured, the rows the values.
-    /// In many cases we know the columns in advance,
-    /// e.g. when using the time benchmark we have a column called time
-    /// which contains the elapsed time. However, in some cases we are
-    /// running benchmarks where the "events" we measure are not known in
-    /// advance. In these cases the table allows us to dynamically add
-    /// columns as they are needed.
-    /// The table will always preserve the runs <-> row mapping, this
-    /// means that all rows will contain a result for any given run. If
-    /// a row is added at a late stage the table will use the fill value
-    /// to initialize the row for all previous runs. The same will happen
-    /// if a row is not updated for a specific run.
-    ///
-    /// The table only is meant to store results with the same unit e.g.
-    /// microseconds or ticks. If the unit of some event differ they should
-    /// be stored in two different tables.
     class table
     {
-    public:
-
-        /// Represents a column in the table
-        struct column
-        {
-            bool has_fill_value() const;
-
-            /// Stores all the values for the table rows
-            std::vector<boost::any> m_values;
-
-            /// Keeps track of whether a row has already been
-            /// initialized
-            bool m_updated;
-
-            /// Stores the data type of the row can be obtained using
-            /// typeid(int).hash_code()
-            boost::optional<size_t> m_type_hash;
-
-            /// The fill value for the column
-            boost::any m_fill;
-        };
-
     public:
 
         /// Construct a new table
         table();
 
-        /// Create a new column in the table
-        /// @param column The name of the column
-        /// @param fill The value used to fill new rows
-        void add_column(const std::string& column,
-                        const boost::any& fill = boost::any());
+        /// Adds a column to the table.
+        /// @param column_name The name of the new column
+        void add_column(const std::string& column_name);
 
-        /// Set the column data type of the column
-        /// @param column The name of the column
-        /// @param type_info The type info of the column data type
-        void set_column_type(const std::string& column,
-                             const std::type_info& type_info);
+        /// Adds a column with a single constant value for each
+        /// row to the table.
+        /// @param column_name The name of the new column
+        /// @param value The value to set for all rows
+        void add_const_column(const std::string& column_name,
+            const boost::any& value);
 
-        /// Set/change the fill value for a column
-        /// @param column The name of the column
-        /// @param fill The fill value
-        template<class T>
-        void set_column_fill(const std::string& column,
-                             const T& fill)
-        {
-            set_column_fill(column, boost::any(fill));
-        }
+        /// Sets the value for the current row in the specified column, if the
+        /// doesn't exist, it will be created.
+        /// @param column_name The name of the column
+        /// @param value The value to set for the current row
+        void set_value(const std::string& column_name, const boost::any& value);
 
-        /// Set/change the fill value for a column
-        /// @param column The name of the column
-        /// @param fill The fill value
-        void set_column_fill(const std::string& column,
-                             const boost::any& fill);
-
-        /// Called when new results are ready to be registered. This
-        /// function essentially adds a new row to the table for all
-        /// current columns.
+        /// Adds a new row to the table for all columns.
         void add_row();
 
-        /// Sets the value for the current row in the specified column
-        /// @param column The name of the column
-        /// @param value The value to set for the current row
-        template<class T>
-        void set_value(const std::string& column, const T& value)
-        {
-            set_value(column, boost::any(value));
-        }
-
-        /// Sets the value for the current row in the specified column
-        /// @param column The name of the column
-        /// @param value The value to set for the current row
-        void set_value(const std::string& column, const boost::any& value);
-
-        /// Sets the value for the current row in the specified column
-        /// @param column The name of the column
-        /// @param value The value to set for the current row
-        void set_value(const std::string& column, const char* value)
-        {
-            set_value(column, std::string(value));
-        }
-
-        /// Merge the source table into this table. All rows in the source
+        /// Merges this table with the source table. All rows in the source
         /// table are added as new rows in the table and columns are
-        /// created on-the-fly as needed.
+        /// created on-the-fly if needed.
         /// @param src The source table to merge into this table
         void merge(const table& src);
 
+        /// Drops a specific column.
+        /// @param column_name The name of the column
+        void drop_column(const std::string& column_name);
+
+        /// Returns the number of rows.
         /// @return The number of rows
         uint32_t rows() const;
 
-        /// @return The columns
-        std::map<std::string, column> columns() const;
+        /// Returns the names of the columns.
+        /// @return The names of the columns
+        std::vector<std::string> columns() const;
 
-        /// Checks whether the column has a specific data type
-        /// @param column The name of the column
-        /// @return True if the column has the type T
+        /// Returns the value stored on the specified position.
+        /// @param column_name The name of the column
+        /// @param row_index The index of the row to access
+        /// @return The value stored on the specified position
+        boost::any value(const std::string& column_name,
+            uint32_t row_index) const;
+
+        /// Returns the default value of the column.
+        /// @param column_name The name of the column
+        /// @return The default value of the column
+        boost::any default_value(const std::string& column_name) const;
+
+        /// Returns the values stored in the specified column.
+        /// @param column_name The name of the column
+        /// @return The values stored in the specified column
+        std::vector<boost::any> values(const std::string& column_name) const;
+
+        /// Returns the data of specific column.
+        /// @param column_name The name of the column
+        /// @return A vector containing the results for a specific column as the
+        /// provided data type T
         template<class T>
-        bool is_column(const std::string &column) const
+        std::vector<T> values_as(const std::string& column_name,
+            const T& default_value) const
         {
-            return is_column(column, typeid(T));
-        }
+            assert(has_column(column_name));
+            assert(is_column<T>(column_name));
 
-        /// Checks whether the column has a specific data type
-        /// @param column The name of the column
-        /// @param type The data type of the column
-        /// @return True if the column has the type
-        bool is_column(const std::string &column,
-                       const std::type_info& type) const;
+            std::vector<T> values;
 
-        /// Returns true if the specific column exists
-        /// @param column The name of the column
-        /// @return True if the column exists
-        bool has_column(const std::string& column) const;
+            const auto& column = m_columns.at(column_name);
 
-        /// Drops a specific column
-        /// @param column The name of the column
-        void drop_column(const std::string& column);
-
-        /// Returns a specific column.
-        /// @param column The name of the column
-        /// @return The vector containing the results for a specific column
-        template<class T>
-        std::vector<T> column_as(const std::string &column) const
-        {
-            assert(m_columns.find(column) != m_columns.end());
-
-            assert(is_column<T>(column));
-
-            std::vector<T> v;
-
-            const auto& c = m_columns.at(column);
-
-            for(const auto& i : c.m_values)
+            for(const auto& value : column->values())
             {
-                assert(!i.empty());
-                T t = boost::any_cast<T>(i);
-                v.push_back(t);
+                if(value.empty())
+                {
+                    values.push_back(default_value);
+                }
+                else
+                {
+                    T casted_value = boost::any_cast<T>(value);
+                    values.push_back(casted_value);
+                }
             }
 
-            return v;
-
+            return values;
         }
+
+        /// Returns true if the specified column is constant.
+        /// @param column_name The name of the column
+        /// @return True if the specified column is constant
+        bool is_constant(const std::string& column_name) const;
+
+        /// Returns the number of empty values in a specified column.
+        /// @param column_name The name of the column
+        /// @return Number of empty values in the specified column
+        uint32_t empty_rows(const std::string& column_name) const;
+
+        /// Checks whether the column contains a specific data type.
+        /// @param column_name The name of the column
+        /// @return True if the column has the type T
+        template<class T>
+        bool is_column(const std::string& column_name) const
+        {
+            return is_column(column_name, typeid(T));
+        }
+
+        /// Checks whether the column contains a specific data type.
+        /// @param column_name The name of the column
+        /// @param type The data type of the column
+        /// @return True if the column has the type
+        bool is_column(const std::string& column_name,
+                       const std::type_info& type) const;
+
+        /// Returns true if the column exists.
+        /// @param column_name The name of the column
+        /// @return True if the column exists
+        bool has_column(const std::string& column_name) const;
 
     public: // Iterator access to the results
 
-        /// The iterator type
-        typedef std::map<std::string, column>::const_iterator
-            const_iterator;
+        /// The pointer to a column type
+        typedef boost::shared_ptr<column> column_ptr;
 
-        /// @return const iterator to the first row
-        const_iterator begin() const;
+        /// The column map type
+        typedef std::map<std::string, column_ptr> column_map;
 
-        /// @return const iterator to the last row
-        const_iterator end() const;
+        /// The column iterator type
+        typedef column_map::const_iterator column_iterator;
+
+        /// The column name iterator type
+        class column_name_iterator : public column_iterator
+        {
+        public:
+
+            column_name_iterator() : column_iterator()
+            { };
+
+            column_name_iterator(const column_iterator s) : column_iterator(s)
+            { };
+
+            std::string* operator->()
+            {
+                return (std::string* const)&(
+                    column_iterator::operator->()->first);
+            }
+
+            std::string operator*()
+            {
+                return column_iterator::operator*().first;
+            }
+        };
+
+        /// @return const iterator to the first column name
+        column_name_iterator begin() const;
+
+        /// @return const iterator to the last column name
+        column_name_iterator end() const;
 
     private:
 
-        /// Keeps track of the number of columns
+        /// Keeps track of the number of rows
         uint32_t m_rows;
 
-        /// Keeps track of which rows have been updated, this
-        /// it to prevent multiple writers overwriting each other
-        /// by accident
-        std::map<std::string, column> m_columns;
-
+        /// Stores the columns and their names
+        column_map m_columns;
     };
-
 }
