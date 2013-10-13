@@ -58,7 +58,7 @@ namespace tables
         return m_values.size();
     }
 
-    // Helper functoin for the empty_rows;
+    // Helper function for the empty_rows;
     bool value_is_empty(const boost::any& value) { return value.empty(); }
 
     uint32_t nonconst_column::empty_rows() const
@@ -92,6 +92,12 @@ namespace tables
         assert(!value.empty());
         // You can't set the default value twice.
         assert(m_default_value.empty());
+
+        if (!m_type_hash)
+        {
+            m_type_hash = value.type().hash_code();
+        }
+        assert(value.type().hash_code() == m_type_hash);
 
         m_default_value = value;
     }

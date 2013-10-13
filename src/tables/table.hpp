@@ -31,11 +31,15 @@ namespace tables
         void add_const_column(const std::string& column_name,
             const boost::any& value);
 
-        /// Sets the value for the current row in the specified column, if the
-        /// doesn't exist, it will be created.
+        /// Sets the value for the current row in the specified column.
         /// @param column_name The name of the column
         /// @param value The value to set for the current row
         void set_value(const std::string& column_name, const boost::any& value);
+
+        /// Sets the default value the specified column.
+        /// @param column_name The name of the column
+        /// @param value The value to set for the current row
+        void set_default_value(const std::string& column_name, const boost::any& value);
 
         /// Adds a new row to the table for all columns.
         void add_row();
@@ -80,8 +84,7 @@ namespace tables
         /// @return A vector containing the results for a specific column as the
         /// provided data type T
         template<class T>
-        std::vector<T> values_as(const std::string& column_name,
-            const T& default_value) const
+        std::vector<T> values_as(const std::string& column_name) const
         {
             assert(has_column(column_name));
             assert(is_column<T>(column_name));
@@ -92,15 +95,9 @@ namespace tables
 
             for(const auto& value : column->values())
             {
-                if(value.empty())
-                {
-                    values.push_back(default_value);
-                }
-                else
-                {
-                    T casted_value = boost::any_cast<T>(value);
-                    values.push_back(casted_value);
-                }
+                // You can't get the values of a column with empty values.
+                assert(!value.empty());
+                values.push_back(boost::any_cast<T>(value));
             }
 
             return values;

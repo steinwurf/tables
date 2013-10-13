@@ -30,12 +30,32 @@ namespace tables
     void table::set_value(const std::string& column_name,
         const boost::any& value)
     {
-        // You can not insert a nonconst value without a row to put it in.
+        // You can not insert a value without a row to put it in.
         assert(m_rows > 0);
+        
+        // You must create the column before you insert values
         assert(has_column(column_name));
+
+        // You cannot insert values into a constant column
+        assert(!is_constant(column_name));
 
         auto& c = m_columns.at(column_name);
         c->set_value(value);
+        assert(value.empty() ||
+               c->type_hash() == value.type().hash_code());
+    }
+
+    void table::set_default_value(const std::string& column_name,
+        const boost::any& value)
+    {
+        // You must create the column before you set the default value
+        assert(has_column(column_name));
+
+        // You cannot set the default value on a constant column
+        assert(!is_constant(column_name));
+
+        auto& c = m_columns.at(column_name);
+        c->set_default_value(value);
         assert(value.empty() ||
                c->type_hash() == value.type().hash_code());
     }
