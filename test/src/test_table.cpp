@@ -108,46 +108,45 @@ TEST(TestTable, test_merge)
     tables::table table1;
     tables::table table2;
 
-    table1.add_row();
-    table2.add_row();
-
     table1.add_column("t1");
-    table1.add_column("t1_const");
+    table1.add_const_column("t1_const", std::string("const"));
     table1.add_column("common");
-    table1.add_column("common_const1");
-    table1.add_column("common_const2");
+    table1.set_default_value("common", uint32_t(75));
+    table1.add_const_column("common_const1", uint32_t(4));
+    table1.add_const_column("common_const2", uint32_t(0));
 
     table2.add_column("t2");
-    table2.add_column("t2_const");
+    table2.add_const_column("t2_const", std::string("const"));
     table2.add_column("common");
-    table2.add_column("common_const1");
-    table2.add_column("common_const2");
+    table2.add_const_column("common_const1", uint32_t(4));
+    table2.add_const_column("common_const2", uint32_t(1));
+
+    table1.add_row();
+    table2.add_row();
 
     table1.set_value("t1", uint32_t(1));
     table2.set_value("t2", uint32_t(2));
 
-    table1.set_value("t1_const", std::string("const"));
-    table2.set_value("t2_const", std::string("const"));
-
     table1.set_value("common", uint32_t(1));
+
+    
+    table1.add_row();
+    table2.add_row();
+
     table2.set_value("common", uint32_t(2));
-    table1.set_value("common_const1", uint32_t(4));
-    table2.set_value("common_const1", uint32_t(4));
-
-    table1.set_value("common_const2", uint32_t(0));
-
-    table2.set_value("common_const2", uint32_t(1));
 
     // table1:
     /**********************************************************
      * t1 * t1_const * common * common_const1 * common_const2 *
      * 1  * const    * 1      * 4             * 0             *
+     *    * const    * 75     * 4             * 0             *     
      **********************************************************/
 
     // table2:
     /**********************************************************
      * t2 * t2_const * common * common_const1 * common_const2 *
-     * 2  * const    * 2      * 4             * 1             *
+     * 2  * const    *        * 4             * 1             *
+     *    * const    * 2      * 4             * 1             *
      *********************************************************/
 
     // table1 and table 2 should have similar dimensions.
@@ -158,7 +157,9 @@ TEST(TestTable, test_merge)
     /**************************************************************************
      * t1 * t2 * t1_const * t2_const * common * common_const1 * common_const2 *
      * 1  *    * const    *          * 1      * 4             * 0             *
-     *    * 2  *          * const    * 2      * 4             * 1             *
+     *    *    * const    *          * 75     * 4             * 0             *
+     *    * 2  *          * const    *        * 4             * 1             *
+     *    *    *          * const    * 2      * 4             * 1             *
      *************************************************************************/
 
     //After merge they should not.
@@ -166,7 +167,7 @@ TEST(TestTable, test_merge)
     EXPECT_FALSE(table1.rows() == table2.rows());
     // It should have the following dimensions:
     EXPECT_EQ(uint64_t(7), table1.columns().size());
-    EXPECT_EQ(uint64_t(2), table1.rows());
+    EXPECT_EQ(uint64_t(4), table1.rows());
 
     EXPECT_TRUE(table1.has_column("t1"));
     EXPECT_TRUE(table1.has_column("t2"));
@@ -179,28 +180,44 @@ TEST(TestTable, test_merge)
     // t1
     EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(table1.value("t1", 0)));
     EXPECT_TRUE(table1.value("t1", 1).empty());
+    EXPECT_TRUE(table1.value("t1", 2).empty());
+    EXPECT_TRUE(table1.value("t1", 3).empty());
     // t2
     EXPECT_TRUE(table1.value("t2", 0).empty());
-    EXPECT_EQ(uint32_t(2), boost::any_cast<uint32_t>(table1.value("t2", 1)));
+    EXPECT_TRUE(table1.value("t2", 1).empty());
+    EXPECT_EQ(uint32_t(2), boost::any_cast<uint32_t>(table1.value("t2", 2)));
+    EXPECT_TRUE(table1.value("t2", 3).empty());
     // t1_const
     EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(
         table1.value("t1_const", 0)));
-    EXPECT_TRUE(table1.value("t1_const", 1).empty());
+    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(
+        table1.value("t1_const", 1)));
+    EXPECT_TRUE(table1.value("t1_const", 2).empty());
+    EXPECT_TRUE(table1.value("t1_const", 3).empty());
     // t2_const
     EXPECT_TRUE(table1.value("t2_const", 0).empty());
+    EXPECT_TRUE(table1.value("t2_const", 1).empty());
     EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(
-        table1.value("t2_const", 1)));
+        table1.value("t2_const", 2)));
+    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(
+        table1.value("t2_const", 3)));
     // common
     EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(table1.value("common", 0)));
-    EXPECT_EQ(uint32_t(2), boost::any_cast<uint32_t>(table1.value("common", 1)));
+    EXPECT_EQ(uint32_t(75), boost::any_cast<uint32_t>(table1.value("common", 1)));
+    EXPECT_TRUE(table1.value("common", 2).empty());
+    EXPECT_EQ(uint32_t(2), boost::any_cast<uint32_t>(table1.value("common", 3)));
 
     // common_const1
     EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(table1.value("common_const1", 0)));
     EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(table1.value("common_const1", 1)));
+    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(table1.value("common_const1", 2)));
+    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(table1.value("common_const1", 3)));
 
     // common_const2
     EXPECT_EQ(uint32_t(0), boost::any_cast<uint32_t>(table1.value("common_const2", 0)));
-    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(table1.value("common_const2", 1)));
+    EXPECT_EQ(uint32_t(0), boost::any_cast<uint32_t>(table1.value("common_const2", 1)));
+    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(table1.value("common_const2", 2)));
+    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(table1.value("common_const2", 3)));
 }
 
 TEST(TestTable, test_is_column)
@@ -215,9 +232,13 @@ TEST(TestTable, test_is_column)
     table.add_row();
 
     table.add_column("c1");
+    table.set_default_value("c1", uint32_t());
     table.add_column("c2");
+    table.set_default_value("c2", int8_t());
     table.add_column("c3");
+    table.set_default_value("c3", double());
     table.add_column("c4");
+    table.set_default_value("c4", std::string());
 
     table.set_value("c1", uint32_t(1));
     table.set_value("c2", int8_t(23));
@@ -276,21 +297,16 @@ TEST(TestTable, test_is_column)
     EXPECT_FALSE(table.is_column<double>("const_c4"));
     EXPECT_TRUE(table.is_column<std::string>("const_c4"));
 
-    std::vector<uint32_t> vuint32_t = table.values_as<uint32_t>("c1",
-        uint32_t());
-    std::vector<int8_t> vint8_t = table.values_as<int8_t>("c2", int8_t());
-    std::vector<double> vdouble = table.values_as<double>("c3", double());
-    std::vector<std::string> vstring = table.values_as<std::string>("c4",
-        std::string());
+    std::vector<uint32_t> vuint32_t = table.values_as<uint32_t>("c1");
+    std::vector<int8_t> vint8_t = table.values_as<int8_t>("c2");
+    std::vector<double> vdouble = table.values_as<double>("c3");
+    std::vector<std::string> vstring = table.values_as<std::string>("c4");
 
-    std::vector<uint32_t> vconstuint32_t = table.values_as<uint32_t>("const_c1",
-        uint32_t());
-    std::vector<int8_t> vconstint8_t = table.values_as<int8_t>("const_c2",
-        int8_t());
-    std::vector<double> vconstdouble = table.values_as<double>("const_c3",
-        double());
+    std::vector<uint32_t> vconstuint32_t = table.values_as<uint32_t>("const_c1");
+    std::vector<int8_t> vconstint8_t = table.values_as<int8_t>("const_c2");
+    std::vector<double> vconstdouble = table.values_as<double>("const_c3");
     std::vector<std::string> vconststring = table.values_as<std::string>(
-        "const_c4", std::string());
+        "const_c4");
 
     EXPECT_EQ(uint64_t(3), vuint32_t.size());
     EXPECT_EQ(uint64_t(3), vint8_t.size());

@@ -6,7 +6,8 @@ of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Major: Modified the API for specifying default values.
+* Minor: Improved unit test for table merging.
 
 3.0.1
 -----
@@ -20,7 +21,7 @@ Latest
 -----
 * Major: Deleted pylist and pydict.
 * Minor: Adding method to column which can be used for determining whether it has a fill value or not.
-* Bug: Fixed Python and Json output.
+* Bug: Fixed Python and JSON output.
 * Bug: Fixed Windows builds.
 
 1.0.0
