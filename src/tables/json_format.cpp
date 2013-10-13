@@ -3,6 +3,11 @@
 namespace tables
 {
 
+    void json_format::print_empty(std::ostream &s) const
+    {
+        s << "null";
+    }
+
     void json_format::print(std::ostream &s, bool val) const
     {
         if(val)
@@ -39,15 +44,15 @@ namespace tables
             if(!first)
                 s << ",";
 
-            print(s, c.first);
+            print(s, c);
             s << ":";
-            if (c.second.has_fill_value())
+            if (val.is_constant(c))
             {
-                print(s, c.second.m_values[0]);
+                print(s, val.value(c, 0));
             }
             else
             {
-                print(s, c.second.m_values);
+                print(s, val.values(c));
             }
             first = false;
         }

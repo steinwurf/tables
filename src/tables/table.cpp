@@ -1,131 +1,98 @@
-#include "table.hpp"
+#include "const_column.hpp"
+#include "nonconst_column.hpp"
 
-#include <cassert>
-#include <iomanip>
+#include "table.hpp"
 
 namespace tables
 {
-
-    bool table::column::has_fill_value() const
-    {
-        return !m_fill.empty();
-    }
-
     table::table()
         : m_rows(0)
     { }
 
-    void table::add_column(const std::string &column,
-                           const boost::any& fill)
+    void table::add_column(const std::string& column_name)
     {
-        assert(m_columns.find(column) == m_columns.end());
-
-        auto& c = m_columns[column];
-        c.m_values.resize(m_rows, fill);
-        c.m_updated = false;
-
-        if(!fill.empty())
-        {
-            set_column_fill(column, fill);
-        }
+        assert(!has_column(column_name));
+        m_columns.insert(std::pair<std::string, column_ptr>(
+                    column_name, column_ptr(new nonconst_column(m_rows))));
     }
 
-    void table::set_column_type(const std::string& column,
-                                const std::type_info& type_info)
+    void table::add_const_column(const std::string& column_name,
+        const boost::any& value)
     {
-        assert(m_columns.find(column) != m_columns.end());
+        // You can't add a const column which already exists.
+        assert(!has_column(column_name));
 
-        auto& c = m_columns[column];
-
-        assert(!c.m_type_hash);
-        c.m_type_hash = type_info.hash_code();
+        m_columns.insert(
+            std::pair<std::string, column_ptr>(column_name,
+                column_ptr(new const_column(value, m_rows))));
     }
 
-    void table::set_column_fill(const std::string& column,
-                                const boost::any& value)
+    void table::set_value(const std::string& column_name,
+        const boost::any& value)
     {
-        assert(!value.empty());
+        // You can not insert a nonconst value without a row to put it in.
+        assert(m_rows > 0);
+        assert(has_column(column_name));
 
-        if(m_columns.find(column) == m_columns.end())
-        {
-            add_column(column, value);
-        }
-
-        auto& c = m_columns[column];
-
-        if(!c.m_type_hash)
-        {
-            c.m_type_hash = value.type().hash_code();
-        }
-
-        assert(c.m_type_hash == value.type().hash_code());
-
-        c.m_fill = value;
-    }
-
-    bool table::is_column(const std::string& column,
-                          const std::type_info& type) const
-    {
-        assert(m_columns.find(column) != m_columns.end());
-        const auto& c = m_columns.at(column);
-        assert(c.m_type_hash);
-        return (*c.m_type_hash) == type.hash_code();
-
+        auto& c = m_columns.at(column_name);
+        c->set_value(value);
+        assert(value.empty() ||
+               c->type_hash() == value.type().hash_code());
     }
 
     void table::add_row()
     {
         ++m_rows;
 
-        for(auto& c: m_columns)
+        for(auto& kv: m_columns)
         {
-            c.second.m_updated = false;
-            c.second.m_values.resize(m_rows, c.second.m_fill);
+            kv.second->add_row();
         }
     }
 
-    void table::set_value(const std::string& column,
-                          const boost::any& value)
+    void table::merge(const table& src)
     {
-        assert(!value.empty());
-
-        if(m_columns.find(column) == m_columns.end())
+        // if two tables are merged, the const of a const_column no longer
+        // applies.
+        std::map<std::string, column_ptr> converted_columns;
+        for(auto& my_kv : m_columns)
         {
-            add_column(column);
+            if(my_kv.second->is_constant())
+            {
+                converted_columns.insert(
+                    std::pair<std::string, column_ptr>(my_kv.first,
+                        column_ptr(new nonconst_column(my_kv.second))));
+            }
         }
 
-        assert(m_columns.find(column) != m_columns.end());
-
-        auto& c = m_columns[column];
-
-        if(!c.m_type_hash)
+        for(auto& converted_column : converted_columns)
         {
-            set_column_type(column, value.type());
+            m_columns.erase(converted_column.first);
+            m_columns.insert(std::pair<std::string, column_ptr>(
+                converted_column.first, converted_column.second));
         }
 
-        assert(c.m_updated == false);
-        assert(c.m_type_hash);
-        assert((*c.m_type_hash) == value.type().hash_code());
+        for(uint32_t i = 0; i < src.rows(); ++i)
+        {
+            add_row();
+            for(const auto& kv : src.m_columns)
+            {
+                auto name = kv.first;
 
-        c.m_updated = true;
+                if (!has_column(name))
+                    add_column(name);
 
-        assert(m_rows > 0); // Did you forget to call add_row(..)
-        assert(c.m_values.size() == m_rows);
+                auto column = kv.second;
 
-        // Access the "current" row if we are on row 1,
-        // this is index 0
-        c.m_values[m_rows - 1] = value;
+                set_value(name, column->value(i));
+            }
+        }
     }
 
-    bool table::has_column(const std::string& column) const
+    void table::drop_column(const std::string& column_name)
     {
-        return m_columns.find(column) != m_columns.end();
-    }
-
-    void table::drop_column(const std::string& column)
-    {
-        assert(has_column(column));
-        m_columns.erase(column);
+        assert(has_column(column_name));
+        m_columns.erase(column_name);
     }
 
     uint32_t table::rows() const
@@ -133,31 +100,69 @@ namespace tables
         return m_rows;
     }
 
-    std::map<std::string, table::column> table::columns() const
+    std::vector<std::string> table::columns() const
     {
-        return m_columns;
-    }
-
-    void table::merge(const table& src)
-    {
-        for(uint32_t i = 0; i < src.rows(); ++i)
+        std::vector<std::string> column_names;
+        for (auto& kv : m_columns)
         {
-            add_row();
-
-            for(const auto& t : src)
-            {
-                set_value(t.first, t.second.m_values[i]);
-            }
-
+            column_names.push_back(kv.first);
         }
+        return column_names;
     }
 
-    table::const_iterator table::begin() const
+    boost::any table::value(const std::string& column_name,
+        uint32_t row_index) const
     {
+        assert(has_column(column_name));
+        return m_columns.at(column_name)->value(row_index);
+    }
+
+    std::vector<boost::any> table::values(const std::string& column_name) const
+    {
+        assert(has_column(column_name));
+        return m_columns.at(column_name)->values();
+    }
+
+    boost::any table::default_value(const std::string& column_name) const
+    {
+        assert(has_column(column_name));
+        return m_columns.at(column_name)->default_value();
+    }
+
+    bool table::is_constant(const std::string& column_name) const
+    {
+        assert(has_column(column_name));
+        return m_columns.at(column_name)->is_constant();
+    }
+
+    uint32_t table::empty_rows(const std::string& column_name) const
+    {
+        assert(has_column(column_name));
+        return m_columns.at(column_name)->empty_rows();
+    }
+
+    bool table::is_column(const std::string& column_name,
+                          const std::type_info& type) const
+    {
+        assert(has_column(column_name));
+
+        const auto& c = m_columns.at(column_name);
+        assert(c->type_hash());
+        return (*c->type_hash()) == type.hash_code();
+    }
+
+    bool table::has_column(const std::string& column_name) const
+    {
+        return m_columns.find(column_name) != m_columns.end();
+    }
+
+    table::column_name_iterator table::begin() const
+    {
+
         return m_columns.cbegin();
     }
 
-    table::const_iterator table::end() const
+    table::column_name_iterator table::end() const
     {
         return m_columns.cend();
     }

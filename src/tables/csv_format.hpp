@@ -7,6 +7,8 @@
 
 namespace tables
 {
+    /// Prints to the ostream in csv format, as specified here:
+    /// http://tools.ietf.org/html/rfc4180
     class csv_format : public format
     {
     public:

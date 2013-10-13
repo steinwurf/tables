@@ -1,39 +1,43 @@
 #include <cstdint>
+
 #include <gtest/gtest.h>
-#include <tables/csv_format.hpp>
+
+#include <tables/json_format.hpp>
 #include <tables/table.hpp>
 
-TEST(TestFormat, test_csv_format)
+TEST(TestPythonFormat, test_json_format)
 {
     std::stringstream ss;
-    tables::csv_format format;
+    tables::json_format fmt;
 
-    format.print(ss, bool(true));
-    format.print(ss, int8_t(-1));
-    format.print(ss, uint8_t(1));
-    format.print(ss, int16_t(-1));
-    format.print(ss, uint16_t(1));
-    format.print(ss, int32_t(-1));
-    format.print(ss, uint32_t(1));
-    format.print(ss, int64_t(-1));
-    format.print(ss, uint64_t(1));
+    fmt.print(ss, bool(true));
+    fmt.print(ss, int8_t(-1));
+    fmt.print(ss, uint8_t(1));
+    fmt.print(ss, int16_t(-1));
+    fmt.print(ss, uint16_t(1));
+    fmt.print(ss, int32_t(-1));
+    fmt.print(ss, uint32_t(1));
+    fmt.print(ss, int64_t(-1));
+    fmt.print(ss, uint64_t(1));
 
-    format.print(ss, float(-3.14));
-    format.print(ss, double(3.14));
+    fmt.print(ss, float(-3.14));
+    fmt.print(ss, double(3.14));
 
-    format.print(ss, "test");
-    format.print(ss, std::string("test"));
+    fmt.print(ss, "test");
+    fmt.print(ss, std::string("test"));
 
     std::vector<int8_t> v;
     v.push_back(-1);
     v.push_back(1);
 
-    format.print(ss, v);
+    fmt.print(ss, v);
 
-    EXPECT_EQ(ss.str(), "1-11-11-11-11-3.143.14testtest-1,1");
+    EXPECT_EQ(ss.str(), "true-11-11-11-11-3.143.14\"test\"\"test\"[-1,1]");
+
+
 }
 
-TEST(TestFormat, test_csv_table_format)
+TEST(TestFormat, test_json_table_format)
 {
     tables::table table;
 
@@ -46,18 +50,21 @@ TEST(TestFormat, test_csv_table_format)
     table.add_column("c2");
     table.add_column("c3");
     table.add_column("c4");
+    table.add_column("c5");
 
     table.add_row();
     table.set_value("c1", uint32_t(1));
     table.set_value("c2", int8_t(23));
     table.set_value("c3", double(2.3));
     table.set_value("c4", std::string("test1"));
+    table.set_value("c5", true);
 
     table.add_row();
     table.set_value("c1", uint32_t(2));
     table.set_value("c2", int8_t(33));
     table.set_value("c3", double(3.3));
     table.set_value("c4", std::string("test2"));
+    table.set_value("c5", false);
 
     table.add_row();
     table.set_value("c1", uint32_t(3));
@@ -65,17 +72,25 @@ TEST(TestFormat, test_csv_table_format)
     table.set_value("c3", double(4.3));
     table.set_value("c4", std::string("test3"));
 
+
     std::stringstream ss;
-    tables::csv_format format;
+    tables::json_format format;
 
     format.print(ss, table);
 
     std::stringstream ss_expect;
 
-    ss_expect << "c1,c2,c3,c4,const_c1,const_c2,const_c3,const_c4" << std::endl
-              << "1,23,2.3,test1,99,127,9.9,test_const" << std::endl
-              << "2,33,3.3,test2,99,127,9.9,test_const" << std::endl
-              << "3,43,4.3,test3,99,127,9.9,test_const" << std::endl;
+    ss_expect << "{"
+              <<    "\"c1\":[1,2,3],"
+              <<    "\"c2\":[23,33,43],"
+              <<    "\"c3\":[2.3,3.3,4.3],"
+              <<    "\"c4\":[\"test1\",\"test2\",\"test3\"],"
+              <<    "\"c5\":[true,false,null],"
+              <<    "\"const_c1\":99,"
+              <<    "\"const_c2\":127,"
+              <<    "\"const_c3\":9.9,"
+              <<    "\"const_c4\":\"test_const\""
+              << "}";
 
 
     EXPECT_EQ(ss_expect.str(),ss.str());
