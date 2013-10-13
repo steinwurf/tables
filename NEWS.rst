@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+3.0.1
+-----
+* Bug: Bumped version number in wscript.
+
 3.0.0
 -----
 * Major: Modified the API used for tables.
