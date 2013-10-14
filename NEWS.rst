@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+4.1.0
+-----
+* Minor: Improved vector nesting support.
+
 4.0.0
 -----
 * Major: Modified the API for specifying default values.

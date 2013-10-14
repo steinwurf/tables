@@ -33,11 +33,9 @@ TEST(TestPythonFormat, test_python_format)
     fmt.print(ss, v);
 
     EXPECT_EQ(ss.str(), "True-11-11-11-11-3.143.14'test''test'[-1,1]");
-
-
 }
 
-TEST(TestFormat, test_python_table_format)
+TEST(TestPythonFormat, test_python_table_format)
 {
     tables::table table;
 

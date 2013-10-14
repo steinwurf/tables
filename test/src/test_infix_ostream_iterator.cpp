@@ -14,7 +14,7 @@ void test_infix_ostream_iterator(std::vector<T> values,
     EXPECT_EQ(ss.str(), expected_result);
 }
 
-TEST(TestFormat, test_infix_ostream_iterator)
+TEST(TestInfix, test_infix_ostream_iterator)
 {
     static const uint32_t a_ints[] = {1,2,3,4,5,6,7,8,9};
     std::vector<uint32_t> v_ints (a_ints,

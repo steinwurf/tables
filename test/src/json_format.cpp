@@ -5,7 +5,7 @@
 #include <tables/json_format.hpp>
 #include <tables/table.hpp>
 
-TEST(TestPythonFormat, test_json_format)
+TEST(TestJsonFormat, test_json_format)
 {
     std::stringstream ss;
     tables::json_format fmt;
@@ -33,11 +33,33 @@ TEST(TestPythonFormat, test_json_format)
     fmt.print(ss, v);
 
     EXPECT_EQ(ss.str(), "true-11-11-11-11-3.143.14\"test\"\"test\"[-1,1]");
-
-
 }
 
-TEST(TestFormat, test_json_table_format)
+TEST(TestJsonFormat, test_nested_json_format)
+{
+    std::stringstream ss;
+    tables::json_format fmt;
+
+    std::vector<uint32_t> vc0;
+
+    std::vector<uint32_t> vc1;
+    vc1.push_back(uint32_t(24));
+
+    std::vector<uint32_t> vc2;
+    vc2.push_back(uint32_t(66));
+    vc2.push_back(uint32_t(89));
+
+    std::vector<std::vector<uint32_t>> vp;
+    vp.push_back(vc0);
+    vp.push_back(vc1);
+    vp.push_back(vc2);
+
+    fmt.print(ss, vp);
+
+    EXPECT_EQ(ss.str(), "[[],[24],[66,89]]");
+}
+
+TEST(TestJsonFormat, test_json_table_format)
 {
     tables::table table;
 

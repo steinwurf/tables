@@ -30,4 +30,9 @@ namespace tables
             s << std::endl;
         }
     }
+
+    std::string csv_format::vector_seperator() const
+    {
+        return ";";
+    }
 }
