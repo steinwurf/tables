@@ -3,12 +3,12 @@
 namespace tables
 {
 
-    void json_format::print_empty(std::ostream &s) const
+    void json_format::print_empty(std::ostream& s) const
     {
         s << "null";
     }
 
-    void json_format::print(std::ostream &s, bool val) const
+    void json_format::print(std::ostream& s, bool val) const
     {
         if(val)
         {
@@ -20,7 +20,7 @@ namespace tables
         }
     }
 
-    void json_format::print(std::ostream &s, const std::string &val) const
+    void json_format::print(std::ostream& s, const std::string& val) const
     {
         s << "\"" << val << "\"";
     }
@@ -35,7 +35,7 @@ namespace tables
         return "]";
     }
 
-    void json_format::print(std::ostream &s, const table &val) const
+    void json_format::print(std::ostream& s, const table& val) const
     {
         s << "{";
         bool first = true;

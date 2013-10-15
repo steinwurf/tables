@@ -25,9 +25,9 @@ namespace tables
         virtual void print_empty(std::ostream& s) const;
 
         /// @copydoc format::print(std::ostream&,bool) const
-        virtual void print(std::ostream &s, bool val) const;
+        virtual void print(std::ostream& s, bool val) const;
 
         /// @copydoc format::print(std::ostream&, const std::string&) const
-        virtual void print(std::ostream &s, const std::string &val) const;
+        virtual void print(std::ostream& s, const std::string& val) const;
     };
 }

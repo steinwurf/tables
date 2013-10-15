@@ -113,7 +113,7 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        virtual void print(std::ostream& s, const char *val) const
+        virtual void print(std::ostream& s, const char* val) const
         {
             print(s, std::string(val));
         }
@@ -197,10 +197,6 @@ namespace tables
                 return print(s, boost::any_cast<table>(val));
             }
             // Vector container types
-            if (typeid(std::vector<boost::any>) == val.type())
-            {
-                return print(s, boost::any_cast<std::vector<boost::any>>(val));
-            }
             if (typeid(std::vector<bool>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<bool>>(val));
@@ -253,6 +249,10 @@ namespace tables
             {
                 return print(s, boost::any_cast<std::vector<table>>(val));
             }
+            if (typeid(std::vector<boost::any>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<boost::any>>(val));
+            }
 
             // We don't know how to convert this type
             std::cout << "Unknown type: " << val.type().name() << std::endl;
@@ -269,7 +269,6 @@ namespace tables
             return ",";
         }
 
-
         virtual std::string vector_end() const
         {
             return "";
@@ -283,7 +282,7 @@ namespace tables
         {
             s << vector_begin();
             uint32_t i = 0;
-            for (const auto& v : val)
+            for (const T& v : val)
             {
                 print(s, v);
                 i++;

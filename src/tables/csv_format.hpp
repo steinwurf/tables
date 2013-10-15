@@ -19,7 +19,7 @@ namespace tables
     public: // From format
 
         /// @copydoc format::print(std::ostream&, const table&)
-        virtual void print(std::ostream &s, const table &val) const;
+        virtual void print(std::ostream& s, const table& val) const;
         virtual std::string vector_seperator() const;
     };
 }

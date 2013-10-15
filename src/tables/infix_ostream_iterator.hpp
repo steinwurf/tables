@@ -13,7 +13,7 @@ namespace tables
     class infix_ostream_iterator :
         public std::iterator<std::output_iterator_tag, void, void, void, void>
     {
-        std::basic_ostream<charT,traits> *os;
+        std::basic_ostream<charT,traits>* os;
         std::basic_string<charT> delimiter;
         std::basic_string<charT> real_delim;
 
@@ -23,16 +23,16 @@ namespace tables
         typedef traits traits_type;
         typedef std::basic_ostream<charT, traits> ostream_type;
 
-        infix_ostream_iterator(ostream_type &s)
+        infix_ostream_iterator(ostream_type& s)
             : os(&s)
         { }
 
-        infix_ostream_iterator(ostream_type &s, charT const *d)
+        infix_ostream_iterator(ostream_type& s, charT const* d)
             : os(&s),
               real_delim(d)
         { }
 
-        infix_ostream_iterator<T, charT, traits> &operator=(T const &item)
+        infix_ostream_iterator<T, charT, traits> &operator=(T const& item)
         {
             *os << delimiter << item;
             delimiter = real_delim;
