@@ -1,9 +1,12 @@
 #include <cstdint>
+#include <sstream>
 
 #include <gtest/gtest.h>
 
 #include <tables/json_format.hpp>
-#include <tables/table.hpp>
+
+#include "format_test_helper.hpp"
+
 
 TEST(TestJsonFormat, test_json_format)
 {
@@ -34,72 +37,40 @@ TEST(TestJsonFormat, test_json_format)
 
     EXPECT_EQ(ss.str(), "true-11-11-11-11-3.143.14\"test\"\"test\"[-1,1]");
 }
-
-TEST(TestJsonFormat, test_nested_json_format)
+template<typename T>
+void test_nested_json_format(const T& child1_value, const T& child2_value,
+    const std::string& result)
 {
     std::stringstream ss;
     tables::json_format fmt;
 
-    std::vector<uint32_t> vc0;
+    std::vector<T> vc0;
 
-    std::vector<uint32_t> vc1;
-    vc1.push_back(uint32_t(24));
+    std::vector<T> vc1;
+    vc1.push_back(T(child1_value));
 
-    std::vector<uint32_t> vc2;
-    vc2.push_back(uint32_t(66));
-    vc2.push_back(uint32_t(89));
+    std::vector<T> vc2;
+    vc2.push_back(child2_value);
+    vc2.push_back(child2_value);
 
-    std::vector<std::vector<uint32_t>> vp;
+    std::vector<std::vector<T>> vp;
     vp.push_back(vc0);
     vp.push_back(vc1);
     vp.push_back(vc2);
 
     fmt.print(ss, vp);
 
-    EXPECT_EQ(ss.str(), "[[],[24],[66,89]]");
+    EXPECT_EQ(ss.str(), result);
+}
+
+TEST(TestJsonFormat, test_nested_json_format)
+{
+    test_nested_json_format(uint32_t(12), uint32_t(49), "[[],[12],[49,49]]");
+    test_nested_json_format(std::string("12"), std::string("49"), "[[],[\"12\"],[\"49\",\"49\"]]");
 }
 
 TEST(TestJsonFormat, test_json_table_format)
 {
-    tables::table table;
-
-    table.add_const_column("const_c1", uint32_t(99));
-    table.add_const_column("const_c2", int8_t(127));
-    table.add_const_column("const_c3", double(9.9));
-    table.add_const_column("const_c4", std::string("test_const"));
-
-    table.add_column("c1");
-    table.add_column("c2");
-    table.add_column("c3");
-    table.add_column("c4");
-    table.add_column("c5");
-
-    table.add_row();
-    table.set_value("c1", uint32_t(1));
-    table.set_value("c2", int8_t(23));
-    table.set_value("c3", double(2.3));
-    table.set_value("c4", std::string("test1"));
-    table.set_value("c5", true);
-
-    table.add_row();
-    table.set_value("c1", uint32_t(2));
-    table.set_value("c2", int8_t(33));
-    table.set_value("c3", double(3.3));
-    table.set_value("c4", std::string("test2"));
-    table.set_value("c5", false);
-
-    table.add_row();
-    table.set_value("c1", uint32_t(3));
-    table.set_value("c2", int8_t(43));
-    table.set_value("c3", double(4.3));
-    table.set_value("c4", std::string("test3"));
-
-
-    std::stringstream ss;
-    tables::json_format format;
-
-    format.print(ss, table);
-
     std::stringstream ss_expect;
 
     ss_expect << "{"
@@ -108,12 +79,13 @@ TEST(TestJsonFormat, test_json_table_format)
               <<    "\"c3\":[2.3,3.3,4.3],"
               <<    "\"c4\":[\"test1\",\"test2\",\"test3\"],"
               <<    "\"c5\":[true,false,null],"
+              <<    "\"c6\":[[1,2,3,4,5],null,[1,2,3,4,5,1337]],"
               <<    "\"const_c1\":99,"
               <<    "\"const_c2\":127,"
               <<    "\"const_c3\":9.9,"
-              <<    "\"const_c4\":\"test_const\""
+              <<    "\"const_c4\":\"test_const\","
+              <<    "\"const_c5\":true,"
+              <<    "\"const_c6\":[1,2,3,4,5]"
               << "}";
-
-
-    EXPECT_EQ(ss_expect.str(),ss.str());
+    test_table_format(tables::json_format(), ss_expect.str());
 }

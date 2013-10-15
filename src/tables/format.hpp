@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 #include <boost/any.hpp>
-
+#include <boost/spirit/home/support/detail/hold_any.hpp>
 #include "table.hpp"
 
 namespace tables
@@ -194,6 +194,60 @@ namespace tables
                 return print(s, boost::any_cast<table>(val));
             }
 
+            // Vector container types
+            if(typeid(std::vector<bool>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<bool>>(val));
+            }
+            if(typeid(std::vector<int8_t>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<int8_t>>(val));
+            }
+            if(typeid(std::vector<uint8_t>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<uint8_t>>(val));
+            }
+            if(typeid(std::vector<int16_t>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<int16_t>>(val));
+            }
+            if(typeid(std::vector<uint16_t>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<uint16_t>>(val));
+            }
+            if(typeid(std::vector<int32_t>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<int32_t>>(val));
+            }
+            if(typeid(std::vector<uint32_t>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<uint32_t>>(val));
+            }
+            if(typeid(std::vector<int64_t>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<int64_t>>(val));
+            }
+            if(typeid(std::vector<uint64_t>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<uint64_t>>(val));
+            }
+            if(typeid(std::vector<float>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<float>>(val));
+            }
+            if(typeid(std::vector<double>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<double>>(val));
+            }
+            if(typeid(std::vector<std::string>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<std::string>>(val));
+            }
+            if(typeid(std::vector<table>) == val.type())
+            {
+                return print(s, boost::any_cast<std::vector<table>>(val));
+            }
+
             // We don't know how to convert this type
             assert(0);
         }
@@ -220,20 +274,15 @@ namespace tables
         template<class T, class Alloc>
         void print(std::ostream& s, const std::vector<T,Alloc>& val) const
         {
-            auto it = val.begin();
             s << vector_begin();
-            while(val.size() > 0)
+            uint32_t i = 0;
+            for (const auto& v : val)
             {
-                print(s, *it);
-                ++it;
-                if(it == val.end())
-                {
+                print(s, v);
+                i++;
+                if (i == val.size())
                     break;
-                }
-                else
-                {
-                    s << vector_seperator();
-                }
+                s << vector_seperator();
             }
             s << vector_end();
 

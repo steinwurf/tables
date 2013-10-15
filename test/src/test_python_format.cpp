@@ -3,7 +3,8 @@
 #include <gtest/gtest.h>
 
 #include <tables/python_format.hpp>
-#include <tables/table.hpp>
+
+#include "format_test_helper.hpp"
 
 TEST(TestPythonFormat, test_python_format)
 {
@@ -37,45 +38,6 @@ TEST(TestPythonFormat, test_python_format)
 
 TEST(TestPythonFormat, test_python_table_format)
 {
-    tables::table table;
-
-    table.add_const_column("const_c1", uint32_t(99));
-    table.add_const_column("const_c2", int8_t(127));
-    table.add_const_column("const_c3", double(9.9));
-    table.add_const_column("const_c4", std::string("test_const"));
-
-    table.add_column("c1");
-    table.add_column("c2");
-    table.add_column("c3");
-    table.add_column("c4");
-    table.add_column("c5");
-
-    table.add_row();
-    table.set_value("c1", uint32_t(1));
-    table.set_value("c2", int8_t(23));
-    table.set_value("c3", double(2.3));
-    table.set_value("c4", std::string("test1"));
-    table.set_value("c5", true);
-
-    table.add_row();
-    table.set_value("c1", uint32_t(2));
-    table.set_value("c2", int8_t(33));
-    table.set_value("c3", double(3.3));
-    table.set_value("c4", std::string("test2"));
-    table.set_value("c5", false);
-
-    table.add_row();
-    table.set_value("c1", uint32_t(3));
-    table.set_value("c2", int8_t(43));
-    table.set_value("c3", double(4.3));
-    table.set_value("c4", std::string("test3"));
-
-
-    std::stringstream ss;
-    tables::python_format format;
-
-    format.print(ss, table);
-
     std::stringstream ss_expect;
 
     ss_expect << "{"
@@ -84,12 +46,14 @@ TEST(TestPythonFormat, test_python_table_format)
               <<    "'c3':[2.3,3.3,4.3],"
               <<    "'c4':['test1','test2','test3'],"
               <<    "'c5':[True,False,None],"
+              <<    "'c6':[[1,2,3,4,5],None,[1,2,3,4,5,1337]],"
               <<    "'const_c1':99,"
               <<    "'const_c2':127,"
               <<    "'const_c3':9.9,"
-              <<    "'const_c4':'test_const'"
+              <<    "'const_c4':'test_const',"
+              <<    "'const_c5':True,"
+              <<    "'const_c6':[1,2,3,4,5]"
               << "}";
 
-
-    EXPECT_EQ(ss_expect.str(),ss.str());
+    test_table_format(tables::python_format(), ss_expect.str());
 }
