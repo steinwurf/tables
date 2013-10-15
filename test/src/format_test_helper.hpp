@@ -11,7 +11,8 @@
 #include <tables/table.hpp>
 
 
-inline void test_table_format(const tables::format& format, const std::string& expect)
+inline void test_table_format(const tables::format& format,
+                              const std::string& expect)
 {
     tables::table table;
 

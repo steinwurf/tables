@@ -5,8 +5,11 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <typeinfo>
+
 #include <boost/any.hpp>
 #include <boost/spirit/home/support/detail/hold_any.hpp>
+
 #include "table.hpp"
 
 namespace tables
@@ -137,119 +140,121 @@ namespace tables
         /// @param val The value to be printed
         virtual void print(std::ostream& s, const boost::any& val) const
         {
-            if(val.empty())
+            if (val.empty())
             {
                 return print_empty(s);
             }
-            if(typeid(bool) == val.type())
+            else if (typeid(bool) == val.type())
             {
                 return print(s, boost::any_cast<bool>(val));
             }
-            if(typeid(int8_t) == val.type())
+            else if (typeid(int8_t) == val.type())
             {
                 return print(s, boost::any_cast<int8_t>(val));
             }
-            if(typeid(uint8_t) == val.type())
+            else if (typeid(uint8_t) == val.type())
             {
                 return print(s, boost::any_cast<uint8_t>(val));
             }
-            if(typeid(int16_t) == val.type())
+            else if (typeid(int16_t) == val.type())
             {
                 return print(s, boost::any_cast<int16_t>(val));
             }
-            if(typeid(uint16_t) == val.type())
+            else if (typeid(uint16_t) == val.type())
             {
                 return print(s, boost::any_cast<uint16_t>(val));
             }
-            if(typeid(int32_t) == val.type())
+            else if (typeid(int32_t) == val.type())
             {
                 return print(s, boost::any_cast<int32_t>(val));
             }
-            if(typeid(uint32_t) == val.type())
+            else if (typeid(uint32_t) == val.type())
             {
                 return print(s, boost::any_cast<uint32_t>(val));
             }
-            if(typeid(int64_t) == val.type())
+            else if (typeid(int64_t) == val.type())
             {
                 return print(s, boost::any_cast<int64_t>(val));
             }
-            if(typeid(uint64_t) == val.type())
+            else if (typeid(uint64_t) == val.type())
             {
                 return print(s, boost::any_cast<uint64_t>(val));
             }
-            if(typeid(float) == val.type())
+            else if (typeid(float) == val.type())
             {
                 return print(s, boost::any_cast<float>(val));
             }
-            if(typeid(double) == val.type())
+            else if (typeid(double) == val.type())
             {
                 return print(s, boost::any_cast<double>(val));
             }
-            if(typeid(std::string) == val.type())
+            else if (typeid(std::string) == val.type())
             {
                 return print(s, boost::any_cast<std::string>(val));
             }
-            if(typeid(table) == val.type())
+            else if (typeid(table) == val.type())
             {
                 return print(s, boost::any_cast<table>(val));
             }
-
             // Vector container types
-            if(typeid(std::vector<bool>) == val.type())
+            else if (typeid(std::vector<bool>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<bool>>(val));
             }
-            if(typeid(std::vector<int8_t>) == val.type())
+            else if (typeid(std::vector<int8_t>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<int8_t>>(val));
             }
-            if(typeid(std::vector<uint8_t>) == val.type())
+            else if (typeid(std::vector<uint8_t>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<uint8_t>>(val));
             }
-            if(typeid(std::vector<int16_t>) == val.type())
+            else if (typeid(std::vector<int16_t>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<int16_t>>(val));
             }
-            if(typeid(std::vector<uint16_t>) == val.type())
+            else if (typeid(std::vector<uint16_t>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<uint16_t>>(val));
             }
-            if(typeid(std::vector<int32_t>) == val.type())
+            else if (typeid(std::vector<int32_t>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<int32_t>>(val));
             }
-            if(typeid(std::vector<uint32_t>) == val.type())
+            else if (typeid(std::vector<uint32_t>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<uint32_t>>(val));
             }
-            if(typeid(std::vector<int64_t>) == val.type())
+            else if (typeid(std::vector<int64_t>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<int64_t>>(val));
             }
-            if(typeid(std::vector<uint64_t>) == val.type())
+            else if (typeid(std::vector<uint64_t>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<uint64_t>>(val));
             }
-            if(typeid(std::vector<float>) == val.type())
+            else if (typeid(std::vector<float>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<float>>(val));
             }
-            if(typeid(std::vector<double>) == val.type())
+            else if (typeid(std::vector<double>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<double>>(val));
             }
-            if(typeid(std::vector<std::string>) == val.type())
+            else if (typeid(std::vector<std::string>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<std::string>>(val));
             }
-            if(typeid(std::vector<table>) == val.type())
+            else if (typeid(std::vector<table>) == val.type())
             {
                 return print(s, boost::any_cast<std::vector<table>>(val));
             }
-
-            // We don't know how to convert this type
-            assert(0);
+            else
+            {
+                // We don't know how to convert this type
+                std::cout << "Unknown type: " << val.type().name() << std::endl;
+                assert(0);
+            }
         }
 
         virtual std::string vector_begin() const
@@ -271,8 +276,8 @@ namespace tables
         /// Prints the value to the ostream
         /// @param s The output stream
         /// @param val The value to be printed
-        template<class T, class Alloc>
-        void print(std::ostream& s, const std::vector<T,Alloc>& val) const
+        template<class T>
+        void print(std::ostream& s, const std::vector<T>& val) const
         {
             s << vector_begin();
             uint32_t i = 0;
