@@ -6,7 +6,7 @@ of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Minor: Improved vector nesting support.
 
 4.0.0
 -----

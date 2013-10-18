@@ -8,7 +8,7 @@
 
 namespace tables
 {
-    void csv_format::print(std::ostream &s, const table &val) const
+    void csv_format::print(std::ostream& s, const table& val) const
     {
         // Print headers
         infix_ostream_iterator<std::string> print_headers (s, ",");
@@ -29,5 +29,10 @@ namespace tables
             }
             s << std::endl;
         }
+    }
+
+    std::string csv_format::vector_seperator() const
+    {
+        return ";";
     }
 }

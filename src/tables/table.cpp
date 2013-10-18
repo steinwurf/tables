@@ -32,7 +32,7 @@ namespace tables
     {
         // You can not insert a value without a row to put it in.
         assert(m_rows > 0);
-        
+
         // You must create the column before you insert values
         assert(has_column(column_name));
 

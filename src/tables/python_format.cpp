@@ -6,7 +6,7 @@ namespace tables
     {
         s << "None";
     }
-    void python_format::print(std::ostream &s, bool val) const
+    void python_format::print(std::ostream& s, bool val) const
     {
         if(val)
         {
@@ -18,7 +18,7 @@ namespace tables
         }
     }
 
-    void python_format::print(std::ostream &s, const std::string &val) const
+    void python_format::print(std::ostream& s, const std::string& val) const
     {
         s << "'" << val << "'";
     }

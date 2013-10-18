@@ -1,9 +1,13 @@
 #include <cstdint>
-#include <gtest/gtest.h>
-#include <tables/csv_format.hpp>
-#include <tables/table.hpp>
+#include <sstream>
 
-TEST(TestFormat, test_csv_format)
+#include <gtest/gtest.h>
+
+#include <tables/csv_format.hpp>
+
+#include "format_test_helper.hpp"
+
+TEST(TestCsvFormat, test_csv_format)
 {
     std::stringstream ss;
     tables::csv_format format;
@@ -30,53 +34,41 @@ TEST(TestFormat, test_csv_format)
 
     format.print(ss, v);
 
-    EXPECT_EQ(ss.str(), "1-11-11-11-11-3.143.14testtest-1,1");
+    EXPECT_EQ(ss.str(), "1-11-11-11-11-3.143.14testtest-1;1");
 }
 
-TEST(TestFormat, test_csv_table_format)
+TEST(TestCsvFormat, test_nested_csv_format)
 {
-    tables::table table;
-
-    table.add_const_column("const_c1", uint32_t(99));
-    table.add_const_column("const_c2", int8_t(127));
-    table.add_const_column("const_c3", double(9.9));
-    table.add_const_column("const_c4", std::string("test_const"));
-
-    table.add_column("c1");
-    table.add_column("c2");
-    table.add_column("c3");
-    table.add_column("c4");
-
-    table.add_row();
-    table.set_value("c1", uint32_t(1));
-    table.set_value("c2", int8_t(23));
-    table.set_value("c3", double(2.3));
-    table.set_value("c4", std::string("test1"));
-
-    table.add_row();
-    table.set_value("c1", uint32_t(2));
-    table.set_value("c2", int8_t(33));
-    table.set_value("c3", double(3.3));
-    table.set_value("c4", std::string("test2"));
-
-    table.add_row();
-    table.set_value("c1", uint32_t(3));
-    table.set_value("c2", int8_t(43));
-    table.set_value("c3", double(4.3));
-    table.set_value("c4", std::string("test3"));
-
     std::stringstream ss;
-    tables::csv_format format;
+    tables::csv_format fmt;
 
-    format.print(ss, table);
+    std::vector<uint32_t> vc0;
 
+    std::vector<uint32_t> vc1;
+    vc1.push_back(uint32_t(24));
+
+    std::vector<uint32_t> vc2;
+    vc2.push_back(uint32_t(66));
+    vc2.push_back(uint32_t(89));
+
+    std::vector<std::vector<uint32_t>> vp;
+    vp.push_back(vc0);
+    vp.push_back(vc1);
+    vp.push_back(vc2);
+
+    fmt.print(ss, vp);
+
+    EXPECT_EQ(ss.str(), ";24;66;89");
+}
+
+TEST(TestCsvFormat, test_csv_table_format)
+{
     std::stringstream ss_expect;
 
-    ss_expect << "c1,c2,c3,c4,const_c1,const_c2,const_c3,const_c4" << std::endl
-              << "1,23,2.3,test1,99,127,9.9,test_const" << std::endl
-              << "2,33,3.3,test2,99,127,9.9,test_const" << std::endl
-              << "3,43,4.3,test3,99,127,9.9,test_const" << std::endl;
+    ss_expect << "c1,c2,c3,c4,c5,c6,const_c1,const_c2,const_c3,const_c4,const_c5,const_c6" << std::endl
+              << "1,23,2.3,test1,1,1;2;3;4;5,99,127,9.9,test_const,1,1;2;3;4;5" << std::endl
+              << "2,33,3.3,test2,0,,99,127,9.9,test_const,1,1;2;3;4;5" << std::endl
+              << "3,43,4.3,test3,,1;2;3;4;5;1337,99,127,9.9,test_const,1,1;2;3;4;5" << std::endl;
 
-
-    EXPECT_EQ(ss_expect.str(),ss.str());
+    test_table_format(tables::csv_format(), ss_expect.str());
 }
