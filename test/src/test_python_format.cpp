@@ -33,7 +33,7 @@ TEST(TestPythonFormat, test_python_format)
 
     fmt.print(ss, v);
 
-    EXPECT_EQ(ss.str(), "True-11-11-11-11-3.143.14'test''test'[-1,1]");
+    EXPECT_EQ("True-11-11-11-11-3.143.14'test''test'[-1,1]", ss.str());
 }
 
 TEST(TestPythonFormat, test_python_table_format)
