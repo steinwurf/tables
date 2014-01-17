@@ -2,14 +2,14 @@
 
 #include <gtest/gtest.h>
 
-#include <tables/default_format.hpp>
+#include <tables/format.hpp>
 
 #include "format_test_helper.hpp"
 
-TEST(TestDefaultFormat, test_default_format)
+TEST(TestFormat, test_format)
 {
     std::stringstream ss;
-    tables::default_format fmt;
+    tables::format fmt;
 
     fmt.print(ss, bool(true));
     fmt.print(ss, int8_t(-1));

@@ -293,6 +293,13 @@ namespace tables
             s << vector_end();
         }
 
-        virtual void print(std::ostream& s, const table& val) const = 0;
+        virtual void print(std::ostream& s, const table& val) const
+        {
+            // Because we want to be able to instantiate this format class,
+            // this method cannot be made purely virtual.
+            (void) s;
+            (void) val;
+            assert(0);
+        }
     };
 }
