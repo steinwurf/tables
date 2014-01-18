@@ -55,5 +55,5 @@ TEST(TestPythonFormat, test_python_table_format)
               <<    "'const_c6':[1,2,3,4,5]"
               << "}";
 
-    test_table_format(tables::python_format(), ss_expect.str());
+    test_table_format(ss_expect.str(), tables::python_format());
 }

@@ -34,7 +34,7 @@ TEST(TestCsvFormat, test_csv_format)
 
     format.print(ss, v);
 
-    EXPECT_EQ(ss.str(), "1-11-11-11-11-3.143.14testtest-1;1");
+    EXPECT_EQ("1-11-11-11-11-3.143.14testtest-1;1", ss.str());
 }
 
 TEST(TestCsvFormat, test_nested_csv_format)
@@ -58,7 +58,7 @@ TEST(TestCsvFormat, test_nested_csv_format)
 
     fmt.print(ss, vp);
 
-    EXPECT_EQ(ss.str(), ";24;66;89");
+    EXPECT_EQ(";24;66;89", ss.str());
 }
 
 TEST(TestCsvFormat, test_csv_table_format)
@@ -70,5 +70,5 @@ TEST(TestCsvFormat, test_csv_table_format)
               << "2,33,3.3,test2,0,,99,127,9.9,test_const,1,1;2;3;4;5" << std::endl
               << "3,43,4.3,test3,,1;2;3;4;5;1337,99,127,9.9,test_const,1,1;2;3;4;5" << std::endl;
 
-    test_table_format(tables::csv_format(), ss_expect.str());
+    test_table_format(ss_expect.str(), tables::csv_format());
 }
