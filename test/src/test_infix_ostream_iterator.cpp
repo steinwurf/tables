@@ -11,7 +11,7 @@ void test_infix_ostream_iterator(std::vector<T> values,
     std::stringstream ss;
     tables::infix_ostream_iterator<T> printer(ss, delimiter.c_str());
     std::copy (values.begin(), values.end(), printer );
-    EXPECT_EQ(ss.str(), expected_result);
+    EXPECT_EQ(expected_result, ss.str());
 }
 
 TEST(TestInfix, test_infix_ostream_iterator)

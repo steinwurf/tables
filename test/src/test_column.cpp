@@ -19,7 +19,7 @@ TEST(TestColumn, test_column_const_nonconst)
     nonconst_column.add_row();
     nonconst_column.set_value(std::string("42"));
     EXPECT_EQ(boost::any_cast<std::string>(nonconst_column.value(0)),
-        boost::any_cast<std::string>(const_column.value(0)));
+              boost::any_cast<std::string>(const_column.value(0)));
 }
 
 class Custom

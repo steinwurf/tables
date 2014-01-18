@@ -35,12 +35,12 @@ TEST(TestJsonFormat, test_json_format)
 
     fmt.print(ss, v);
 
-    EXPECT_EQ(ss.str(), "true-11-11-11-11-3.143.14\"test\"\"test\"[-1,1]");
+    EXPECT_EQ("true-11-11-11-11-3.143.14\"test\"\"test\"[-1,1]", ss.str());
 }
 
 template<typename T>
 void test_nested_json_format(const T& child1_value, const T& child2_value,
-    const std::string& result)
+    const std::string& expected)
 {
     std::stringstream ss;
     tables::json_format fmt;
@@ -61,7 +61,7 @@ void test_nested_json_format(const T& child1_value, const T& child2_value,
 
     fmt.print(ss, vp);
 
-    EXPECT_EQ(ss.str(), result);
+    EXPECT_EQ(expected, ss.str());
 }
 
 TEST(TestJsonFormat, test_nested_json_format)
@@ -90,5 +90,5 @@ TEST(TestJsonFormat, test_json_table_format)
               <<    "\"const_c6\":[1,2,3,4,5]"
               << "}";
 
-    test_table_format(tables::json_format(), ss_expect.str());
+    test_table_format(ss_expect.str(), tables::json_format());
 }
