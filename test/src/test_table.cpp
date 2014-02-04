@@ -129,7 +129,7 @@ TEST(TestTable, test_merge)
 
     table1.set_value("common", uint32_t(1));
 
-    
+
     table1.add_row();
     table2.add_row();
 
@@ -139,7 +139,7 @@ TEST(TestTable, test_merge)
     /**********************************************************
      * t1 * t1_const * common * common_const1 * common_const2 *
      * 1  * const    * 1      * 4             * 0             *
-     *    * const    * 75     * 4             * 0             *     
+     *    * const    * 75     * 4             * 0             *
      **********************************************************/
 
     // table2:
