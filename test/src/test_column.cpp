@@ -297,7 +297,8 @@ template<class T> void test_nonconst_copy_constructor(T value)
     uint32_t length = 10;
     boost::shared_ptr<tables::const_column> const_column(
         new tables::const_column(value, length));
-    tables::nonconst_column nonconst_column(const_column);
+    tables::nonconst_column nonconst_column(
+        (boost::shared_ptr<tables::column>) const_column);
 
     EXPECT_TRUE(const_column->is_constant());
     EXPECT_FALSE(nonconst_column.is_constant());
