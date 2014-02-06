@@ -92,7 +92,7 @@ namespace tables
                 converted_column.first, converted_column.second));
         }
 
-        for(uint64_t i = 0; i < src.rows(); ++i)
+        for(size_t i = 0; i < src.rows(); ++i)
         {
             add_row();
             for(const auto& kv : src.m_columns)
@@ -115,7 +115,7 @@ namespace tables
         m_columns.erase(column_name);
     }
 
-    uint64_t table::rows() const
+    size_t table::rows() const
     {
         return m_rows;
     }
@@ -131,7 +131,7 @@ namespace tables
     }
 
     boost::any table::value(const std::string& column_name,
-        uint64_t row_index) const
+        size_t row_index) const
     {
         assert(has_column(column_name));
         return m_columns.at(column_name)->value(row_index);
@@ -155,7 +155,7 @@ namespace tables
         return m_columns.at(column_name)->is_constant();
     }
 
-    uint64_t table::empty_rows(const std::string& column_name) const
+    size_t table::empty_rows(const std::string& column_name) const
     {
         assert(has_column(column_name));
         return m_columns.at(column_name)->empty_rows();
