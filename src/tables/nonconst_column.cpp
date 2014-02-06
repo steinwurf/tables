@@ -53,15 +53,15 @@ namespace tables
         add_rows(1);
     }
 
-    uint32_t nonconst_column::rows() const
+    size_t nonconst_column::rows() const
     {
         return m_values.size();
     }
 
-    // Helper function for the empty_rows;
+    // Helper function for the empty_rows method
     bool value_is_empty(const boost::any& value) { return value.empty(); }
 
-    uint32_t nonconst_column::empty_rows() const
+    uint64_t nonconst_column::empty_rows() const
     {
         return std::count_if(m_values.begin(), m_values.end(), value_is_empty);
     }

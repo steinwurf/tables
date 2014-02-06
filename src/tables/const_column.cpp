@@ -40,12 +40,12 @@ namespace tables
         m_rows += 1;
     }
 
-    uint32_t const_column::rows() const
+    size_t const_column::rows() const
     {
         return m_rows;
     }
 
-    uint32_t const_column::empty_rows() const
+    uint64_t const_column::empty_rows() const
     {
         return 0;
     }
