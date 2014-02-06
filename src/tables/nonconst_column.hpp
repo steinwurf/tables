@@ -50,7 +50,7 @@ namespace tables
         void set_default_value(const boost::any& value);
 
         /// @copydoc column::is_constant() const
-        boost::optional<uint64_t> type_hash() const;
+        boost::optional<size_t> type_hash() const;
 
         /// @copydoc column::type_hash() const
         bool is_constant() const;
@@ -64,6 +64,6 @@ namespace tables
         boost::any m_default_value;
 
         /// Stores a hash of the columns data type
-        boost::optional<uint64_t> m_type_hash;
+        boost::optional<size_t> m_type_hash;
     };
 }

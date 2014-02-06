@@ -48,7 +48,7 @@ namespace tables
         bool is_constant() const;
 
         /// @copydoc column::type_hash() const
-        boost::optional<uint64_t> type_hash() const;
+        boost::optional<size_t> type_hash() const;
 
     private:
 

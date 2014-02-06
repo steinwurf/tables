@@ -102,7 +102,7 @@ namespace tables
         m_default_value = value;
     }
 
-    boost::optional<uint64_t> nonconst_column::type_hash() const
+    boost::optional<size_t> nonconst_column::type_hash() const
     {
         return m_type_hash;
     }

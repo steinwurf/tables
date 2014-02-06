@@ -59,7 +59,7 @@ namespace tables
 
         /// Returns the type hash of the columns data
         /// @return The type hash of the columns data
-        virtual boost::optional<uint64_t> type_hash() const = 0;
+        virtual boost::optional<size_t> type_hash() const = 0;
 
         /// A virtual destructor on a base class with virtual methods is needed
         virtual ~column() {}

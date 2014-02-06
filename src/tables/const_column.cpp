@@ -65,7 +65,7 @@ namespace tables
     }
 
 
-    boost::optional<uint64_t> const_column::type_hash() const
+    boost::optional<size_t> const_column::type_hash() const
     {
         return m_value.type().hash_code();
     }
