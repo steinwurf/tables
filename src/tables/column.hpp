@@ -38,7 +38,7 @@ namespace tables
 
         /// Returns the number of rows
         /// @return The number of rows
-        virtual size_t rows() const = 0;
+        virtual uint64_t rows() const = 0;
 
         /// Returns the number of empty rows
         /// @return The number of empty rows
@@ -59,7 +59,7 @@ namespace tables
 
         /// Returns the type hash of the columns data
         /// @return The type hash of the columns data
-        virtual boost::optional<size_t> type_hash() const = 0;
+        virtual boost::optional<uint64_t> type_hash() const = 0;
 
         /// A virtual destructor on a base class with virtual methods is needed
         virtual ~column() {}

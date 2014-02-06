@@ -38,7 +38,7 @@ namespace tables
         void add_row();
 
         /// @copydoc column::rows() const
-        size_t rows() const;
+        uint64_t rows() const;
 
         /// @copydoc column::empty_rows() const
         uint64_t empty_rows() const;
@@ -50,7 +50,7 @@ namespace tables
         void set_default_value(const boost::any& value);
 
         /// @copydoc column::is_constant() const
-        boost::optional<size_t> type_hash() const;
+        boost::optional<uint64_t> type_hash() const;
 
         /// @copydoc column::type_hash() const
         bool is_constant() const;
@@ -64,6 +64,6 @@ namespace tables
         boost::any m_default_value;
 
         /// Stores a hash of the columns data type
-        boost::optional<size_t> m_type_hash;
+        boost::optional<uint64_t> m_type_hash;
     };
 }

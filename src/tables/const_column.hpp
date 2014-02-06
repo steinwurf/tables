@@ -33,7 +33,7 @@ namespace tables
         void add_row();
 
         /// @copydoc column::rows() const
-        size_t rows() const;
+        uint64_t rows() const;
 
         /// @copydoc column::empty_rows() const
         uint64_t empty_rows() const;
@@ -48,7 +48,7 @@ namespace tables
         bool is_constant() const;
 
         /// @copydoc column::type_hash() const
-        boost::optional<size_t> type_hash() const;
+        boost::optional<uint64_t> type_hash() const;
 
     private:
 

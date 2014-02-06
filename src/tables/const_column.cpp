@@ -40,7 +40,7 @@ namespace tables
         m_rows += 1;
     }
 
-    size_t const_column::rows() const
+    uint64_t const_column::rows() const
     {
         return m_rows;
     }
@@ -65,7 +65,7 @@ namespace tables
     }
 
 
-    boost::optional<size_t> const_column::type_hash() const
+    boost::optional<uint64_t> const_column::type_hash() const
     {
         return m_value.type().hash_code();
     }
