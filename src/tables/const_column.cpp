@@ -3,13 +3,13 @@
 namespace tables
 {
 
-    const_column::const_column(const boost::any& value, uint32_t rows)
+    const_column::const_column(const boost::any& value, uint64_t rows)
         : m_value(value), m_rows(rows)
     {
         assert(!value.empty());
     }
 
-    boost::any const_column::value(uint32_t row_index) const
+    boost::any const_column::value(uint64_t row_index) const
     {
         // did you forget to add rows?
         assert(m_rows > 0);
@@ -30,7 +30,7 @@ namespace tables
         return boost::any();
     }
 
-    void const_column::add_rows(uint32_t rows)
+    void const_column::add_rows(uint64_t rows)
     {
         m_rows += rows;
     }

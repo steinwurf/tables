@@ -19,7 +19,7 @@ namespace tables
         /// @param row_index The index of the row on which the data should be
         /// fetched
         /// @returns A boost any object containing the data
-        virtual boost::any value(uint32_t row_index) const = 0;
+        virtual boost::any value(uint64_t row_index) const = 0;
 
         /// Returns a vector all the values in the column
         /// @return A vector containing all the values
@@ -31,7 +31,7 @@ namespace tables
 
         /// Adds the specfied number of rows
         /// @param rows The number of rows to add
-        virtual void add_rows(uint32_t rows) = 0;
+        virtual void add_rows(uint64_t rows) = 0;
 
         /// Adds a row to the column
         virtual void add_row() = 0;
