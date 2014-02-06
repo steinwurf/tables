@@ -5,7 +5,7 @@
 namespace tables
 {
 
-    nonconst_column::nonconst_column(uint64_t rows)
+    nonconst_column::nonconst_column(size_t rows)
         : m_default_value(boost::any())
     {
         add_rows(rows);
@@ -21,7 +21,7 @@ namespace tables
         m_default_value = column->default_value();
     }
 
-    boost::any nonconst_column::value(uint64_t row_index) const
+    boost::any nonconst_column::value(size_t row_index) const
     {
         assert(row_index < m_values.size());
         return m_values[row_index];
@@ -37,7 +37,7 @@ namespace tables
         return m_default_value;
     }
 
-    void nonconst_column::add_rows(uint64_t rows)
+    void nonconst_column::add_rows(size_t rows)
     {
         // Check for overflow
         assert(m_values.size() + rows >= rows);
@@ -53,7 +53,7 @@ namespace tables
         add_rows(1);
     }
 
-    uint64_t nonconst_column::rows() const
+    size_t nonconst_column::rows() const
     {
         return m_values.size();
     }
@@ -61,7 +61,7 @@ namespace tables
     // Helper function for the empty_rows method
     bool value_is_empty(const boost::any& value) { return value.empty(); }
 
-    uint64_t nonconst_column::empty_rows() const
+    size_t nonconst_column::empty_rows() const
     {
         return std::count_if(m_values.begin(), m_values.end(), value_is_empty);
     }

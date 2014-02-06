@@ -56,7 +56,7 @@ namespace tables
 
         /// Returns the number of rows.
         /// @return The number of rows
-        uint64_t rows() const;
+        size_t rows() const;
 
         /// Returns the names of the columns.
         /// @return The names of the columns
@@ -67,7 +67,7 @@ namespace tables
         /// @param row_index The index of the row to access
         /// @return The value stored on the specified position
         boost::any value(const std::string& column_name,
-            uint64_t row_index) const;
+            size_t row_index) const;
 
         /// Returns the default value of the column.
         /// @param column_name The name of the column
@@ -111,7 +111,7 @@ namespace tables
         /// Returns the number of empty values in a specified column.
         /// @param column_name The name of the column
         /// @return Number of empty values in the specified column
-        uint64_t empty_rows(const std::string& column_name) const;
+        size_t empty_rows(const std::string& column_name) const;
 
         /// Checks whether the column contains a specific data type.
         /// @param column_name The name of the column
@@ -177,7 +177,7 @@ namespace tables
     private:
 
         /// Keeps track of the number of rows
-        uint64_t m_rows;
+        size_t m_rows;
 
         /// Stores the columns and their names
         column_map m_columns;

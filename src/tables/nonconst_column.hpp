@@ -13,7 +13,7 @@ namespace tables
 
         /// Creates a non-constant column
         /// @param rows The initial number of rows
-        nonconst_column(uint64_t rows = 0);
+        nonconst_column(size_t rows = 0);
 
         /// Creates a non-constant column from a column (most likely a
         /// const_column)
@@ -22,8 +22,8 @@ namespace tables
 
     public:
 
-        /// @copydoc column::value(uint64_t) const
-        boost::any value(uint64_t row_index) const;
+        /// @copydoc column::value(size_t) const
+        boost::any value(size_t row_index) const;
 
         /// @copydoc column::values() const
         std::vector<boost::any> values() const;
@@ -31,17 +31,17 @@ namespace tables
         /// @copydoc column::default_value() const
         boost::any default_value() const;
 
-        /// @copydoc column::add_rows(uint64_t)
-        void add_rows(uint64_t rows);
+        /// @copydoc column::add_rows(size_t)
+        void add_rows(size_t rows);
 
         /// @copydoc column::add_row()
         void add_row();
 
         /// @copydoc column::rows() const
-        uint64_t rows() const;
+        size_t rows() const;
 
         /// @copydoc column::empty_rows() const
-        uint64_t empty_rows() const;
+        size_t empty_rows() const;
 
         /// @copydoc column::set_value(const boost::any&)
         void set_value(const boost::any& value);
