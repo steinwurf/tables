@@ -3,6 +3,9 @@ Introduction
 
 Tables is a c++ library which allows arbitrary data to be stored as rows in a table with column headers.
 
+.. image:: http://buildbot.steinwurf.dk/svgstatus?project=tables
+    :target: http://buildbot.steinwurf.dk/stats?projects=tables
+
 Dependencies
 ------------
 * We rely on functionality from the Boost C++ libraries, currently the
