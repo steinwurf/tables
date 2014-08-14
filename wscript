@@ -17,7 +17,7 @@ def options(opt):
 
     import waflib.extras.wurf_dependency_bundle as bundle
     import waflib.extras.wurf_dependency_resolve as resolve
-
+    print("test")
     bundle.add_dependency(opt, resolve.ResolveGitMajorVersion(
         name='boost',
         git_repository='github.com/steinwurf/external-boost-light.git',
