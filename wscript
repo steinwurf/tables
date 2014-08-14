@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 # encoding: utf-8
 
+import random
+
 APPNAME = 'tables'
 VERSION = '4.1.0'
 
@@ -18,6 +20,8 @@ def options(opt):
     import waflib.extras.wurf_dependency_bundle as bundle
     import waflib.extras.wurf_dependency_resolve as resolve
     print("tssest4")
+    if random.choice([True, False, False]):
+        return 1
     bundle.add_dependency(opt, resolve.ResolveGitMajorVersion(
         name='boost',
         git_repository='github.com/steinwurf/external-boost-light.git',
