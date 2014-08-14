@@ -20,7 +20,7 @@ def options(opt):
     import waflib.extras.wurf_dependency_bundle as bundle
     import waflib.extras.wurf_dependency_resolve as resolve
     print("tssest4")
-    if random.choice([True, False, False]):
+    if random.choice([True,False,False,False,False,False, False, False]):
         return 1
     bundle.add_dependency(opt, resolve.ResolveGitMajorVersion(
         name='boost',
