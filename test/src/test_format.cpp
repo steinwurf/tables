@@ -1,8 +1,16 @@
-#include <cstdint>
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 
 #include <gtest/gtest.h>
 
 #include <tables/format.hpp>
+
+#include <cstdint>
+#include <string>
+#include <vector>
 
 #include "format_test_helper.hpp"
 

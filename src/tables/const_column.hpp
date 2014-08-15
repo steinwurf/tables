@@ -1,4 +1,11 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 #pragma once
+
+#include <vector>
 
 #include "column.hpp"
 

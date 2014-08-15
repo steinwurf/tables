@@ -1,6 +1,14 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 #pragma once
 
 #include <boost/shared_ptr.hpp>
+
+#include <vector>
+
 #include "column.hpp"
 
 namespace tables
@@ -13,12 +21,12 @@ namespace tables
 
         /// Creates a non-constant column
         /// @param rows The initial number of rows
-        nonconst_column(uint32_t rows = 0);
+        explicit nonconst_column(uint32_t rows = 0);
 
         /// Creates a non-constant column from a column (most likely a
         /// const_column)
         /// @param column The source column to initialize data from.
-        nonconst_column(const boost::shared_ptr<column> column);
+        explicit nonconst_column(const boost::shared_ptr<column> column);
 
     public:
 

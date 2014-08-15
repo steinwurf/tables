@@ -1,3 +1,10 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
+#include <vector>
+
 #include "const_column.hpp"
 
 namespace tables

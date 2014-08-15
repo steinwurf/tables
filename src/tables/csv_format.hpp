@@ -1,6 +1,12 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 #pragma once
 
 #include <ostream>
+#include <string>
 
 #include "format.hpp"
 #include "table.hpp"
@@ -16,7 +22,8 @@ namespace tables
         /// Make the format::print functions available
         using format::print;
 
-    public: // From format
+    public:
+        // From format
 
         /// @copydoc format::print(std::ostream&, const table&)
         virtual void print(std::ostream& s, const table& val) const;

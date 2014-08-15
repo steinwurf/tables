@@ -1,7 +1,12 @@
-#include <cstdint>
-#include <ctime>
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
 #include <gtest/gtest.h>
+
+#include <cstdint>
+#include <ctime>
 
 GTEST_API_ int main(int argc, char **argv)
 {

@@ -1,6 +1,15 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
+#include <map>
+#include <utility>
+#include <vector>
+#include <string>
+
 #include "const_column.hpp"
 #include "nonconst_column.hpp"
-
 #include "table.hpp"
 
 namespace tables
@@ -64,7 +73,7 @@ namespace tables
     {
         ++m_rows;
 
-        for(auto& kv: m_columns)
+        for (auto& kv : m_columns)
         {
             kv.second->add_row();
         }
@@ -75,9 +84,9 @@ namespace tables
         // if two tables are merged, the const of a const_column no longer
         // applies.
         std::map<std::string, column_ptr> converted_columns;
-        for(auto& my_kv : m_columns)
+        for (auto& my_kv : m_columns)
         {
-            if(my_kv.second->is_constant())
+            if (my_kv.second->is_constant())
             {
                 converted_columns.insert(
                     std::pair<std::string, column_ptr>(my_kv.first,
@@ -85,17 +94,17 @@ namespace tables
             }
         }
 
-        for(auto& converted_column : converted_columns)
+        for (auto& converted_column : converted_columns)
         {
             m_columns.erase(converted_column.first);
             m_columns.insert(std::pair<std::string, column_ptr>(
                 converted_column.first, converted_column.second));
         }
 
-        for(uint32_t i = 0; i < src.rows(); ++i)
+        for (uint32_t i = 0; i < src.rows(); ++i)
         {
             add_row();
-            for(const auto& kv : src.m_columns)
+            for (const auto& kv : src.m_columns)
             {
                 auto name = kv.first;
 
@@ -178,7 +187,6 @@ namespace tables
 
     table::column_name_iterator table::begin() const
     {
-
         return m_columns.cbegin();
     }
 
