@@ -1,4 +1,12 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 #pragma once
+
+#include <boost/any.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <cassert>
 #include <cstdint>
@@ -6,8 +14,6 @@
 #include <string>
 #include <vector>
 
-#include <boost/any.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include "column.hpp"
 
@@ -39,7 +45,8 @@ namespace tables
         /// Sets the default value the specified column.
         /// @param column_name The name of the column
         /// @param value The value to set for the current row
-        void set_default_value(const std::string& column_name, const boost::any& value);
+        void set_default_value(const std::string& column_name,
+                               const boost::any& value);
 
         /// Adds a new row to the table for all columns.
         void add_row();
@@ -93,7 +100,7 @@ namespace tables
 
             const auto& column = m_columns.at(column_name);
 
-            for(const auto& value : column->values())
+            for (const auto& value : column->values())
             {
                 // You can't get the values of a column with empty values.
                 assert(!value.empty());
@@ -134,7 +141,8 @@ namespace tables
         /// @return True if the column exists
         bool has_column(const std::string& column_name) const;
 
-    public: // Iterator access to the results
+    public:
+        // Iterator access to the results
 
         /// The pointer to a column type
         typedef boost::shared_ptr<column> column_ptr;
@@ -153,7 +161,8 @@ namespace tables
             column_name_iterator() : column_iterator()
             { };
 
-            column_name_iterator(const column_iterator s) : column_iterator(s)
+            column_name_iterator(const column_iterator s)
+                : column_iterator(s)
             { };
 
             std::string* operator->()

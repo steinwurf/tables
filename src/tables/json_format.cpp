@@ -1,3 +1,10 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
+#include <string>
+
 #include "json_format.hpp"
 
 namespace tables
@@ -10,7 +17,7 @@ namespace tables
 
     void json_format::print(std::ostream& s, bool val) const
     {
-        if(val)
+        if (val)
         {
             s << "true";
         }
@@ -39,9 +46,9 @@ namespace tables
     {
         s << "{";
         bool first = true;
-        for(const auto& c: val.columns())
+        for (const auto& c: val.columns())
         {
-            if(!first)
+            if (!first)
                 s << ",";
 
             print(s, c);

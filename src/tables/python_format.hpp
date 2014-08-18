@@ -1,6 +1,12 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 #pragma once
 
 #include <ostream>
+#include <string>
 
 #include "format.hpp"
 #include "json_format.hpp"
@@ -19,8 +25,8 @@ namespace tables
         /// Make the json_format::print functions available
         using json_format::print;
 
-    public: // From format
-
+    public:
+        // From format
         /// @copydoc format::print_empty(std::ostream&) const
         virtual void print_empty(std::ostream& s) const;
 

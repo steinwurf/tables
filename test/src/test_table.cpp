@@ -1,10 +1,15 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
+#include <gtest/gtest.h>
+#include <boost/any.hpp>
+#include <tables/table.hpp>
+
 #include <cstdint>
 #include <string>
 #include <vector>
-#include <gtest/gtest.h>
-#include <boost/any.hpp>
-
-#include <tables/table.hpp>
 
 TEST(TestTable, test_constructor)
 {
@@ -162,7 +167,7 @@ TEST(TestTable, test_merge)
      *    *    *          * const    * 2      * 4             * 1             *
      *************************************************************************/
 
-    //After merge they should not.
+    // After merge they should not.
     EXPECT_FALSE(table1.columns().size() == table2.columns().size());
     EXPECT_FALSE(table1.rows() == table2.rows());
     // It should have the following dimensions:
@@ -202,22 +207,33 @@ TEST(TestTable, test_merge)
     EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(
         table1.value("t2_const", 3)));
     // common
-    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(table1.value("common", 0)));
-    EXPECT_EQ(uint32_t(75), boost::any_cast<uint32_t>(table1.value("common", 1)));
+    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(
+        table1.value("common", 0)));
+    EXPECT_EQ(uint32_t(75), boost::any_cast<uint32_t>(
+        table1.value("common", 1)));
     EXPECT_TRUE(table1.value("common", 2).empty());
-    EXPECT_EQ(uint32_t(2), boost::any_cast<uint32_t>(table1.value("common", 3)));
+    EXPECT_EQ(uint32_t(2), boost::any_cast<uint32_t>(
+        table1.value("common", 3)));
 
     // common_const1
-    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(table1.value("common_const1", 0)));
-    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(table1.value("common_const1", 1)));
-    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(table1.value("common_const1", 2)));
-    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(table1.value("common_const1", 3)));
+    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(
+        table1.value("common_const1", 0)));
+    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(
+        table1.value("common_const1", 1)));
+    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(
+        table1.value("common_const1", 2)));
+    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(
+        table1.value("common_const1", 3)));
 
     // common_const2
-    EXPECT_EQ(uint32_t(0), boost::any_cast<uint32_t>(table1.value("common_const2", 0)));
-    EXPECT_EQ(uint32_t(0), boost::any_cast<uint32_t>(table1.value("common_const2", 1)));
-    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(table1.value("common_const2", 2)));
-    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(table1.value("common_const2", 3)));
+    EXPECT_EQ(uint32_t(0), boost::any_cast<uint32_t>(
+        table1.value("common_const2", 0)));
+    EXPECT_EQ(uint32_t(0), boost::any_cast<uint32_t>(
+        table1.value("common_const2", 1)));
+    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(
+        table1.value("common_const2", 2)));
+    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(
+        table1.value("common_const2", 3)));
 }
 
 TEST(TestTable, test_is_column)
@@ -302,7 +318,8 @@ TEST(TestTable, test_is_column)
     std::vector<double> vdouble = table.values_as<double>("c3");
     std::vector<std::string> vstring = table.values_as<std::string>("c4");
 
-    std::vector<uint32_t> vconstuint32_t = table.values_as<uint32_t>("const_c1");
+    std::vector<uint32_t> vconstuint32_t = table.values_as<uint32_t>(
+        "const_c1");
     std::vector<int8_t> vconstint8_t = table.values_as<int8_t>("const_c2");
     std::vector<double> vconstdouble = table.values_as<double>("const_c3");
     std::vector<std::string> vconststring = table.values_as<std::string>(
@@ -366,7 +383,7 @@ TEST(TestTable, test_table_iterator)
     table.set_value("c3", double(2.3));
     table.set_value("c4", std::string("test1"));
     uint32_t counter = 0;
-    for(const auto& c_name : table)
+    for (const auto& c_name : table)
     {
         EXPECT_EQ(table.columns()[counter].size(), c_name.size());
         EXPECT_EQ(table.columns()[counter], c_name);

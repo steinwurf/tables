@@ -1,3 +1,8 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 #pragma once
 
 // This code has been copied from
@@ -9,11 +14,14 @@
 #include <string>
 namespace tables
 {
-    template <class T, class charT=char, class traits=std::char_traits<charT> >
+    template <
+        class T,
+        class charT = char,
+        class traits = std::char_traits<charT>>
     class infix_ostream_iterator :
         public std::iterator<std::output_iterator_tag, void, void, void, void>
     {
-        std::basic_ostream<charT,traits>* os;
+        std::basic_ostream<charT, traits>* os;
         std::basic_string<charT> delimiter;
         std::basic_string<charT> real_delim;
 
@@ -23,7 +31,7 @@ namespace tables
         typedef traits traits_type;
         typedef std::basic_ostream<charT, traits> ostream_type;
 
-        infix_ostream_iterator(ostream_type& s)
+        explicit infix_ostream_iterator(ostream_type& s)
             : os(&s)
         { }
 
@@ -39,15 +47,19 @@ namespace tables
             return *this;
         }
 
-        infix_ostream_iterator<T, charT, traits> &operator*() {
+        infix_ostream_iterator<T, charT, traits> &operator*()
+        {
             return *this;
         }
 
-        infix_ostream_iterator<T, charT, traits> &operator++() {
+        infix_ostream_iterator<T, charT, traits> &operator++()
+        {
             return *this;
         }
 
-        infix_ostream_iterator<T, charT, traits> &operator++(int) {
+        infix_ostream_iterator<T, charT, traits> &operator++(int value)
+        {
+            (void)value;
             return *this;
         }
     };

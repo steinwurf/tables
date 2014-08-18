@@ -1,14 +1,19 @@
-#pragma once
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
-#include <sstream>
-#include <cstdint>
-#include <string>
-#include <vector>
+#pragma once
 
 #include <gtest/gtest.h>
 
 #include <tables/format.hpp>
 #include <tables/table.hpp>
+
+#include <sstream>
+#include <cstdint>
+#include <string>
+#include <vector>
 
 
 inline void test_table_format(const std::string& expect,

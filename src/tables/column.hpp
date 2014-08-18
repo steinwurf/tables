@@ -1,10 +1,16 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 #pragma once
+
+#include <boost/any.hpp>
+#include <boost/optional.hpp>
 
 #include <cstdint>
 #include <cstdlib>
 #include <vector>
-#include <boost/any.hpp>
-#include <boost/optional.hpp>
 
 namespace tables
 {

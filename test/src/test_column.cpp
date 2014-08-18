@@ -1,5 +1,8 @@
-#include <cstdint>
-#include <string>
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 #include <gtest/gtest.h>
 #include <boost/any.hpp>
 #include <boost/shared_ptr.hpp>
@@ -7,6 +10,9 @@
 #include <tables/column.hpp>
 #include <tables/nonconst_column.hpp>
 #include <tables/const_column.hpp>
+
+#include <cstdint>
+#include <string>
 
 
 TEST(TestColumn, test_column_const_nonconst)
@@ -25,7 +31,7 @@ TEST(TestColumn, test_column_const_nonconst)
 class Custom
 {
 public:
-    Custom(uint32_t value)
+    explicit Custom(uint32_t value)
     {
         m_value = value;
     }
@@ -53,7 +59,7 @@ template<class T> void test_nonconst_column_insert_and_retrieve(T value)
         for (uint32_t j = 0; j < length; ++j)
         {
             column.add_row();
-            if(j == i)
+            if (j == i)
             {
                 column.set_value(value);
             }
@@ -62,7 +68,7 @@ template<class T> void test_nonconst_column_insert_and_retrieve(T value)
         // retrieve
         for (uint32_t j = 0; j < length; ++j)
         {
-            if(j == i)
+            if (j == i)
             {
                 EXPECT_EQ(value, boost::any_cast<T>(column.value(i)));
             }
@@ -96,7 +102,7 @@ template<class T> void test_nonconst_column_default_insert_and_retrieve(T value,
         for (uint32_t j = 0; j < length; ++j)
         {
             column.add_row();
-            if(j == i)
+            if (j == i)
             {
                 column.set_value(value);
             }
@@ -105,7 +111,7 @@ template<class T> void test_nonconst_column_default_insert_and_retrieve(T value,
         // retrieve
         for (uint32_t j = 0; j < length; ++j)
         {
-            if(j == i)
+            if (j == i)
             {
                 EXPECT_EQ(value, boost::any_cast<T>(column.value(i)));
             }
@@ -224,7 +230,7 @@ template<class T> bool test_value_method(T value,
 {
     for (uint32_t row = 0; row < rows; row++)
     {
-        if(column->value(row).empty() || boost::any_cast<T>(
+        if (column->value(row).empty() || boost::any_cast<T>(
             column->value(row)) != value)
             return false;
     }

@@ -1,6 +1,12 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 #include "nonconst_column.hpp"
 
 #include <algorithm>
+#include <vector>
 
 namespace tables
 {
@@ -74,7 +80,7 @@ namespace tables
         // set, otherwise we cannot.
         assert(!m_default_value.empty() || m_values[m_values.size()-1].empty());
 
-        if(!value.empty())
+        if (!value.empty())
         {
             if (!m_type_hash)
             {

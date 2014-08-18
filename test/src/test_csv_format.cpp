@@ -1,9 +1,16 @@
-#include <cstdint>
-#include <sstream>
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
 #include <gtest/gtest.h>
 
 #include <tables/csv_format.hpp>
+
+#include <cstdint>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #include "format_test_helper.hpp"
 
@@ -65,10 +72,14 @@ TEST(TestCsvFormat, test_csv_table_format)
 {
     std::stringstream ss_expect;
 
-    ss_expect << "c1,c2,c3,c4,c5,c6,const_c1,const_c2,const_c3,const_c4,const_c5,const_c6" << std::endl
-              << "1,23,2.3,test1,1,1;2;3;4;5,99,127,9.9,test_const,1,1;2;3;4;5" << std::endl
-              << "2,33,3.3,test2,0,,99,127,9.9,test_const,1,1;2;3;4;5" << std::endl
-              << "3,43,4.3,test3,,1;2;3;4;5;1337,99,127,9.9,test_const,1,1;2;3;4;5" << std::endl;
+    ss_expect << "c1,c2,c3,c4,c5,c6,const_c1,const_c2,const_c3,const_c4,"
+              << "const_c5,const_c6" << std::endl
+              << "1,23,2.3,test1,1,1;2;3;4;5,99,127,9.9,test_const,1,"
+              << "1;2;3;4;5" << std::endl
+              << "2,33,3.3,test2,0,,99,127,9.9,test_const,1,"
+              << "1;2;3;4;5" << std::endl
+              << "3,43,4.3,test3,,1;2;3;4;5;1337,99,127,9.9,test_const,1,"
+              << "1;2;3;4;5" << std::endl;
 
     test_table_format(ss_expect.str(), tables::csv_format());
 }

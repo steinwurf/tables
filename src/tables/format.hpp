@@ -1,4 +1,12 @@
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
+
 #pragma once
+
+#include <boost/any.hpp>
+#include <boost/spirit/home/support/detail/hold_any.hpp>
 
 #include <cassert>
 #include <cstdint>
@@ -6,9 +14,6 @@
 #include <vector>
 #include <string>
 #include <typeinfo>
-
-#include <boost/any.hpp>
-#include <boost/spirit/home/support/detail/hold_any.hpp>
 
 #include "table.hpp"
 

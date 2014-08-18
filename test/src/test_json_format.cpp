@@ -1,9 +1,15 @@
-#include <cstdint>
-#include <sstream>
+// Copyright (c) 2014 Steinwurf ApS
+// All Rights Reserved
+//
+// Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
 #include <gtest/gtest.h>
-
 #include <tables/json_format.hpp>
+
+#include <cstdint>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #include "format_test_helper.hpp"
 
