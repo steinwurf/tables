@@ -13,7 +13,6 @@
 
 namespace tables
 {
-
     /// Prints to the ostream in Python format. As the Python format is based on
     /// the json one, only slight difference exists. These comes from the fact
     /// that the Python data types are different from those of Javascript

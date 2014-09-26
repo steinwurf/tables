@@ -3,14 +3,16 @@
 //
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
-#include <gtest/gtest.h>
-#include <tables/python_format.hpp>
-
 #include <cstdint>
 #include <vector>
 #include <string>
 
+#include <gtest/gtest.h>
+
+#include <tables/python_format.hpp>
+
 #include "format_test_helper.hpp"
+
 
 TEST(TestPythonFormat, test_python_format)
 {

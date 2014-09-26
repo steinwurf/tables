@@ -3,13 +3,15 @@
 //
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
-#include <gtest/gtest.h>
-#include <tables/infix_ostream_iterator.hpp>
-
 #include <cstdint>
 #include <string>
 #include <vector>
 #include <algorithm>
+
+#include <gtest/gtest.h>
+
+#include <tables/infix_ostream_iterator.hpp>
+
 
 template<typename T>
 void test_infix_ostream_iterator(std::vector<T> values,

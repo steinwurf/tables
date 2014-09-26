@@ -9,7 +9,6 @@
 
 namespace tables
 {
-
     const_column::const_column(const boost::any& value, uint32_t rows)
         : m_value(value), m_rows(rows)
     {

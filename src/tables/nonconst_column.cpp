@@ -3,14 +3,13 @@
 //
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
-#include "nonconst_column.hpp"
-
 #include <algorithm>
 #include <vector>
 
+#include "nonconst_column.hpp"
+
 namespace tables
 {
-
     nonconst_column::nonconst_column(uint32_t rows)
         : m_default_value(boost::any())
     {

@@ -3,16 +3,17 @@
 //
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
-#include <gtest/gtest.h>
+#include <cstdint>
+#include <string>
+
 #include <boost/any.hpp>
 #include <boost/shared_ptr.hpp>
+
+#include <gtest/gtest.h>
 
 #include <tables/column.hpp>
 #include <tables/nonconst_column.hpp>
 #include <tables/const_column.hpp>
-
-#include <cstdint>
-#include <string>
 
 
 TEST(TestColumn, test_column_const_nonconst)
@@ -31,6 +32,7 @@ TEST(TestColumn, test_column_const_nonconst)
 class Custom
 {
 public:
+
     explicit Custom(uint32_t value)
     {
         m_value = value;
@@ -45,6 +47,7 @@ public:
     }
 
 private:
+
     uint32_t m_value;
 };
 

@@ -12,6 +12,7 @@
 #include <ostream>
 #include <iterator>
 #include <string>
+
 namespace tables
 {
     template <

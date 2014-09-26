@@ -5,15 +5,14 @@
 
 #pragma once
 
-#include <boost/shared_ptr.hpp>
-
 #include <vector>
+
+#include <boost/shared_ptr.hpp>
 
 #include "column.hpp"
 
 namespace tables
 {
-
     /// Class for columns containing data for every row.
     class nonconst_column : public column
     {
