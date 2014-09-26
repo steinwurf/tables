@@ -5,17 +5,17 @@
 
 #pragma once
 
-#include <boost/any.hpp>
-#include <boost/shared_ptr.hpp>
-
 #include <cassert>
 #include <cstdint>
 #include <map>
 #include <string>
 #include <vector>
 
+#include <boost/any.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "column.hpp"
+
 
 namespace tables
 {

@@ -11,7 +11,6 @@
 
 namespace tables
 {
-
     /// Class for columns containing the same data for every row.
     class const_column : public column
     {

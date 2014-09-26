@@ -57,7 +57,8 @@ def build(bld):
               source=bld.path.ant_glob('src/tables/*.cpp'),
               target='tables',
               export_includes=['src'],
-              use=['boost_chrono', 'boost_system', 'boost_program_options'])
+              use=['boost_includes', 'boost_chrono', 'boost_system',
+                   'boost_program_options'])
 
     if bld.is_toplevel():
         recurse_helper(bld, 'boost')

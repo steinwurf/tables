@@ -5,9 +5,6 @@
 
 #pragma once
 
-#include <boost/any.hpp>
-#include <boost/spirit/home/support/detail/hold_any.hpp>
-
 #include <cassert>
 #include <cstdint>
 #include <iostream>
@@ -15,11 +12,13 @@
 #include <string>
 #include <typeinfo>
 
+#include <boost/any.hpp>
+
 #include "table.hpp"
+
 
 namespace tables
 {
-
     /// Simple helper format struct, used when printing values.
     /// The format for specific data types may be overwritten to
     /// produce a specific output.

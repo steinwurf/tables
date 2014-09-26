@@ -12,9 +12,9 @@
 #include <cstdlib>
 #include <vector>
 
+
 namespace tables
 {
-
     /// An abstract class containing only purely virtual methods. This is used
     /// as a base class for the different columns.
     class column

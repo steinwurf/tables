@@ -3,13 +3,16 @@
 //
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
-#include <gtest/gtest.h>
-#include <boost/any.hpp>
-#include <tables/table.hpp>
-
 #include <cstdint>
 #include <string>
 #include <vector>
+
+#include <boost/any.hpp>
+
+#include <gtest/gtest.h>
+
+#include <tables/table.hpp>
+
 
 TEST(TestTable, test_constructor)
 {

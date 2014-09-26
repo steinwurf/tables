@@ -3,13 +3,14 @@
 //
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
-#include <gtest/gtest.h>
-#include <tables/json_format.hpp>
-
 #include <cstdint>
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include <gtest/gtest.h>
+
+#include <tables/json_format.hpp>
 
 #include "format_test_helper.hpp"
 
