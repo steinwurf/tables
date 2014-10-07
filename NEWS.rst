@@ -10,6 +10,7 @@ Latest
 * Minor: Fixed style issues
 * Minor: Update to waf 1.8.0-pre1
 * Minor: Made python files comply with pep8
+* Patch: Add missing iostream include in format.hpp
 
 4.1.0
 -----
