@@ -1,8 +1,13 @@
 #! /usr/bin/env python
 # encoding: utf-8
 
+from waflib import Context
+
 bld.program(
     features='cxx test',
     source=['tables_tests.cpp'] + bld.path.ant_glob('src/*.cpp'),
+    export_defines=[
+        'STEINWURF_{}_VERSION="{}"'.format(
+            Context.g_module.APPNAME.upper(), Context.g_module.VERSION)],
     target='tables_tests',
     use=['tables', 'gtest', 'boost_includes'])
