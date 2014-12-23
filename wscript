@@ -53,12 +53,14 @@ def configure(conf):
 
 def build(bld):
 
-    bld.stlib(features='cxx',
-              source=bld.path.ant_glob('src/tables/*.cpp'),
-              target='tables',
-              export_includes=['src'],
-              use=['boost_includes', 'boost_chrono', 'boost_system',
-                   'boost_program_options'])
+    bld.stlib(
+        features='cxx',
+        source=bld.path.ant_glob('src/tables/*.cpp'),
+        target='tables',
+        export_includes=['src'],
+        export_defines=['STEINWURF_TABLES_VERSION="{}"'.format(VERSION)],
+        use=['boost_includes', 'boost_chrono', 'boost_system',
+             'boost_program_options'])
 
     if bld.is_toplevel():
         recurse_helper(bld, 'boost')
