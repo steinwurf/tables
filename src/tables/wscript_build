@@ -1,0 +1,9 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+bld.stlib(
+    features='cxx',
+    source=bld.path.ant_glob('**/*.cpp'),
+    target='tables',
+    export_includes=['..'],
+    use=['boost_includes'])
