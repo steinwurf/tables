@@ -1,17 +1,15 @@
-Introduction
-------------
+tables
+------
 
-Tables is a c++ library which allows arbitrary data to be stored as rows in a table with column headers.
+tables is a c++ library which allows arbitrary data to be stored as rows in a
+table with column headers.
+Furthermore, tables allows the stored data to be converted into other data
+formats.
+Currently CSV and JSON is supported, but the library can be extended to support
+additional formats if needed.
 
 .. image:: http://buildbot.steinwurf.dk/svgstatus?project=tables
     :target: http://buildbot.steinwurf.dk/stats?projects=tables
-
-Dependencies
-------------
-* We rely on functionality from the Boost C++ libraries, currently the
-  tables build-tool will automatically download these dependencies.
-* We are migrating to C++11 and currently use a few features, you therefore
-  have to supply the appropiate C++11 compiler switch when using tables.
 
 Platforms
 ---------
@@ -22,13 +20,13 @@ page <http://176.28.49.184:12344/>`_:
 Build
 -----
 We use the ``waf`` build-system to build the tables static library.
-With some additional tools which may be found at external-waf_
+With some additional tools which may be found at waf_
 
-.. _external-waf: https://github.com/steinwurf/external-waf
+.. waf: https://github.com/steinwurf/waf
 
 To build tables run the following command:
 ::
-  ./waf configure --bundle=ALL --bundle-path=~/dev/bundle_dependencies
+  ./waf configure --bundle-path=~/dev/bundle_dependencies
   ./waf build
 
 Substitute the ``~/dev/bundle_dependencies`` with the path where you wish
