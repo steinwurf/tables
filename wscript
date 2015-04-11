@@ -28,9 +28,9 @@ def configure(conf):
         git_repository='github.com/steinwurf/boost.git',
         major=1))
 
+    # Internal dependencies
     if conf.is_toplevel():
 
-        # Internal dependencies
         conf.add_dependency(resolve.ResolveVersion(
             name='gtest',
             git_repository='github.com/steinwurf/gtest.git',
@@ -45,8 +45,10 @@ def build(bld):
         'DEFINES_STEINWURF_VERSION',
         'STEINWURF_TABLES_VERSION="{}"'.format(VERSION))
 
+    bld.recurse('src/tables')
+
     if bld.is_toplevel():
 
+        # Only build test when executed from the top-level wscript,
+        # i.e. not when included as a dependency
         bld.recurse('test')
-
-    bld.recurse('src/tables')
