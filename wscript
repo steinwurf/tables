@@ -12,29 +12,34 @@ def options(opt):
     opt.load('wurf_common_tools')
 
 
-def configure(conf):
+def resolve(ctx):
 
     import waflib.extras.wurf_dependency_resolve as resolve
 
-    conf.load("wurf_common_tools")
+    ctx.load('wurf_common_tools')
 
-    conf.add_dependency(resolve.ResolveVersion(
+    ctx.add_dependency(resolve.ResolveVersion(
         name='waf-tools',
         git_repository='github.com/steinwurf/waf-tools.git',
         major=2))
 
-    conf.add_dependency(resolve.ResolveVersion(
+    ctx.add_dependency(resolve.ResolveVersion(
         name='boost',
         git_repository='github.com/steinwurf/boost.git',
-        major=1))
+        major=5))
 
     # Internal dependencies
-    if conf.is_toplevel():
+    if ctx.is_toplevel():
 
-        conf.add_dependency(resolve.ResolveVersion(
+        ctx.add_dependency(resolve.ResolveVersion(
             name='gtest',
             git_repository='github.com/steinwurf/gtest.git',
             major=2))
+
+
+def configure(conf):
+
+    conf.load("wurf_common_tools")
 
 
 def build(bld):
