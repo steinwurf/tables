@@ -26,7 +26,7 @@ def resolve(ctx):
     ctx.add_dependency(resolve.ResolveVersion(
         name='boost',
         git_repository='github.com/steinwurf/boost.git',
-        major=5))
+        major=1))
 
     # Internal dependencies
     if ctx.is_toplevel():
@@ -54,6 +54,6 @@ def build(bld):
 
     if bld.is_toplevel():
 
-        # Only build test when executed from the top-level wscript,
+        # Only build tests when executed from the top-level wscript,
         # i.e. not when included as a dependency
         bld.recurse('test')
