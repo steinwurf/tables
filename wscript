@@ -60,6 +60,7 @@ def build(bld):
         bld.recurse('test')
 
     bld.recurse('src/tables')
+    bld.recurse('examples/creating_printing_table')
 
     bld.env.append_unique(
         'DEFINES_STEINWURF_VERSION',
