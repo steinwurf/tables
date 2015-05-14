@@ -60,15 +60,19 @@ namespace tables
 
     uint32_t nonconst_column::rows() const
     {
-        return m_values.size();
+        return (uint32_t)m_values.size();
     }
 
-    // Helper function for the empty_rows;
-    bool value_is_empty(const boost::any& value) { return value.empty(); }
+    // Helper function for counting empty rows
+    bool value_is_empty(const boost::any& value)
+    {
+        return value.empty();
+    }
 
     uint32_t nonconst_column::empty_rows() const
     {
-        return std::count_if(m_values.begin(), m_values.end(), value_is_empty);
+        return (uint32_t)std::count_if(m_values.begin(), m_values.end(),
+                                       value_is_empty);
     }
 
     void nonconst_column::set_value(const boost::any& value)
@@ -93,7 +97,7 @@ namespace tables
 
     void nonconst_column::set_default_value(const boost::any& value)
     {
-        // The default default value is an empty boost::any anyway.
+        // The default default value is an empty boost::any.
         assert(!value.empty());
         // You can't set the default value twice.
         assert(m_default_value.empty());
