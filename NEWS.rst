@@ -6,7 +6,8 @@ of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Minor: Added a simple example showing how to create and print a table in
+  different formats. Added by Juan Cabrera.
 
 5.1.2
 -----
