@@ -3,6 +3,6 @@
 
 bld.program(
     features='cxx',
-    source=['creating_printing_table.cpp'] + bld.path.ant_glob('src/*.cpp'),
+    source=['creating_printing_table.cpp'],
     target='creating_printing_table',
     use=['tables'])
