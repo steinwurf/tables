@@ -58,9 +58,9 @@ def build(bld):
         recurse_helper(bld, 'gtest')
 
         bld.recurse('test')
+        bld.recurse('examples/creating_printing_table')
 
     bld.recurse('src/tables')
-    bld.recurse('examples/creating_printing_table')
 
     bld.env.append_unique(
         'DEFINES_STEINWURF_VERSION',

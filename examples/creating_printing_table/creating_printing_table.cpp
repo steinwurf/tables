@@ -20,12 +20,11 @@
 
 int main()
 {
-
     // In this example we will generate 100 random numbers. We will
     // then store those numbers in a table with three columns:
     // The random number, the iteration in which it was generated and
     // a string saying either 'high' or 'low'. The third column shows
-    // that different types of data can be stored in the table.  
+    // that different types of data can be stored in the table.
 
     // We set the names for the otuput files.
     std::string out_csv = "out.csv";
@@ -58,8 +57,14 @@ int main()
         // and the string in the table.
         results.set_value("Iteration", i);
         results.set_value("Number", random_number);
-        results.set_value("Classification", random_number > RAND_MAX / 2 ? 
-            std::string("low") : std::string("high"));
+        if (random_number > RAND_MAX / 2)
+        {
+            results.set_value("Classification", std::string("high"));
+        }
+        else
+        {
+            results.set_value("Classification", std::string("low"));
+        }
     }
 
     // We create the ofstream objects.
