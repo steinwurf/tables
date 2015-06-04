@@ -6,6 +6,7 @@ of every change, see the Git log.
 
 Latest
 ------
+* Minor: Added buildbot.py for coverage reports.
 * Minor: Added a simple example showing how to create and print a table in
   different formats. Added by Juan Cabrera.
 
