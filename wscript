@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 APPNAME = 'tables'
-VERSION = '5.1.2'
+VERSION = '6.0.0'
 
 import waflib.extras.wurf_options
 

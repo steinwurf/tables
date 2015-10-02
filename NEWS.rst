@@ -6,6 +6,13 @@ of every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+6.0.0
+-----
+* Major: Upgrade to waf-tools 3
+* Major: Upgrade to boost 2
+* Minor: Upgrade to gtest 3
 * Minor: Added buildbot.py for coverage reports.
 * Minor: Added a simple example showing how to create and print a table in
   different formats. Added by Juan Cabrera.
