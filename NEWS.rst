@@ -6,7 +6,13 @@ of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Minor: Added buildbot.py for coverage reports.
+* Minor: Added a simple example showing how to create and print a table in
+  different formats. Added by Juan Cabrera.
+
+5.1.2
+-----
+* Patch: Fix conversion warnings with 64-bit MSVC.
 
 5.1.1
 -----
@@ -44,7 +50,7 @@ Latest
 2.0.0
 -----
 * Major: Deleted pylist and pydict.
-* Minor: Adding method to column which can be used for determining whether it has a fill value or not.
+* Minor: Adding a method to ``column`` to check if it has a fill value.
 * Bug: Fixed Python and JSON output.
 * Bug: Fixed Windows builds.
 

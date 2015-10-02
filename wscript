@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 APPNAME = 'tables'
-VERSION = '5.1.1'
+VERSION = '5.1.2'
 
 import waflib.extras.wurf_options
 
@@ -57,3 +57,5 @@ def build(bld):
         # Only build tests when executed from the top-level wscript,
         # i.e. not when included as a dependency
         bld.recurse('test')
+        bld.recurse('examples/creating_printing_table')
+
