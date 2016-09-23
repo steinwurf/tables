@@ -35,7 +35,7 @@ namespace tables
         /// @param column_name The name of the new column
         /// @param value The value to set for all rows
         void add_const_column(const std::string& column_name,
-            const boost::any& value);
+                              const boost::any& value);
 
         /// Sets the value for the current row in the specified column.
         /// @param column_name The name of the column
@@ -74,7 +74,7 @@ namespace tables
         /// @param row_index The index of the row to access
         /// @return The value stored on the specified position
         boost::any value(const std::string& column_name,
-            uint32_t row_index) const;
+                         uint32_t row_index) const;
 
         /// Returns the default value of the column.
         /// @param column_name The name of the column
@@ -158,11 +158,12 @@ namespace tables
         {
         public:
 
-            column_name_iterator() : column_iterator()
+            column_name_iterator() :
+                column_iterator()
             { };
 
-            column_name_iterator(const column_iterator s)
-                : column_iterator(s)
+            column_name_iterator(const column_iterator s) :
+                column_iterator(s)
             { };
 
             std::string* operator->()

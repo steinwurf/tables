@@ -14,30 +14,30 @@
 
 namespace tables
 {
-    table::table()
-        : m_rows(0)
+    table::table() :
+        m_rows(0)
     { }
 
     void table::add_column(const std::string& column_name)
     {
         assert(!has_column(column_name));
         m_columns.insert(std::pair<std::string, column_ptr>(
-                    column_name, column_ptr(new nonconst_column(m_rows))));
+            column_name, column_ptr(new nonconst_column(m_rows))));
     }
 
     void table::add_const_column(const std::string& column_name,
-        const boost::any& value)
+                                 const boost::any& value)
     {
         // You can't add a const column which already exists.
         assert(!has_column(column_name));
 
         m_columns.insert(
             std::pair<std::string, column_ptr>(column_name,
-                column_ptr(new const_column(value, m_rows))));
+                                               column_ptr(new const_column(value, m_rows))));
     }
 
     void table::set_value(const std::string& column_name,
-        const boost::any& value)
+                          const boost::any& value)
     {
         // You can not insert a value without a row to put it in.
         assert(m_rows > 0);
@@ -55,7 +55,7 @@ namespace tables
     }
 
     void table::set_default_value(const std::string& column_name,
-        const boost::any& value)
+                                  const boost::any& value)
     {
         // You must create the column before you set the default value
         assert(has_column(column_name));
@@ -89,7 +89,8 @@ namespace tables
             if (my_kv.second->is_constant())
             {
                 converted_columns.insert(
-                    std::pair<std::string, column_ptr>(my_kv.first,
+                    std::pair<std::string, column_ptr>(
+                        my_kv.first,
                         column_ptr(new nonconst_column(my_kv.second))));
             }
         }
@@ -140,7 +141,7 @@ namespace tables
     }
 
     boost::any table::value(const std::string& column_name,
-        uint32_t row_index) const
+                            uint32_t row_index) const
     {
         assert(has_column(column_name));
         return m_columns.at(column_name)->value(row_index);

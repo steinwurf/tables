@@ -38,11 +38,13 @@ public:
         m_value = value;
     }
 
-    bool operator== (const Custom& other) const {
+    bool operator== (const Custom& other) const
+    {
         return m_value == other.m_value;
     }
 
-    bool operator != (const Custom& other) const {
+    bool operator != (const Custom& other) const
+    {
         return !(m_value == other.m_value);
     }
 
@@ -93,8 +95,8 @@ TEST(TestColumn, test_nonconst_column_insert_and_retrieve)
     test_nonconst_column_insert_and_retrieve(Custom(43));
 }
 
-template<class T> void test_nonconst_column_default_insert_and_retrieve(T value,
-    T default_value)
+template<class T> void test_nonconst_column_default_insert_and_retrieve(
+    T value, T default_value)
 {
     uint32_t length = 10;
     for (uint32_t i = 0; i < length; ++i)
@@ -131,11 +133,11 @@ TEST(TestColumn, test_nonconst_column_default_insert_and_retrieve)
     // Integer
     test_nonconst_column_default_insert_and_retrieve(42, 43);
     // String
-    test_nonconst_column_default_insert_and_retrieve(std::string("42"),
-        std::string("43"));
+    test_nonconst_column_default_insert_and_retrieve(
+        std::string("42"), std::string("43"));
     // Custom
-    test_nonconst_column_default_insert_and_retrieve(Custom(43),
-        Custom(44));
+    test_nonconst_column_default_insert_and_retrieve(
+        Custom(43), Custom(44));
 }
 
 template<class T> void test_const_column_insert_and_retrieve(T value)
@@ -228,8 +230,8 @@ template<class T> void test_values_after_insert(T value)
     }
 }
 
-template<class T> bool test_value_method(T value,
-    boost::shared_ptr<tables::column> column, uint32_t rows)
+template<class T> bool test_value_method(
+    T value, boost::shared_ptr<tables::column> column, uint32_t rows)
 {
     for (uint32_t row = 0; row < rows; row++)
     {

@@ -32,33 +32,33 @@ namespace tables
         typedef traits traits_type;
         typedef std::basic_ostream<charT, traits> ostream_type;
 
-        explicit infix_ostream_iterator(ostream_type& s)
-            : os(&s)
+        explicit infix_ostream_iterator(ostream_type& s) :
+            os(&s)
         { }
 
-        infix_ostream_iterator(ostream_type& s, charT const* d)
-            : os(&s),
-              real_delim(d)
+        infix_ostream_iterator(ostream_type& s, charT const* d) :
+            os(&s),
+            real_delim(d)
         { }
 
-        infix_ostream_iterator<T, charT, traits> &operator=(T const& item)
+        infix_ostream_iterator<T, charT, traits>& operator=(T const& item)
         {
             *os << delimiter << item;
             delimiter = real_delim;
             return *this;
         }
 
-        infix_ostream_iterator<T, charT, traits> &operator*()
+        infix_ostream_iterator<T, charT, traits>& operator*()
         {
             return *this;
         }
 
-        infix_ostream_iterator<T, charT, traits> &operator++()
+        infix_ostream_iterator<T, charT, traits>& operator++()
         {
             return *this;
         }
 
-        infix_ostream_iterator<T, charT, traits> &operator++(int value)
+        infix_ostream_iterator<T, charT, traits>& operator++(int value)
         {
             (void)value;
             return *this;

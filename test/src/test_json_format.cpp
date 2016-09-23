@@ -47,7 +47,7 @@ TEST(TestJsonFormat, test_json_format)
 
 template<typename T>
 void test_nested_json_format(const T& child1_value, const T& child2_value,
-    const std::string& expected)
+                             const std::string& expected)
 {
     std::stringstream ss;
     tables::json_format fmt;
