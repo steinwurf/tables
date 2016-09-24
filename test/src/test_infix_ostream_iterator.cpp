@@ -15,7 +15,7 @@
 
 template<typename T>
 void test_infix_ostream_iterator(
-    std::vector<T> values, const std::string& delimiter, 
+    std::vector<T> values, const std::string& delimiter,
     const std::string& expected_result)
 {
     std::stringstream ss;
