@@ -31,9 +31,9 @@ TEST(TestInfix, test_infix_ostream_iterator)
         a_ints, a_ints + sizeof(a_ints) / sizeof(a_ints[0]));
 
     static const std::string a_strings[] =
-    {
-        "s1", "s2", "s3", "s4", "s5", "s6", "s7"
-    };
+        {
+            "s1", "s2", "s3", "s4", "s5", "s6", "s7"
+        };
     std::vector<std::string> v_strings(
         a_strings, a_strings + sizeof(a_strings) / sizeof(a_strings[0]));
 
