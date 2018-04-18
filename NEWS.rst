@@ -6,7 +6,7 @@ of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Patch: Added virtual constructor to format.
 
 7.0.0
 -----
