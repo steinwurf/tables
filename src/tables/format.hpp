@@ -305,5 +305,8 @@ public:
         (void) val;
         assert(0);
     }
+
+    virtual ~format()
+    { }
 };
 }
