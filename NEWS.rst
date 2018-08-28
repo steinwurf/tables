@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+7.0.2
+-----
+* Patch: Fix const qualifier warning with g++ 8.2.
+
 7.0.1
 -----
 * Patch: Added virtual constructor to format.
