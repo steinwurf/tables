@@ -168,7 +168,7 @@ public:
 
         std::string* operator->()
         {
-            return (std::string* const)&(
+            return (std::string*)&(
                 column_iterator::operator->()->first);
         }
 
