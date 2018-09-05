@@ -69,6 +69,22 @@ TEST(TestCsvFormat, test_nested_csv_format)
     EXPECT_EQ(";24;66;89", ss.str());
 }
 
+TEST(TestCsvFormat, test_csv_empty_table)
+{
+    tables::table table;
+    tables::csv_format format;
+
+    std::stringstream ss;
+    std::stringstream ss_expect;
+
+    // A single empty line is printed for an empty table
+    ss_expect << std::endl;
+
+    format.print(ss, table);
+
+    EXPECT_EQ(ss_expect.str(), ss.str());
+}
+
 TEST(TestCsvFormat, test_csv_table_format)
 {
     std::stringstream ss_expect;

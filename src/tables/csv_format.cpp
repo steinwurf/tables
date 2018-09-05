@@ -16,11 +16,14 @@ void csv_format::print(std::ostream& s, const table& val) const
 {
     // Print headers
     auto it = val.begin();
-    s << *it;
-    for (it++; it != val.end(); it++)
+    if (it != val.end())
     {
-        s << ",";
         s << *it;
+        for (it++; it != val.end(); it++)
+        {
+            s << ",";
+            s << *it;
+        }
     }
     s << std::endl;
 
