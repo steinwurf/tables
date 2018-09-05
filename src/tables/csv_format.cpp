@@ -8,7 +8,6 @@
 #include <iterator>
 #include <algorithm>
 
-#include "infix_ostream_iterator.hpp"
 #include "csv_format.hpp"
 
 namespace tables
@@ -16,8 +15,13 @@ namespace tables
 void csv_format::print(std::ostream& s, const table& val) const
 {
     // Print headers
-    infix_ostream_iterator<std::string> print_headers(s, ",");
-    std::copy(val.begin(), val.end(), print_headers);
+    auto it = val.begin();
+    s << *it;
+    for (it++; it != val.end(); it++)
+    {
+        s << ",";
+        s << *it;
+    }
     s << std::endl;
 
     // Print rows

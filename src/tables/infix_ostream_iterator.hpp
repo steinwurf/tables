@@ -15,10 +15,12 @@
 
 namespace tables
 {
-template <
+template
+<
     class T,
     class charT = char,
-    class traits = std::char_traits<charT>>
+    class traits = std::char_traits<charT>
+>
 class infix_ostream_iterator :
     public std::iterator<std::output_iterator_tag, void, void, void, void>
 {
