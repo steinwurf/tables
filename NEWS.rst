@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+7.0.4
+-----
+* Patch: Fix issue when printing an empty table using csv_format.
+
 7.0.3
 -----
 * Patch: Fix compatibility with Visual Studio 2017.
