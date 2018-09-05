@@ -43,7 +43,8 @@ public:
 
     infix_ostream_iterator<T, charT, traits>& operator=(T const& item)
     {
-        *os << delimiter << item;
+        *os << delimiter;
+        *os << item;
         delimiter = real_delim;
         return *this;
     }

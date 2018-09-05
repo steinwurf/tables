@@ -70,7 +70,6 @@ void const_column::set_default_value(const boost::any& value)
     assert(0);
 }
 
-
 boost::optional<size_t> const_column::type_hash() const
 {
     return m_value.type().hash_code();

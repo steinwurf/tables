@@ -32,8 +32,8 @@ void table::add_const_column(const std::string& column_name,
     assert(!has_column(column_name));
 
     m_columns.insert(
-        std::pair<std::string, column_ptr>(column_name,
-                                           column_ptr(new const_column(value, m_rows))));
+        std::pair<std::string, column_ptr>(
+            column_name, column_ptr(new const_column(value, m_rows))));
 }
 
 void table::set_value(const std::string& column_name,
