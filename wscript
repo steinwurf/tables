@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 APPNAME = 'tables'
-VERSION = '7.0.2'
+VERSION = '7.0.3'
 
 
 def build(bld):

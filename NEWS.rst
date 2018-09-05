@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+7.0.3
+-----
+* Patch: Fix compatibility with Visual Studio 2017.
+
 7.0.2
 -----
 * Patch: Fix const qualifier warning with g++ 8.2.
