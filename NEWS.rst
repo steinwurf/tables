@@ -6,6 +6,10 @@ of every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+7.1.0
+-----
 * Minor: Add reserve(..) function to minimize reallocations when adding rows.
 
 7.0.4
