@@ -54,12 +54,12 @@ public:
 
     /// Sets a value in the column, at the current row
     /// @param value The value to set
-    virtual void set_value(const boost::any &value) = 0;
+    virtual void set_value(const boost::any& value) = 0;
 
     /// Sets the default value for the column. This is used instead
     /// when values in the column is empty.
     /// @param value The value to set
-    virtual void set_default_value(const boost::any &value) = 0;
+    virtual void set_default_value(const boost::any& value) = 0;
 
     /// Returns true if the column is constant
     /// @return True if the column is constant
