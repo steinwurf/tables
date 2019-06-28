@@ -13,7 +13,6 @@
 
 #include <tables/table.hpp>
 
-
 TEST(TestTable, test_constructor)
 {
     tables::table table;
@@ -62,6 +61,7 @@ TEST(TestTable, test_add_const_column_insert_zero)
 TEST(TestTable, test_columns)
 {
     tables::table table;
+    table.reserve(100);
     table.add_row();
     table.add_const_column("column1", 42);
     EXPECT_EQ(uint64_t(1), table.columns().size());
@@ -97,18 +97,18 @@ TEST(TestTable, test_add_row)
     uint32_t value = 42;
     table.add_column("test");
     table.set_value("test", value);
-    auto returned_value = table.value("test", rows-1);
+    auto returned_value = table.value("test", rows - 1);
     EXPECT_EQ(value, boost::any_cast<uint32_t>(returned_value));
-    EXPECT_TRUE(table.value("test", rows-2).empty());
+    EXPECT_TRUE(table.value("test", rows - 2).empty());
 
     // test values()
     EXPECT_EQ(rows, table.values("test").size());
-    for (uint32_t i = 0; i < rows-1; ++i)
+    for (uint32_t i = 0; i < rows - 1; ++i)
     {
         EXPECT_TRUE(table.values("test")[i].empty());
     }
-    EXPECT_EQ(rows-1, table.empty_rows("test"));
-    EXPECT_EQ(value, boost::any_cast<uint32_t>(table.values("test")[rows-1]));
+    EXPECT_EQ(rows - 1, table.empty_rows("test"));
+    EXPECT_EQ(value, boost::any_cast<uint32_t>(table.values("test")[rows - 1]));
 }
 
 TEST(TestTable, test_merge)
@@ -136,7 +136,6 @@ TEST(TestTable, test_merge)
     table2.set_value("t2", uint32_t(2));
 
     table1.set_value("common", uint32_t(1));
-
 
     table1.add_row();
     table2.add_row();
@@ -196,47 +195,47 @@ TEST(TestTable, test_merge)
     EXPECT_EQ(uint32_t(2), boost::any_cast<uint32_t>(table1.value("t2", 2)));
     EXPECT_TRUE(table1.value("t2", 3).empty());
     // t1_const
-    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(
-        table1.value("t1_const", 0)));
-    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(
-        table1.value("t1_const", 1)));
+    EXPECT_EQ(std::string("const"),
+              boost::any_cast<std::string>(table1.value("t1_const", 0)));
+    EXPECT_EQ(std::string("const"),
+              boost::any_cast<std::string>(table1.value("t1_const", 1)));
     EXPECT_TRUE(table1.value("t1_const", 2).empty());
     EXPECT_TRUE(table1.value("t1_const", 3).empty());
     // t2_const
     EXPECT_TRUE(table1.value("t2_const", 0).empty());
     EXPECT_TRUE(table1.value("t2_const", 1).empty());
-    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(
-        table1.value("t2_const", 2)));
-    EXPECT_EQ(std::string("const"), boost::any_cast<std::string>(
-        table1.value("t2_const", 3)));
+    EXPECT_EQ(std::string("const"),
+              boost::any_cast<std::string>(table1.value("t2_const", 2)));
+    EXPECT_EQ(std::string("const"),
+              boost::any_cast<std::string>(table1.value("t2_const", 3)));
     // common
-    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(
-        table1.value("common", 0)));
-    EXPECT_EQ(uint32_t(75), boost::any_cast<uint32_t>(
-        table1.value("common", 1)));
+    EXPECT_EQ(uint32_t(1),
+              boost::any_cast<uint32_t>(table1.value("common", 0)));
+    EXPECT_EQ(uint32_t(75),
+              boost::any_cast<uint32_t>(table1.value("common", 1)));
     EXPECT_TRUE(table1.value("common", 2).empty());
-    EXPECT_EQ(uint32_t(2), boost::any_cast<uint32_t>(
-        table1.value("common", 3)));
+    EXPECT_EQ(uint32_t(2),
+              boost::any_cast<uint32_t>(table1.value("common", 3)));
 
     // common_const1
-    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(
-        table1.value("common_const1", 0)));
-    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(
-        table1.value("common_const1", 1)));
-    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(
-        table1.value("common_const1", 2)));
-    EXPECT_EQ(uint32_t(4), boost::any_cast<uint32_t>(
-        table1.value("common_const1", 3)));
+    EXPECT_EQ(uint32_t(4),
+              boost::any_cast<uint32_t>(table1.value("common_const1", 0)));
+    EXPECT_EQ(uint32_t(4),
+              boost::any_cast<uint32_t>(table1.value("common_const1", 1)));
+    EXPECT_EQ(uint32_t(4),
+              boost::any_cast<uint32_t>(table1.value("common_const1", 2)));
+    EXPECT_EQ(uint32_t(4),
+              boost::any_cast<uint32_t>(table1.value("common_const1", 3)));
 
     // common_const2
-    EXPECT_EQ(uint32_t(0), boost::any_cast<uint32_t>(
-        table1.value("common_const2", 0)));
-    EXPECT_EQ(uint32_t(0), boost::any_cast<uint32_t>(
-        table1.value("common_const2", 1)));
-    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(
-        table1.value("common_const2", 2)));
-    EXPECT_EQ(uint32_t(1), boost::any_cast<uint32_t>(
-        table1.value("common_const2", 3)));
+    EXPECT_EQ(uint32_t(0),
+              boost::any_cast<uint32_t>(table1.value("common_const2", 0)));
+    EXPECT_EQ(uint32_t(0),
+              boost::any_cast<uint32_t>(table1.value("common_const2", 1)));
+    EXPECT_EQ(uint32_t(1),
+              boost::any_cast<uint32_t>(table1.value("common_const2", 2)));
+    EXPECT_EQ(uint32_t(1),
+              boost::any_cast<uint32_t>(table1.value("common_const2", 3)));
 }
 
 TEST(TestTable, test_is_column)
@@ -321,12 +320,12 @@ TEST(TestTable, test_is_column)
     std::vector<double> vdouble = table.values_as<double>("c3");
     std::vector<std::string> vstring = table.values_as<std::string>("c4");
 
-    std::vector<uint32_t> vconstuint32_t = table.values_as<uint32_t>(
-        "const_c1");
+    std::vector<uint32_t> vconstuint32_t =
+        table.values_as<uint32_t>("const_c1");
     std::vector<int8_t> vconstint8_t = table.values_as<int8_t>("const_c2");
     std::vector<double> vconstdouble = table.values_as<double>("const_c3");
-    std::vector<std::string> vconststring = table.values_as<std::string>(
-        "const_c4");
+    std::vector<std::string> vconststring =
+        table.values_as<std::string>("const_c4");
 
     EXPECT_EQ(uint64_t(3), vuint32_t.size());
     EXPECT_EQ(uint64_t(3), vint8_t.size());

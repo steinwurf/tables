@@ -46,6 +46,11 @@ void const_column::add_row()
     m_rows += 1;
 }
 
+void const_column::reserve(uint32_t rows)
+{
+    (void)rows; // nothing to do here
+}
+
 uint32_t const_column::rows() const
 {
     return m_rows;

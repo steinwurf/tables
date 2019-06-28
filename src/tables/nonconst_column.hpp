@@ -17,7 +17,6 @@ namespace tables
 class nonconst_column : public column
 {
 public:
-
     /// Creates a non-constant column
     /// @param rows The initial number of rows
     explicit nonconst_column(uint32_t rows = 0);
@@ -28,7 +27,6 @@ public:
     explicit nonconst_column(const boost::shared_ptr<column> column);
 
 public:
-
     /// @copydoc column::value(uint32_t) const
     boost::any value(uint32_t row_index) const;
 
@@ -50,6 +48,9 @@ public:
     /// @copydoc column::empty_rows() const
     uint32_t empty_rows() const;
 
+    /// @copydoc column::reserve()
+    void reserve(uint32_t rows);
+
     /// @copydoc column::set_value(const boost::any&)
     void set_value(const boost::any& value);
 
@@ -63,7 +64,6 @@ public:
     bool is_constant() const;
 
 private:
-
     /// Stores the columns data for every row.
     std::vector<boost::any> m_values;
 
