@@ -15,14 +15,12 @@ namespace tables
 class const_column : public column
 {
 public:
-
     /// Creates a constant column
     /// @param value The value stored by this column
     /// @param rows The initial number of rows
     const_column(const boost::any& value, uint32_t rows = 0);
 
 public:
-
     /// @copydoc column::value(uint32_t) const
     boost::any value(uint32_t row_index) const;
 
@@ -44,6 +42,9 @@ public:
     /// @copydoc column::empty_rows() const
     uint32_t empty_rows() const;
 
+    /// @copydoc column::reserve()
+    void reserve(uint32_t rows);
+
     /// @copydoc column::set_value(const boost::any&)
     void set_value(const boost::any& value);
 
@@ -57,7 +58,6 @@ public:
     boost::optional<size_t> type_hash() const;
 
 private:
-
     /// Stores the single value of the column
     const boost::any m_value;
 

@@ -63,6 +63,11 @@ uint32_t nonconst_column::rows() const
     return (uint32_t)m_values.size();
 }
 
+void nonconst_column::reserve(uint32_t rows)
+{
+    m_values.reserve(rows);
+}
+
 // Helper function for counting empty rows
 bool value_is_empty(const boost::any& value)
 {
@@ -81,7 +86,7 @@ void nonconst_column::set_value(const boost::any& value)
     assert(m_values.size() > 0);
     // If the default is not set we can check if the value was previously
     // set, otherwise we cannot.
-    assert(!m_default_value.empty() || m_values[m_values.size()-1].empty());
+    assert(!m_default_value.empty() || m_values[m_values.size() - 1].empty());
 
     if (!value.empty())
     {
@@ -92,7 +97,7 @@ void nonconst_column::set_value(const boost::any& value)
         assert(value.type().hash_code() == m_type_hash);
     }
 
-    m_values[m_values.size()-1] = value;
+    m_values[m_values.size() - 1] = value;
 }
 
 void nonconst_column::set_default_value(const boost::any& value)

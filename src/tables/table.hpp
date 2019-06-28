@@ -65,6 +65,10 @@ public:
     /// @return The number of rows
     uint32_t rows() const;
 
+    /// Reserves space for a given number of rows in each column
+    /// @param reserve The number of rows to reserve
+    void reserve(uint32_t rows);
+
     /// Returns the names of the columns.
     /// @return The names of the columns
     std::vector<std::string> columns() const;
@@ -188,6 +192,9 @@ private:
 
     /// Keeps track of the number of rows
     uint32_t m_rows;
+
+    /// The number of rows to reserve
+    uint32_t m_reserve;
 
     /// Stores the columns and their names
     column_map m_columns;

@@ -4,9 +4,9 @@
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
 #include <map>
+#include <string>
 #include <utility>
 #include <vector>
-#include <string>
 
 #include "const_column.hpp"
 #include "nonconst_column.hpp"
@@ -15,14 +15,17 @@
 namespace tables
 {
 table::table() :
-    m_rows(0)
-{ }
+    m_rows(0), m_reserve(0)
+{
+}
 
 void table::add_column(const std::string& column_name)
 {
     assert(!has_column(column_name));
     m_columns.insert(std::pair<std::string, column_ptr>(
         column_name, column_ptr(new nonconst_column(m_rows))));
+
+    m_columns[column_name]->reserve(m_reserve);
 }
 
 void table::add_const_column(const std::string& column_name,
@@ -31,13 +34,13 @@ void table::add_const_column(const std::string& column_name,
     // You can't add a const column which already exists.
     assert(!has_column(column_name));
 
-    m_columns.insert(
-        std::pair<std::string, column_ptr>(
-            column_name, column_ptr(new const_column(value, m_rows))));
+    m_columns.insert(std::pair<std::string, column_ptr>(
+        column_name, column_ptr(new const_column(value, m_rows))));
+
+    m_columns[column_name]->reserve(m_reserve);
 }
 
-void table::set_value(const std::string& column_name,
-                      const boost::any& value)
+void table::set_value(const std::string& column_name, const boost::any& value)
 {
     // You can not insert a value without a row to put it in.
     assert(m_rows > 0);
@@ -50,8 +53,7 @@ void table::set_value(const std::string& column_name,
 
     auto& c = m_columns.at(column_name);
     c->set_value(value);
-    assert(value.empty() ||
-           c->type_hash() == value.type().hash_code());
+    assert(value.empty() || c->type_hash() == value.type().hash_code());
 }
 
 void table::set_default_value(const std::string& column_name,
@@ -65,8 +67,7 @@ void table::set_default_value(const std::string& column_name,
 
     auto& c = m_columns.at(column_name);
     c->set_default_value(value);
-    assert(value.empty() ||
-           c->type_hash() == value.type().hash_code());
+    assert(value.empty() || c->type_hash() == value.type().hash_code());
 }
 
 void table::add_row()
@@ -79,6 +80,16 @@ void table::add_row()
     }
 }
 
+void table::reserve(uint32_t rows)
+{
+    for (auto& kv : m_columns)
+    {
+        kv.second->reserve(rows);
+    }
+
+    m_reserve = rows;
+}
+
 void table::merge(const table& src)
 {
     // if two tables are merged, the const of a const_column no longer
@@ -88,10 +99,8 @@ void table::merge(const table& src)
     {
         if (my_kv.second->is_constant())
         {
-            converted_columns.insert(
-                std::pair<std::string, column_ptr>(
-                    my_kv.first,
-                    column_ptr(new nonconst_column(my_kv.second))));
+            converted_columns.insert(std::pair<std::string, column_ptr>(
+                my_kv.first, column_ptr(new nonconst_column(my_kv.second))));
         }
     }
 

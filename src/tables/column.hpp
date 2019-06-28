@@ -12,7 +12,6 @@
 #include <cstdlib>
 #include <vector>
 
-
 namespace tables
 {
 /// An abstract class containing only purely virtual methods. This is used
@@ -20,7 +19,6 @@ namespace tables
 class column
 {
 public:
-
     /// Returns the value located at the specified location
     /// @param row_index The index of the row on which the data should be
     /// fetched
@@ -50,6 +48,10 @@ public:
     /// @return The number of empty rows
     virtual uint32_t empty_rows() const = 0;
 
+    /// Reserves space for a given number of rows in each column
+    /// @param reserve The number of rows to reserve
+    virtual void reserve(uint32_t rows) = 0;
+
     /// Sets a value in the column, at the current row
     /// @param value The value to set
     virtual void set_value(const boost::any& value) = 0;
@@ -70,4 +72,4 @@ public:
     /// A virtual destructor on a base class with virtual methods is needed
     virtual ~column() {}
 };
-}
+} // namespace tables
