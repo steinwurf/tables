@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+8.0.0
+-----
+* Major: Upgrade to boost 4
+
 7.1.0
 -----
 * Minor: Add reserve(..) function to minimize reallocations when adding rows.
