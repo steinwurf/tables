@@ -6,7 +6,7 @@ of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Patch: Fix nodebug warning.
 
 8.0.0
 -----
