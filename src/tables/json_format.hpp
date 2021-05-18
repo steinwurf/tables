@@ -8,8 +8,8 @@
 #include <ostream>
 #include <string>
 
-#include "table.hpp"
 #include "format.hpp"
+#include "table.hpp"
 
 namespace tables
 {
@@ -18,7 +18,6 @@ namespace tables
 struct json_format : public format
 {
 public:
-
     /// Make the format::print functions available
     using format::print;
 

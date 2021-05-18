@@ -4,15 +4,14 @@
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
 #include <cstdint>
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <gtest/gtest.h>
 
 #include <tables/python_format.hpp>
 
 #include "format_test_helper.hpp"
-
 
 TEST(TestPythonFormat, test_python_format)
 {
@@ -49,18 +48,18 @@ TEST(TestPythonFormat, test_python_table_format)
     std::stringstream ss_expect;
 
     ss_expect << "{"
-              <<    "'c1':[1,2,3],"
-              <<    "'c2':[23,33,43],"
-              <<    "'c3':[2.3,3.3,4.3],"
-              <<    "'c4':['test1','test2','test3'],"
-              <<    "'c5':[True,False,None],"
-              <<    "'c6':[[1,2,3,4,5],None,[1,2,3,4,5,1337]],"
-              <<    "'const_c1':99,"
-              <<    "'const_c2':127,"
-              <<    "'const_c3':9.9,"
-              <<    "'const_c4':'test_const',"
-              <<    "'const_c5':True,"
-              <<    "'const_c6':[1,2,3,4,5]"
+              << "'c1':[1,2,3],"
+              << "'c2':[23,33,43],"
+              << "'c3':[2.3,3.3,4.3],"
+              << "'c4':['test1','test2','test3'],"
+              << "'c5':[True,False,None],"
+              << "'c6':[[1,2,3,4,5],None,[1,2,3,4,5,1337]],"
+              << "'const_c1':99,"
+              << "'const_c2':127,"
+              << "'const_c3':9.9,"
+              << "'const_c4':'test_const',"
+              << "'const_c5':True,"
+              << "'const_c6':[1,2,3,4,5]"
               << "}";
 
     test_table_format(ss_expect.str(), tables::python_format());

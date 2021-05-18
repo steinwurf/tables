@@ -46,7 +46,7 @@ void json_format::print(std::ostream& s, const table& val) const
 {
     s << "{";
     bool first = true;
-    for (const auto& c: val.columns())
+    for (const auto& c : val.columns())
     {
         if (!first)
             s << ",";

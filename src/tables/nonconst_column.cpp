@@ -10,8 +10,7 @@
 
 namespace tables
 {
-nonconst_column::nonconst_column(uint32_t rows) :
-    m_default_value(boost::any())
+nonconst_column::nonconst_column(uint32_t rows) : m_default_value(boost::any())
 {
     add_rows(rows);
 }

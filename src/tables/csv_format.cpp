@@ -3,10 +3,10 @@
 //
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
-#include <cstdint>
-#include <string>
-#include <iterator>
 #include <algorithm>
+#include <cstdint>
+#include <iterator>
+#include <string>
 
 #include "csv_format.hpp"
 

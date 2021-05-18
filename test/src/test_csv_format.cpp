@@ -14,7 +14,6 @@
 
 #include "format_test_helper.hpp"
 
-
 TEST(TestCsvFormat, test_csv_format)
 {
     std::stringstream ss;

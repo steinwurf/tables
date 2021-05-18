@@ -8,14 +8,13 @@
 #include <cassert>
 #include <cstdint>
 #include <iostream>
-#include <vector>
 #include <string>
 #include <typeinfo>
+#include <vector>
 
 #include <boost/any.hpp>
 
 #include "table.hpp"
-
 
 namespace tables
 {
@@ -25,7 +24,6 @@ namespace tables
 struct format
 {
 public:
-
     /// Prints the value to the ostream
     /// @param s The output stream
     /// @param val The value to be printed
@@ -39,7 +37,7 @@ public:
     /// @param val The value to be printed
     virtual void print(std::ostream& s, int8_t val) const
     {
-        s << (int32_t) val;
+        s << (int32_t)val;
     }
 
     /// Prints the value to the ostream
@@ -47,7 +45,7 @@ public:
     /// @param val The value to be printed
     virtual void print(std::ostream& s, uint8_t val) const
     {
-        s << (uint32_t) val;
+        s << (uint32_t)val;
     }
 
     /// Prints the value to the ostream
@@ -135,7 +133,7 @@ public:
     /// @param s The output stream
     virtual void print_empty(std::ostream& s) const
     {
-        (void) s;
+        (void)s;
         return;
     }
 
@@ -281,7 +279,7 @@ public:
     /// Prints the value to the ostream
     /// @param s The output stream
     /// @param val The value to be printed
-    template<class T>
+    template <class T>
     void print(std::ostream& s, const std::vector<T>& val) const
     {
         s << vector_begin();
@@ -301,12 +299,13 @@ public:
     {
         // Because we want to be able to instantiate this format class,
         // this method cannot be made purely virtual.
-        (void) s;
-        (void) val;
+        (void)s;
+        (void)val;
         assert(0);
     }
 
     virtual ~format()
-    { }
+    {
+    }
 };
 }

@@ -14,8 +14,7 @@
 
 namespace tables
 {
-table::table() :
-    m_rows(0), m_reserve(0)
+table::table() : m_rows(0), m_reserve(0)
 {
 }
 
