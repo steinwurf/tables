@@ -284,7 +284,7 @@ public:
     {
         s << vector_begin();
         uint32_t i = 0;
-        for (const T& v : val)
+        for (T v : val)
         {
             print(s, v);
             i++;
