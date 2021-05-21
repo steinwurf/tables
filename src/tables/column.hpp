@@ -70,6 +70,8 @@ public:
     virtual boost::optional<size_t> type_hash() const = 0;
 
     /// A virtual destructor on a base class with virtual methods is needed
-    virtual ~column() {}
+    virtual ~column()
+    {
+    }
 };
 } // namespace tables

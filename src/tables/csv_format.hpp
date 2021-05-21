@@ -18,7 +18,6 @@ namespace tables
 class csv_format : public format
 {
 public:
-
     /// Make the format::print functions available
     using format::print;
 

@@ -20,7 +20,6 @@ namespace tables
 struct python_format : public json_format
 {
 public:
-
     /// Make the json_format::print functions available
     using json_format::print;
 

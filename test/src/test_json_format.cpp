@@ -14,7 +14,6 @@
 
 #include "format_test_helper.hpp"
 
-
 TEST(TestJsonFormat, test_json_format)
 {
     std::stringstream ss;
@@ -45,7 +44,7 @@ TEST(TestJsonFormat, test_json_format)
     EXPECT_EQ("true-11-11-11-11-3.143.14\"test\"\"test\"[-1,1]", ss.str());
 }
 
-template<typename T>
+template <typename T>
 void test_nested_json_format(const T& child1_value, const T& child2_value,
                              const std::string& expected)
 {
@@ -74,8 +73,8 @@ void test_nested_json_format(const T& child1_value, const T& child2_value,
 TEST(TestJsonFormat, test_nested_json_format)
 {
     test_nested_json_format(uint32_t(12), uint32_t(49), "[[],[12],[49,49]]");
-    test_nested_json_format(
-        std::string("12"), std::string("49"), "[[],[\"12\"],[\"49\",\"49\"]]");
+    test_nested_json_format(std::string("12"), std::string("49"),
+                            "[[],[\"12\"],[\"49\",\"49\"]]");
 }
 
 TEST(TestJsonFormat, test_json_table_format)
@@ -83,18 +82,18 @@ TEST(TestJsonFormat, test_json_table_format)
     std::stringstream ss_expect;
 
     ss_expect << "{"
-              <<    "\"c1\":[1,2,3],"
-              <<    "\"c2\":[23,33,43],"
-              <<    "\"c3\":[2.3,3.3,4.3],"
-              <<    "\"c4\":[\"test1\",\"test2\",\"test3\"],"
-              <<    "\"c5\":[true,false,null],"
-              <<    "\"c6\":[[1,2,3,4,5],null,[1,2,3,4,5,1337]],"
-              <<    "\"const_c1\":99,"
-              <<    "\"const_c2\":127,"
-              <<    "\"const_c3\":9.9,"
-              <<    "\"const_c4\":\"test_const\","
-              <<    "\"const_c5\":true,"
-              <<    "\"const_c6\":[1,2,3,4,5]"
+              << "\"c1\":[1,2,3],"
+              << "\"c2\":[23,33,43],"
+              << "\"c3\":[2.3,3.3,4.3],"
+              << "\"c4\":[\"test1\",\"test2\",\"test3\"],"
+              << "\"c5\":[true,false,null],"
+              << "\"c6\":[[1,2,3,4,5],null,[1,2,3,4,5,1337]],"
+              << "\"const_c1\":99,"
+              << "\"const_c2\":127,"
+              << "\"const_c3\":9.9,"
+              << "\"const_c4\":\"test_const\","
+              << "\"const_c5\":true,"
+              << "\"const_c6\":[1,2,3,4,5]"
               << "}";
 
     test_table_format(ss_expect.str(), tables::json_format());

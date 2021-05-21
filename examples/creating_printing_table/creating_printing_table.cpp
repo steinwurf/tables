@@ -4,14 +4,13 @@
 // Signed-off-to-Steinwurf-by: Juan Cabrera <jcabre14@student.aau.dk>
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
-
-#include <fstream>
 #include <cstdint>
+#include <fstream>
 
-#include <tables/table.hpp>
 #include <tables/csv_format.hpp>
 #include <tables/json_format.hpp>
 #include <tables/python_format.hpp>
+#include <tables/table.hpp>
 
 /// @example creating_printing_table.cpp
 ///

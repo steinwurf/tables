@@ -21,7 +21,7 @@ boost::any const_column::value(uint32_t row_index) const
     assert(m_rows > 0);
     // you are out of bounds here.
     assert(row_index < m_rows);
-    (void) row_index;
+    (void)row_index;
     return m_value;
 }
 

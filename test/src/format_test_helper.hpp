@@ -10,11 +10,10 @@
 #include <tables/format.hpp>
 #include <tables/table.hpp>
 
-#include <sstream>
 #include <cstdint>
+#include <sstream>
 #include <string>
 #include <vector>
-
 
 inline void test_table_format(const std::string& expect,
                               const tables::format& format)
@@ -65,7 +64,6 @@ inline void test_table_format(const std::string& expect,
     table.set_value("c3", double(4.3));
     table.set_value("c4", std::string("test3"));
     table.set_value("c6", c6_data);
-
 
     std::stringstream ss;
 

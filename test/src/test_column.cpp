@@ -12,9 +12,8 @@
 #include <gtest/gtest.h>
 
 #include <tables/column.hpp>
-#include <tables/nonconst_column.hpp>
 #include <tables/const_column.hpp>
-
+#include <tables/nonconst_column.hpp>
 
 TEST(TestColumn, test_column_const_nonconst)
 {
@@ -32,28 +31,27 @@ TEST(TestColumn, test_column_const_nonconst)
 class Custom
 {
 public:
-
     explicit Custom(uint32_t value)
     {
         m_value = value;
     }
 
-    bool operator== (const Custom& other) const
+    bool operator==(const Custom& other) const
     {
         return m_value == other.m_value;
     }
 
-    bool operator != (const Custom& other) const
+    bool operator!=(const Custom& other) const
     {
         return !(m_value == other.m_value);
     }
 
 private:
-
     uint32_t m_value;
 };
 
-template<class T> void test_nonconst_column_insert_and_retrieve(T value)
+template <class T>
+void test_nonconst_column_insert_and_retrieve(T value)
 {
     uint32_t length = 10;
     for (uint32_t i = 0; i < length; ++i)
@@ -95,8 +93,8 @@ TEST(TestColumn, test_nonconst_column_insert_and_retrieve)
     test_nonconst_column_insert_and_retrieve(Custom(43));
 }
 
-template<class T> void test_nonconst_column_default_insert_and_retrieve(
-    T value, T default_value)
+template <class T>
+void test_nonconst_column_default_insert_and_retrieve(T value, T default_value)
 {
     uint32_t length = 10;
     for (uint32_t i = 0; i < length; ++i)
@@ -133,14 +131,14 @@ TEST(TestColumn, test_nonconst_column_default_insert_and_retrieve)
     // Integer
     test_nonconst_column_default_insert_and_retrieve(42, 43);
     // String
-    test_nonconst_column_default_insert_and_retrieve(
-        std::string("42"), std::string("43"));
+    test_nonconst_column_default_insert_and_retrieve(std::string("42"),
+                                                     std::string("43"));
     // Custom
-    test_nonconst_column_default_insert_and_retrieve(
-        Custom(43), Custom(44));
+    test_nonconst_column_default_insert_and_retrieve(Custom(43), Custom(44));
 }
 
-template<class T> void test_const_column_insert_and_retrieve(T value)
+template <class T>
+void test_const_column_insert_and_retrieve(T value)
 {
     uint32_t length = 10;
 
@@ -177,13 +175,15 @@ TEST(TestColumn, test_const_column_insert_and_retrieve)
     test_const_column_insert_and_retrieve(Custom(43));
 }
 
-template<class T> void test_const_hash_type_after_insert(T value)
+template <class T>
+void test_const_hash_type_after_insert(T value)
 {
     tables::const_column const_column(value);
     EXPECT_EQ(typeid(T).hash_code(), const_column.type_hash());
 }
 
-template<class T> void test_nonconst_hash_type_after_insert(T value)
+template <class T>
+void test_nonconst_hash_type_after_insert(T value)
 {
     tables::nonconst_column nonconst_column;
     nonconst_column.add_row();
@@ -211,7 +211,8 @@ TEST(TestColumn, test_nonconst_hash_type_after_insert)
     test_nonconst_hash_type_after_insert(Custom(43));
 }
 
-template<class T> void test_values_after_insert(T value)
+template <class T>
+void test_values_after_insert(T value)
 {
     uint32_t length = 10;
     for (uint32_t i = 0; i < length; ++i)
@@ -230,13 +231,14 @@ template<class T> void test_values_after_insert(T value)
     }
 }
 
-template<class T> bool test_value_method(
-    T value, boost::shared_ptr<tables::column> column, uint32_t rows)
+template <class T>
+bool test_value_method(T value, boost::shared_ptr<tables::column> column,
+                       uint32_t rows)
 {
     for (uint32_t row = 0; row < rows; row++)
     {
-        if (column->value(row).empty() || boost::any_cast<T>(
-            column->value(row)) != value)
+        if (column->value(row).empty() ||
+            boost::any_cast<T>(column->value(row)) != value)
             return false;
     }
     return true;
@@ -303,22 +305,22 @@ TEST(TestColumn, test_value_method)
     }
 }
 
-template<class T> void test_nonconst_copy_constructor(T value)
+template <class T>
+void test_nonconst_copy_constructor(T value)
 {
     uint32_t length = 10;
     boost::shared_ptr<tables::const_column> const_column(
         new tables::const_column(value, length));
     tables::nonconst_column nonconst_column(
-        (boost::shared_ptr<tables::column>) const_column);
+        (boost::shared_ptr<tables::column>)const_column);
 
     EXPECT_TRUE(const_column->is_constant());
     EXPECT_FALSE(nonconst_column.is_constant());
     EXPECT_EQ(nonconst_column.type_hash(), const_column->type_hash());
     for (uint32_t i = 0; i < length; ++i)
     {
-        EXPECT_EQ(
-            boost::any_cast<T>(const_column->value(i)),
-            boost::any_cast<T>(nonconst_column.value(i)));
+        EXPECT_EQ(boost::any_cast<T>(const_column->value(i)),
+                  boost::any_cast<T>(nonconst_column.value(i)));
     }
 }
 

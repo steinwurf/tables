@@ -16,13 +16,11 @@
 
 #include "column.hpp"
 
-
 namespace tables
 {
 class table
 {
 public:
-
     /// Construct a new table
     table();
 
@@ -77,8 +75,7 @@ public:
     /// @param column_name The name of the column
     /// @param row_index The index of the row to access
     /// @return The value stored on the specified position
-    boost::any value(const std::string& column_name,
-                     uint32_t row_index) const;
+    boost::any value(const std::string& column_name, uint32_t row_index) const;
 
     /// Returns the default value of the column.
     /// @param column_name The name of the column
@@ -94,7 +91,7 @@ public:
     /// @param column_name The name of the column
     /// @return A vector containing the results for a specific column as the
     /// provided data type T
-    template<class T>
+    template <class T>
     std::vector<T> values_as(const std::string& column_name) const
     {
         assert(has_column(column_name));
@@ -127,7 +124,7 @@ public:
     /// Checks whether the column contains a specific data type.
     /// @param column_name The name of the column
     /// @return True if the column has the type T
-    template<class T>
+    template <class T>
     bool is_column(const std::string& column_name) const
     {
         return is_column(column_name, typeid(T));
@@ -161,19 +158,13 @@ public:
     class column_name_iterator : public column_iterator
     {
     public:
+        column_name_iterator() : column_iterator(){};
 
-        column_name_iterator() :
-            column_iterator()
-        { };
-
-        column_name_iterator(const column_iterator s) :
-            column_iterator(s)
-        { };
+        column_name_iterator(const column_iterator s) : column_iterator(s){};
 
         std::string* operator->()
         {
-            return (std::string*)&(
-                column_iterator::operator->()->first);
+            return (std::string*)&(column_iterator::operator->()->first);
         }
 
         std::string operator*()
@@ -189,7 +180,6 @@ public:
     column_name_iterator end() const;
 
 private:
-
     /// Keeps track of the number of rows
     uint32_t m_rows;
 
