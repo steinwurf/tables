@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+8.0.2
+-----
+* Patch: Added missing include to column.hpp.
+
 8.0.1
 -----
 * Patch: Fix nodebug warning.
