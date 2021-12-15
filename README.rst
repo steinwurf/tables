@@ -1,7 +1,7 @@
 tables
 ------
 
-|Linux make-specs| |Windows make-specs| |MacOS make-specs| |Linux CMake| |Windows CMake| |MacOS CMake| |Valgrind| |No Assertions| |Clang Format| |Cppcheck|
+|Linux make-specs| |Windows make-specs| |MacOS make-specs| |Valgrind| |No Assertions| |Clang Format| |Cppcheck|
 
 .. |Linux make-specs| image:: https://github.com/steinwurf/tables/actions/workflows/linux_mkspecs.yml/badge.svg
    :target: https://github.com/steinwurf/tables/actions/workflows/linux_mkspecs.yml
