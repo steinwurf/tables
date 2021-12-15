@@ -1,8 +1,28 @@
 tables
 ------
 
-.. image:: https://travis-ci.org/steinwurf/tables.svg?branch=master
-    :target: https://travis-ci.org/steinwurf/tables
+|Linux make-specs| |Windows make-specs| |MacOS make-specs| |Linux CMake| |Windows CMake| |MacOS CMake| |Valgrind| |No Assertions| |Clang Format| |Cppcheck|
+
+.. |Linux make-specs| image:: https://github.com/steinwurf/tables/actions/workflows/linux_mkspecs.yml/badge.svg
+   :target: https://github.com/steinwurf/tables/actions/workflows/linux_mkspecs.yml
+   
+.. |Windows make-specs| image:: https://github.com/steinwurf/tables/actions/workflows/windows_mkspecs.yml/badge.svg
+   :target: https://github.com/steinwurf/tables/actions/workflows/windows_mkspecs.yml
+
+.. |MacOS make-specs| image:: https://github.com/steinwurf/tables/actions/workflows/macos_mkspecs.yml/badge.svg
+   :target: https://github.com/steinwurf/tables/actions/workflows/macos_mkspecs.yml
+
+.. |Clang Format| image:: https://github.com/steinwurf/tables/actions/workflows/clang-format.yml/badge.svg
+   :target: https://github.com/steinwurf/tables/actions/workflows/clang-format.yml
+
+.. |No Assertions| image:: https://github.com/steinwurf/tables/actions/workflows/nodebug.yml/badge.svg
+   :target: https://github.com/steinwurf/tables/actions/workflows/nodebug.yml
+
+.. |Valgrind| image:: https://github.com/steinwurf/tables/actions/workflows/valgrind.yml/badge.svg
+   :target: https://github.com/steinwurf/tables/actions/workflows/valgrind.yml
+
+.. |Cppcheck| image:: https://github.com/steinwurf/tables/actions/workflows/cppcheck.yml/badge.svg
+   :target: https://github.com/steinwurf/tables/actions/workflows/cppcheck.yml
 
 tables is a C++ library which allows arbitrary data to be stored as rows in a
 table with column headers.
